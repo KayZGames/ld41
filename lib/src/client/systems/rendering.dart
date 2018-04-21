@@ -14,6 +14,9 @@ part 'rendering.g.dart';
     Position,
     Color,
   ],
+  manager: [
+    TagManager,
+  ],
 )
 class TerrainRenderingSystem extends _$TerrainRenderingSystem {
   List<Attrib> attributes = const [
@@ -25,26 +28,36 @@ class TerrainRenderingSystem extends _$TerrainRenderingSystem {
   Float32List items;
 
   double scale = 0.2;
+  double cameraX, cameraY;
 
   TerrainRenderingSystem(gl) : super(gl);
+
+
+  @override
+  void begin() {
+    final camera = tagManager.getEntity(cameraTag);
+    final cameraPosition = positionMapper[camera];
+    cameraX = cameraPosition.x;
+    cameraY = cameraPosition.y;
+  }
 
   @override
   void processEntity(int index, Entity entity) {
     final position = positionMapper[entity];
     final color = colorMapper[entity];
     var hexagonIndex = index * 5 * 7;
-    items[hexagonIndex] = position.x * scale;
-    items[hexagonIndex + 1] = position.y * scale;
+    items[hexagonIndex] = position.x * scale - cameraX;
+    items[hexagonIndex + 1] = position.y * scale - cameraY;
     items[hexagonIndex + 2] = color.r;
     items[hexagonIndex + 3] = color.g;
     items[hexagonIndex + 4] = color.b;
 
     for (int i = 0; i < 6; i++) {
       var edgeIndex = hexagonIndex + 5 + i * 5;
-      items[edgeIndex] = (position.x +
-          sin(pi/5) * cos(pi / 6 + i * pi / 3)) *
-          scale;
-      items[edgeIndex + 1] = (position.y + sin(pi/5) * sin(pi / 6 + i * pi / 3)) * scale;
+      items[edgeIndex] =
+          (position.x + sin(pi / 5) * cos(pi / 6 + i * pi / 3)) * scale - cameraX;
+      items[edgeIndex + 1] =
+          (position.y + sin(pi / 5) * sin(pi / 6 + i * pi / 3)) * scale - cameraY;
       items[edgeIndex + 2] = color.r;
       items[edgeIndex + 3] = color.g;
       items[edgeIndex + 4] = color.b;

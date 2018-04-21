@@ -30,6 +30,7 @@ class Fertility extends Component {
 }
 
 class ChangeTerrain extends Component {}
+class Camera extends Component {}
 
 enum TerrainType {
   glacier,

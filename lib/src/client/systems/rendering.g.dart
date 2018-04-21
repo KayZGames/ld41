@@ -10,6 +10,7 @@ abstract class _$TerrainRenderingSystem extends WebGlRenderingSystem {
   Mapper<TilePosition> tilePositionMapper;
   Mapper<Position> positionMapper;
   Mapper<Color> colorMapper;
+  TagManager tagManager;
   _$TerrainRenderingSystem(RenderingContext2 gl)
       : super(gl, new Aspect.empty()..allOf([TilePosition, Position, Color]));
   @override
@@ -18,6 +19,7 @@ abstract class _$TerrainRenderingSystem extends WebGlRenderingSystem {
     tilePositionMapper = new Mapper<TilePosition>(TilePosition, world);
     positionMapper = new Mapper<Position>(Position, world);
     colorMapper = new Mapper<Color>(Color, world);
+    tagManager = world.getManager(TagManager);
   }
 }
 

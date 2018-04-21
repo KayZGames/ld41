@@ -14,3 +14,16 @@ abstract class _$HudInteractionSystem extends VoidEntitySystem {
     gameStateManager = world.getManager(GameStateManager);
   }
 }
+
+abstract class _$CameraControllerSystem extends GenericInputHandlingSystem {
+  Mapper<Camera> cameraMapper;
+  Mapper<Position> positionMapper;
+  _$CameraControllerSystem()
+      : super(new Aspect.empty()..allOf([Camera, Position]));
+  @override
+  void initialize() {
+    super.initialize();
+    cameraMapper = new Mapper<Camera>(Camera, world);
+    positionMapper = new Mapper<Position>(Position, world);
+  }
+}

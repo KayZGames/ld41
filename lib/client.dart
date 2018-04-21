@@ -26,8 +26,13 @@ class Game extends GameBase {
     var gameStateManager = new GameStateManager();
     world.addManager(gameStateManager);
     world.addManager(new WorldMapManager());
+    var tagManager = new TagManager();
+    world.addManager(tagManager);
 
-    final radius = 10;
+    final camera = addEntity([new Position(0.0, 0.0), new Camera()]);
+    tagManager.register(camera, cameraTag);
+
+    final radius = 20;
     var startX = 0;
     var endX = radius;
     final tilesForRandomDistribution = TerrainType.values
@@ -73,6 +78,7 @@ class Game extends GameBase {
     return {
       GameBase.rendering: [
         new HudInteractionSystem(),
+        new CameraControllerSystem(),
         new PrepareTerrainChangeSystem(),
         new TerrainChangeSystem(),
         new WebGlCanvasCleaningSystem(gl),
