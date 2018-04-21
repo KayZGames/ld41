@@ -14,6 +14,7 @@ part 'events.g.dart';
 )
 class HudInteractionSystem extends _$HudInteractionSystem {
   bool endTurn = false;
+  int zoomDelta = 0;
 
   @override
   void initialize() {
@@ -29,6 +30,7 @@ class HudInteractionSystem extends _$HudInteractionSystem {
     if (gameStateManager.state == State.playersTurn && endTurn) {
       gameStateManager.state = State.endTurn;
     }
+    if (zoomDelta > 0) {}
   }
 
   @override
@@ -45,18 +47,38 @@ class HudInteractionSystem extends _$HudInteractionSystem {
   ],
 )
 class CameraControllerSystem extends _$CameraControllerSystem {
+  num zoomDelta = 0;
+
+  @override
+  void initialize() {
+    super.initialize();
+
+    document.onMouseWheel.listen((wheelEvent) => zoomDelta = wheelEvent.deltaY);
+  }
+
   @override
   void processEntity(Entity entity) {
     final position = positionMapper[entity];
+    final camera = cameraMapper[entity];
     if (up) {
-      position.y += 0.1;
+      position.y += 0.03 * camera.zoom;
     } else if (down) {
-      position.y -= 0.1;
+      position.y -= 0.03 * camera.zoom;
     }
     if (left) {
-      position.x -= 0.1;
+      position.x -= 0.03 * camera.zoom;
     } else if (right) {
-      position.x += 0.1;
+      position.x += 0.03 * camera.zoom;
     }
+    if (zoomDelta > 0) {
+      camera.zoom += 0.1 * camera.zoom;
+    } else if (zoomDelta < 0) {
+      camera.zoom -= 0.1 * camera.zoom;
+    }
+  }
+
+  @override
+  void end() {
+    zoomDelta = 0;
   }
 }

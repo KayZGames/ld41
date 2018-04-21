@@ -17,6 +17,9 @@ part 'rendering.g.dart';
   manager: [
     TagManager,
   ],
+  mapper: [
+    Camera,
+  ],
 )
 class TerrainRenderingSystem extends _$TerrainRenderingSystem {
   List<Attrib> attributes = const [
@@ -30,8 +33,9 @@ class TerrainRenderingSystem extends _$TerrainRenderingSystem {
   double scale = 0.2;
   double cameraX, cameraY;
 
-  TerrainRenderingSystem(gl) : super(gl);
+  Matrix4 twodOrthographicMatrix;
 
+  TerrainRenderingSystem(gl) : super(gl);
 
   @override
   void begin() {
@@ -39,6 +43,19 @@ class TerrainRenderingSystem extends _$TerrainRenderingSystem {
     final cameraPosition = positionMapper[camera];
     cameraX = cameraPosition.x;
     cameraY = cameraPosition.y;
+
+    final ratio = 16 / 9;
+    final zoom = cameraMapper[camera].zoom;
+    final orthographicMatrix = new Matrix4.identity();
+    setOrthographicMatrix(
+        orthographicMatrix,
+        cameraX - 1.0 * ratio * zoom,
+        cameraX + 1.0 * ratio * zoom,
+        cameraY - 1.0 * zoom,
+        cameraY + 1.0 * zoom,
+        2.0,
+        -2.0);
+    twodOrthographicMatrix = orthographicMatrix;
   }
 
   @override
@@ -55,9 +72,11 @@ class TerrainRenderingSystem extends _$TerrainRenderingSystem {
     for (int i = 0; i < 6; i++) {
       var edgeIndex = hexagonIndex + 5 + i * 5;
       items[edgeIndex] =
-          (position.x + sin(pi / 5) * cos(pi / 6 + i * pi / 3)) * scale - cameraX;
+          (position.x + sin(pi / 5) * cos(pi / 6 + i * pi / 3)) * scale -
+              cameraX;
       items[edgeIndex + 1] =
-          (position.y + sin(pi / 5) * sin(pi / 6 + i * pi / 3)) * scale - cameraY;
+          (position.y + sin(pi / 5) * sin(pi / 6 + i * pi / 3)) * scale -
+              cameraY;
       items[edgeIndex + 2] = color.r;
       items[edgeIndex + 3] = color.g;
       items[edgeIndex + 4] = color.b;
@@ -74,6 +93,8 @@ class TerrainRenderingSystem extends _$TerrainRenderingSystem {
 
   @override
   void render(int length) {
+    final location = gl.getUniformLocation(program, 'uViewProjectionMatrix');
+    gl.uniformMatrix4fv(location, false, twodOrthographicMatrix.storage);
     drawTriangles(attributes, items, indices);
   }
 

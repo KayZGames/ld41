@@ -30,7 +30,18 @@ class Fertility extends Component {
 }
 
 class ChangeTerrain extends Component {}
-class Camera extends Component {}
+
+class Camera extends Component {
+  double _zoom;
+  Camera([this._zoom = 1.0]);
+  set zoom(double value) {
+    if (value >= 0.1 && value <= 10.0) {
+      _zoom = value;
+    }
+  }
+
+  double get zoom => _zoom;
+}
 
 enum TerrainType {
   glacier,
