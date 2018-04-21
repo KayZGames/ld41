@@ -5,7 +5,7 @@ import 'package:ld41/src/shared/components.dart';
 part 'logic.g.dart';
 
 @Generate(EntityProcessingSystem, allOf: [Terrain, Color])
-class TerrainColoringSystem extends _$TileColoringSystem {
+class TerrainColoringSystem extends _$TerrainColoringSystem {
   @override
   void processEntity(Entity entity) {
     final terrain = terrainMapper[entity];

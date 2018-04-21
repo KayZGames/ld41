@@ -24,7 +24,76 @@ class TerrainRenderingSystem extends _$TerrainRenderingSystem {
   Uint16List indices;
   Float32List items;
 
+  double scale = 0.2;
+
   TerrainRenderingSystem(gl) : super(gl);
+
+  @override
+  void processEntity(int index, Entity entity) {
+    final position = positionMapper[entity];
+    final color = colorMapper[entity];
+    var hexagonIndex = index * 5 * 7;
+    items[hexagonIndex] = position.x * scale;
+    items[hexagonIndex + 1] = position.y * scale;
+    items[hexagonIndex + 2] = color.r;
+    items[hexagonIndex + 3] = color.g;
+    items[hexagonIndex + 4] = color.b;
+
+    for (int i = 0; i < 6; i++) {
+      var edgeIndex = hexagonIndex + 5 + i * 5;
+      items[edgeIndex] = (position.x +
+          sin(pi/5) * cos(pi / 6 + i * pi / 3)) *
+          scale;
+      items[edgeIndex + 1] = (position.y + sin(pi/5) * sin(pi / 6 + i * pi / 3)) * scale;
+      items[edgeIndex + 2] = color.r;
+      items[edgeIndex + 3] = color.g;
+      items[edgeIndex + 4] = color.b;
+    }
+    final triangleIndiceIndex = index * 3 * 6;
+    final triangleIndex = index * 7;
+    for (int i = 0; i < 6; i++) {
+      indices[triangleIndiceIndex + i * 3] = triangleIndex;
+      indices[triangleIndiceIndex + i * 3 + 1] = triangleIndex + i + 1;
+      indices[triangleIndiceIndex + i * 3 + 2] = triangleIndex + i + 2;
+    }
+    indices[triangleIndiceIndex + 3 * 6 - 1] = triangleIndex + 1;
+  }
+
+  @override
+  void render(int length) {
+    drawTriangles(attributes, items, indices);
+  }
+
+  @override
+  void updateLength(int length) {
+    indices = new Uint16List(length * 3 * 7);
+    items = new Float32List(length * 5 * 7);
+  }
+
+  @override
+  String get fShaderFile => 'TerrainRenderingSystem';
+  @override
+  String get vShaderFile => 'TerrainRenderingSystem';
+}
+
+@Generate(
+  WebGlRenderingSystem,
+  allOf: [
+    TilePosition,
+    Position,
+    Color,
+  ],
+)
+class TerrainRenderingSystem2 extends _$TerrainRenderingSystem2 {
+  List<Attrib> attributes = const [
+    const Attrib('pos', 2),
+    const Attrib('color', 3),
+  ];
+
+  Uint16List indices;
+  Float32List items;
+
+  TerrainRenderingSystem2(gl) : super(gl);
 
   @override
   void processEntities(Iterable<Entity> entities) {
@@ -139,7 +208,7 @@ class TerrainRenderingSystem extends _$TerrainRenderingSystem {
   }
 
   @override
-  String get fShaderFile => 'TerrainRenderingSystem';
+  String get fShaderFile => 'TerrainRenderingSystem2';
   @override
-  String get vShaderFile => 'TerrainRenderingSystem';
+  String get vShaderFile => 'TerrainRenderingSystem2';
 }

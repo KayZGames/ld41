@@ -67,6 +67,7 @@ class Game extends GameBase {
         new TerrainColoringSystem(),
         new WebGlCanvasCleaningSystem(gl),
         new TerrainRenderingSystem(gl),
+//        new TerrainRenderingSystem2(gl),
         new CanvasCleaningSystem(hudCanvas),
         new FpsRenderingSystem(hudCtx, fillStyle: 'white'),
       ],
