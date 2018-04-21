@@ -6,11 +6,11 @@ part of 'rendering.dart';
 // Generator: SystemGenerator
 // **************************************************************************
 
-abstract class _$TileRenderingSystem extends WebGlRenderingSystem {
+abstract class _$TerrainRenderingSystem extends WebGlRenderingSystem {
   Mapper<TilePosition> tilePositionMapper;
   Mapper<Position> positionMapper;
   Mapper<Color> colorMapper;
-  _$TileRenderingSystem(RenderingContext2 gl)
+  _$TerrainRenderingSystem(RenderingContext2 gl)
       : super(gl, new Aspect.empty()..allOf([TilePosition, Position, Color]));
   @override
   void initialize() {

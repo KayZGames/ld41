@@ -15,7 +15,7 @@ part 'rendering.g.dart';
     Color,
   ],
 )
-class TileRenderingSystem extends _$TileRenderingSystem {
+class TerrainRenderingSystem extends _$TerrainRenderingSystem {
   List<Attrib> attributes = const [
     const Attrib('pos', 2),
     const Attrib('color', 3),
@@ -24,7 +24,7 @@ class TileRenderingSystem extends _$TileRenderingSystem {
   Uint16List indices;
   Float32List items;
 
-  TileRenderingSystem(gl) : super(gl);
+  TerrainRenderingSystem(gl) : super(gl);
 
   @override
   void processEntities(Iterable<Entity> entities) {
@@ -64,8 +64,8 @@ class TileRenderingSystem extends _$TileRenderingSystem {
         }
         hexagonIndex += tilePosition.x;
         hexagonIndex *= 5;
-        items[hexagonIndex] = position.x * 0.3;
-        items[hexagonIndex + 1] = position.y * 0.3;
+        items[hexagonIndex] = position.x * 0.2;
+        items[hexagonIndex + 1] = position.y * 0.2;
         items[hexagonIndex + 2] = color.r;
         items[hexagonIndex + 3] = color.g;
         items[hexagonIndex + 4] = color.b;
@@ -139,7 +139,7 @@ class TileRenderingSystem extends _$TileRenderingSystem {
   }
 
   @override
-  String get fShaderFile => 'TileRenderingSystem';
+  String get fShaderFile => 'TerrainRenderingSystem';
   @override
-  String get vShaderFile => 'TileRenderingSystem';
+  String get vShaderFile => 'TerrainRenderingSystem';
 }

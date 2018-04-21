@@ -1,13 +1,14 @@
 import 'package:dartemis/dartemis.dart';
+import 'package:gamedev_helpers/gamedev_helpers_shared.dart';
 
 class TilePosition extends Component {
   int x, y, z;
   TilePosition(this.x, this.y) : z = -x - y;
 }
 
-class Tile extends Component {
-  CellType type;
-  Tile(this.type);
+class Terrain extends Component {
+  TerrainType type;
+  Terrain(this.type);
 }
 
 class Temerature extends Component {
@@ -27,7 +28,7 @@ class Fertility extends Component {
   Fertility(this.percentage);
 }
 
-enum CellType {
+enum TerrainType {
   glacier,
   ocean,
   lake,
@@ -36,9 +37,6 @@ enum CellType {
   desert,
   barren,
   farm,
-  village,
-  town,
-  city,
   shore,
   jungle,
   swamp,
