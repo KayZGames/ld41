@@ -3,6 +3,7 @@ library client;
 import 'dart:html';
 import 'package:ld41/shared.dart';
 import 'package:gamedev_helpers/gamedev_helpers.dart';
+import 'package:ld41/src/shared/managers.dart';
 
 import 'src/client/systems/events.dart';
 import 'src/client/systems/rendering.dart';
@@ -21,6 +22,10 @@ class Game extends GameBase {
 
   @override
   void createEntities() {
+    var gameStateManager = new GameStateManager();
+    world.addManager(gameStateManager);
+    world.addManager(new WorldMapManager());
+
     final radius = 10;
     var startX = 0;
     var endX = radius;
@@ -50,6 +55,7 @@ class Game extends GameBase {
           new TilePosition(x, y),
           new Position(x + y * cos(pi / 3), -y * sin(pi / 3)),
           new Color(1.0, 0.0, 0.0, 1.0),
+          new ChangeTerrain(),
           tile,
         ]);
       }
@@ -58,18 +64,22 @@ class Game extends GameBase {
         endX--;
       }
     }
+    new Timer.periodic(const Duration(seconds: 5),
+        (_) => gameStateManager.state = State.endTurn);
   }
 
   @override
   Map<int, List<EntitySystem>> getSystems() {
     return {
       GameBase.rendering: [
-        new TerrainColoringSystem(),
+        new PrepareTerrainChangeSystem(),
+        new TerrainChangeSystem(),
         new WebGlCanvasCleaningSystem(gl),
         new TerrainRenderingSystem(gl),
 //        new TerrainRenderingSystem2(gl),
         new CanvasCleaningSystem(hudCanvas),
         new FpsRenderingSystem(hudCtx, fillStyle: 'white'),
+        new EndTurnSystem(),
       ],
       GameBase.physics: [
         // add at least one

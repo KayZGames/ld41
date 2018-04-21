@@ -1,15 +1,27 @@
 import 'package:dartemis/dartemis.dart';
 import 'package:gamedev_helpers/gamedev_helpers_shared.dart';
 import 'package:ld41/src/shared/components.dart';
+import 'package:ld41/src/shared/managers.dart';
 
 part 'logic.g.dart';
 
-@Generate(EntityProcessingSystem, allOf: [Terrain, Color])
-class TerrainColoringSystem extends _$TerrainColoringSystem {
+@Generate(
+  EntityProcessingSystem,
+  allOf: [
+    Terrain,
+    Color,
+    ChangeTerrain,
+  ],
+)
+class TerrainChangeSystem extends _$TerrainChangeSystem {
   @override
   void processEntity(Entity entity) {
+    entity
+      ..removeComponent(ChangeTerrain)
+      ..changedInWorld();
     final terrain = terrainMapper[entity];
     final color = colorMapper[entity];
+    terrain.type = terrain.nextType;
     switch (terrain.type) {
       case TerrainType.glacier:
         color.r = 1.0;
@@ -72,8 +84,63 @@ class TerrainColoringSystem extends _$TerrainColoringSystem {
         color.b = 0.0;
         break;
       default:
-        throw new ArgumentError.value(
-            terrain.type, 'tile.type', 'no color defined for type ${terrain.type}');
+        throw new ArgumentError.value(terrain.type, 'tile.type',
+            'no color defined for type ${terrain.type}');
     }
   }
+}
+
+@Generate(
+  EntityProcessingSystem,
+  allOf: [
+    Terrain,
+    TilePosition,
+  ],
+  manager: [
+    WorldMapManager,
+    GameStateManager,
+  ],
+)
+class PrepareTerrainChangeSystem extends _$PrepareTerrainChangeSystem {
+  @override
+  void processEntity(Entity entity) {
+    final terrain = terrainMapper[entity];
+    if (terrain.type == TerrainType.endOfWorld) return;
+    final tilePosition = tilePositionMapper[entity];
+    final surroundingTypes = worldMapManager.getSurroundingTerrainTypes(
+        tilePosition.x, tilePosition.y);
+    if (terrain.type == TerrainType.grass) {
+      var forests = surroundingTypes[TerrainType.forest];
+      if (forests != null) {
+        terrain.nextType = TerrainType.forest;
+        entity
+          ..addComponent(new ChangeTerrain())
+          ..changedInWorld();
+      }
+    }
+  }
+
+  @override
+  void end() {
+    world.processEntityChanges();
+  }
+
+  @override
+  bool checkProcessing() => gameStateManager.state == State.endTurn;
+}
+
+@Generate(
+  VoidEntitySystem,
+  manager: [
+    GameStateManager,
+  ],
+)
+class EndTurnSystem extends _$EndTurnSystem {
+  @override
+  void processSystem() {
+    gameStateManager.state = State.playersTurn;
+  }
+
+  @override
+  bool checkProcessing() => gameStateManager.state == State.endTurn;
 }

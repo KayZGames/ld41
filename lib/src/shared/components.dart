@@ -8,7 +8,8 @@ class TilePosition extends Component {
 
 class Terrain extends Component {
   TerrainType type;
-  Terrain(this.type);
+  TerrainType nextType;
+  Terrain(this.type) : nextType = type;
 }
 
 class Temerature extends Component {
@@ -27,6 +28,8 @@ class Fertility extends Component {
   double percentage;
   Fertility(this.percentage);
 }
+
+class ChangeTerrain extends Component {}
 
 enum TerrainType {
   glacier,
