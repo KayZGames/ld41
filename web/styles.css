@@ -28,39 +28,54 @@ canvas {
   height: 100vh;
 }
 
-#sidebar {
+.sidebar {
   position: absolute;
   top: 0;
-  right: 0;
   width: 200px;
-  padding-left: 15px;
   height: 100%;
   background-color: coral;
+}
+
+.sidebar.right {
+  right: 0;
+  padding-left: 15px;
   box-shadow: inset 15px 0 15px -14px black;
 }
 
-#terrainstats > div {
-  margin-top: 10px;
-  display: flex;
-  justify-content: start;
+.sidebar.left {
+  left: 0;
+  padding-right: 15px;
+  box-shadow: inset -15px 0 15px -14px black;
 }
 
-#terrainstats > div > .icon {
+.sidebar > div > div.title {
+  text-align: center;
+  display: block;
+  margin-top: 15px;
+}
+
+.terrainstats > div {
+  display: flex;
+  justify-content: start;
+  margin-top: 10px;
+}
+
+.terrainstats > div > .icon {
   width: 20px;
   height: 20px;
 }
 
-#terrainstats > div > .name {
+.terrainstats > div > .name {
   width: 120px;
   margin-left: 5px;
 }
 
-#terrainstats > div > .count {
+.terrainstats > div > .count {
   width: 40px;
   text-align: right;
 }
 
-#terrainstats > div#grass > .icon {
+.terrainstats > div#grass > .icon {
   background-color: green;
 }
 
@@ -83,4 +98,64 @@ canvas {
   box-shadow: inset 0 0 6px 3px black;
   background-color: aliceblue;
   cursor: pointer;
+}
+
+.powers > #energy {
+  margin-top: 15px;
+  margin-bottom: 35px;
+  position: relative;
+  width: 185px;
+  height: 26px;
+  background-color: black;
+  box-shadow: 0 0 5px 5px ghostwhite;
+}
+
+.powers > #energy > .percentage {
+  background-color: aqua;
+  height: 26px;
+  overflow-x: visible;
+  white-space: nowrap;
+}
+
+.powers > #energy > label {
+  position: absolute;
+  width: 185px;
+  text-align: center;
+  top: 0;
+  left: 0;
+  color: ghostwhite;
+}
+
+.powers > #energy > .empty {
+  position: absolute;
+  font-size: 15px;
+  left: -3px;
+}
+
+.powers > #energy > .full {
+  position: absolute;
+  font-size: 15px;
+  right: -12px;
+}
+
+.power {
+  box-shadow: inset 0 0 4px 3px black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  margin-top: 10px;
+  width: 185px;
+  height: 50px;
+  cursor: pointer;
+  user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  background-color: burlywood;
+}
+
+.power:hover {
+  box-shadow: inset 0 0 4px 4px black;
+  background-color: white;
 }

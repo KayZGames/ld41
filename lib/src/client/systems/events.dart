@@ -67,14 +67,14 @@ class CameraControllerSystem extends _$CameraControllerSystem {
     final position = positionMapper[entity];
     final camera = cameraMapper[entity];
     if (up) {
-      position.y += 0.2 * camera.zoom * hexagonSize;
+      position.y += 0.3 * sqrt(camera.zoom) * hexagonSize;
     } else if (down) {
-      position.y -= 0.2 * camera.zoom * hexagonSize;
+      position.y -= 0.3 * sqrt(camera.zoom) * hexagonSize;
     }
     if (left) {
-      position.x -= 0.2 * camera.zoom * hexagonSize;
+      position.x -= 0.3 * sqrt(camera.zoom) * hexagonSize;
     } else if (right) {
-      position.x += 0.2 * camera.zoom * hexagonSize;
+      position.x += 0.3 * sqrt(camera.zoom) * hexagonSize;
     }
     if (zoomDelta > 0) {
       camera.zoom += 0.1 * camera.zoom;
