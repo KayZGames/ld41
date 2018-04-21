@@ -10,10 +10,18 @@ part 'events.g.dart';
   VoidEntitySystem,
   manager: [
     GameStateManager,
+    WorldMapManager,
+    CursorManager,
+  ],
+  mapper: [
+    Terrain,
   ],
 )
 class HudInteractionSystem extends _$HudInteractionSystem {
   bool endTurn = false;
+  bool clicked = false;
+  bool cancelPower = false;
+  PowerType selectedPower;
   final CanvasElement hud;
   Point<num> mouseOffset = new Point(0, 0);
 
@@ -26,8 +34,32 @@ class HudInteractionSystem extends _$HudInteractionSystem {
         .querySelector('#endturn')
         .onClick
         .listen((event) => endTurn = event.button == 0);
+    document
+        .querySelector('.power.human')
+        .onClick
+        .listen((event) => selectedPower = PowerType.human);
+    document
+        .querySelector('.power.forest')
+        .onClick
+        .listen((event) => selectedPower = PowerType.forest);
+    document
+        .querySelector('.power.fire')
+        .onClick
+        .listen((event) => selectedPower = PowerType.fire);
+    document
+        .querySelector('.power.flood')
+        .onClick
+        .listen((event) => selectedPower = PowerType.flood);
 
     hud.onMouseMove.listen((mouseEvent) => mouseOffset = mouseEvent.offset);
+    hud.onContextMenu.listen((event) => event.preventDefault());
+    hud.onMouseUp.listen((event) {
+      if (event.button == 0) {
+        clicked = true;
+      } else if (event.button == 2) {
+        cancelPower = true;
+      }
+    });
   }
 
   @override
@@ -35,13 +67,29 @@ class HudInteractionSystem extends _$HudInteractionSystem {
     if (gameStateManager.state == State.playersTurn && endTurn) {
       gameStateManager.state = State.endTurn;
     }
-    gameStateManager.cursorX = mouseOffset.x - hud.width / 2;
-    gameStateManager.cursorY = mouseOffset.y - hud.height / 2;
+    cursorManager.cursorX = mouseOffset.x;
+    cursorManager.cursorY = mouseOffset.y;
+
+    if (selectedPower != null) {
+      gameStateManager.selectedPower = selectedPower;
+    } else if (cancelPower) {
+      gameStateManager.selectedPower = null;
+    } else if (clicked) {
+      final selectedTile = cursorManager.getCurrentHexagonFromCursorPosition();
+      final entity = worldMapManager.worldMap[selectedTile.x][selectedTile.y];
+      entity
+        ..addComponent(new ExecutePower(gameStateManager.selectedPower))
+        ..changedInWorld();
+      gameStateManager.selectedPower = null;
+    }
   }
 
   @override
   void end() {
     endTurn = false;
+    clicked = false;
+    cancelPower = false;
+    selectedPower = null;
   }
 }
 

@@ -30,17 +30,28 @@ abstract class _$TerrainRenderingSystem extends WebGlRenderingSystem {
 abstract class _$CursorRenderingSystem extends VoidWebGlRenderingSystem {
   Mapper<Position> positionMapper;
   Mapper<Camera> cameraMapper;
-  GameStateManager gameStateManager;
   TagManager tagManager;
   CameraManager cameraManager;
+  CursorManager cursorManager;
   _$CursorRenderingSystem(RenderingContext2 gl) : super(gl);
   @override
   void initialize() {
     super.initialize();
     positionMapper = new Mapper<Position>(Position, world);
     cameraMapper = new Mapper<Camera>(Camera, world);
-    gameStateManager = world.getManager(GameStateManager);
     tagManager = world.getManager(TagManager);
     cameraManager = world.getManager(CameraManager);
+    cursorManager = world.getManager(CursorManager);
+  }
+}
+
+abstract class _$SelectedPowerRenderingSystem extends VoidEntitySystem {
+  GameStateManager gameStateManager;
+  CursorManager cursorManager;
+  @override
+  void initialize() {
+    super.initialize();
+    gameStateManager = world.getManager(GameStateManager);
+    cursorManager = world.getManager(CursorManager);
   }
 }

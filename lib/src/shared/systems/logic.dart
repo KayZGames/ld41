@@ -139,6 +139,7 @@ class FinishEndTurnSystem extends _$FinishEndTurnSystem {
   @override
   void processSystem() {
     gameStateManager.state = State.playersTurn;
+    gameStateManager.turn++;
   }
 
   @override
@@ -159,4 +160,63 @@ class FinishGameStartedSystem extends _$FinishGameStartedSystem {
 
   @override
   bool checkProcessing() => gameStateManager.state == State.started;
+}
+
+@Generate(
+  EntityProcessingSystem,
+  allOf: [
+    ExecutePower,
+    Terrain,
+    TilePosition,
+  ],
+  manager: [
+    GameStateManager,
+  ],
+)
+class ExecutePowerSystem extends _$ExecutePowerSystem {
+  @override
+  void processEntity(Entity entity) {
+    final power = executePowerMapper[entity].power;
+    final tilePosition = tilePositionMapper[entity];
+    entity.removeComponent(ExecutePower);
+    if (power == PowerType.human) {
+      world.createAndAddEntity(
+          [new Human(), new TilePosition(tilePosition.x, tilePosition.y)]);
+      world.createAndAddEntity(
+          [new LogMessage(gameStateManager.turn, 'Humans!!!')]);
+    } else if (power == PowerType.forest) {
+      var terrain = terrainMapper[entity];
+      if (terrain.type == TerrainType.grass ||
+          terrain.type == TerrainType.barren ||
+          terrain.type == TerrainType.farm) {
+        terrain.nextType = TerrainType.forest;
+        entity.addComponent(new ChangeTerrain());
+        world.createAndAddEntity(
+            [new LogMessage(gameStateManager.turn, 'A new forest has grown.')]);
+      } else if (terrain.type == TerrainType.swamp) {
+        terrain.nextType = TerrainType.jungle;
+        entity.addComponent(new ChangeTerrain());
+        world.createAndAddEntity(
+            [new LogMessage(gameStateManager.turn, 'A new jungle has grown.')]);
+      }
+    } else if (power == PowerType.fire) {
+      entity.addComponent(new Fire());
+      world.createAndAddEntity([
+        new LogMessage(gameStateManager.turn,
+            'A fire has started!! Why is there no fire brigade?!')
+      ]);
+    } else if (power == PowerType.flood) {
+      entity.addComponent(new Flood());
+      world.createAndAddEntity([
+        new LogMessage(gameStateManager.turn,
+            'A flood!! Get onto higher ground! Oh no, it\'s a flat earth!')
+      ]);
+    }
+    entity.changedInWorld();
+  }
+
+  @override
+  void end() {
+    world.processEntityChanges();
+  }
 }

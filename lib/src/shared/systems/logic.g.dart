@@ -55,3 +55,20 @@ abstract class _$FinishGameStartedSystem extends VoidEntitySystem {
     gameStateManager = world.getManager(GameStateManager);
   }
 }
+
+abstract class _$ExecutePowerSystem extends EntityProcessingSystem {
+  Mapper<ExecutePower> executePowerMapper;
+  Mapper<Terrain> terrainMapper;
+  Mapper<TilePosition> tilePositionMapper;
+  GameStateManager gameStateManager;
+  _$ExecutePowerSystem()
+      : super(new Aspect.empty()..allOf([ExecutePower, Terrain, TilePosition]));
+  @override
+  void initialize() {
+    super.initialize();
+    executePowerMapper = new Mapper<ExecutePower>(ExecutePower, world);
+    terrainMapper = new Mapper<Terrain>(Terrain, world);
+    tilePositionMapper = new Mapper<TilePosition>(TilePosition, world);
+    gameStateManager = world.getManager(GameStateManager);
+  }
+}

@@ -43,6 +43,23 @@ class Camera extends Component {
   double get zoom => _zoom;
 }
 
+class ExecutePower extends Component {
+  PowerType power;
+  ExecutePower(power);
+}
+
+class Human extends Component {}
+
+class Fire extends Component {}
+
+class Flood extends Component {}
+
+class LogMessage extends Component {
+  int turn;
+  String message;
+  LogMessage(this.turn, this.message);
+}
+
 enum TerrainType {
   glacier,
   ocean,
@@ -62,3 +79,5 @@ enum OverlayCellType {
   fire,
   flood,
 }
+
+enum PowerType { human, forest, fire, flood }

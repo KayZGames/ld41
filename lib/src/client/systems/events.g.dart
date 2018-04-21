@@ -7,11 +7,17 @@ part of 'events.dart';
 // **************************************************************************
 
 abstract class _$HudInteractionSystem extends VoidEntitySystem {
+  Mapper<Terrain> terrainMapper;
   GameStateManager gameStateManager;
+  WorldMapManager worldMapManager;
+  CursorManager cursorManager;
   @override
   void initialize() {
     super.initialize();
+    terrainMapper = new Mapper<Terrain>(Terrain, world);
     gameStateManager = world.getManager(GameStateManager);
+    worldMapManager = world.getManager(WorldMapManager);
+    cursorManager = world.getManager(CursorManager);
   }
 }
 

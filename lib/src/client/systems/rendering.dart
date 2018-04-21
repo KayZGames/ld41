@@ -1,3 +1,4 @@
+import 'dart:html';
 import 'dart:typed_data';
 import 'dart:web_gl';
 
@@ -114,9 +115,9 @@ class TerrainRenderingSystem extends _$TerrainRenderingSystem {
 @Generate(
   VoidWebGlRenderingSystem,
   manager: [
-    GameStateManager,
     TagManager,
     CameraManager,
+    CursorManager,
   ],
   mapper: [
     Position,
@@ -133,40 +134,16 @@ class CursorRenderingSystem extends _$CursorRenderingSystem {
 
   @override
   void render() {
-    final cursorX = gameStateManager.cursorX;
-    final cursorY = gameStateManager.cursorY;
     final camera = tagManager.getEntity(cameraTag);
-    final cameraPosition = positionMapper[camera];
     final zoom = cameraMapper[camera].zoom;
+    final selectedTile = cursorManager.getCurrentHexagonFromCursorPosition();
+    final cameraPosition = positionMapper[camera];
+    final cameraX = cameraPosition.x;
+    final cameraY = cameraPosition.y;
 
-    var cameraX = cameraPosition.x;
-    var cameraY = cameraPosition.y;
-    final cursorInCameraX = cameraX + cursorX * zoom;
-    final cursorInCameraY = -cameraY + cursorY * zoom;
-
-    final x =
-        (cursorInCameraX * sqrt(3) / 3 - cursorInCameraY * 1 / 3) / hexagonSize;
-    final y = (cursorInCameraY * 2 / 3) / hexagonSize;
-    final z = -x - y;
-
-    var rx = x.round();
-    var ry = y.round();
-    var rz = z.round();
-
-    var xDiff = (rx - x).abs();
-    var yDiff = (ry - y).abs();
-    var zDiff = (rz - z).abs();
-
-    if (xDiff > yDiff && xDiff > zDiff) {
-      rx = -ry - rz;
-    } else if (yDiff > zDiff) {
-      ry = -rx - rz;
-    } else {
-      rz = -rx - ry;
-    }
-
-    final centerX = rx * hexagonWidth + ry * hexagonWidth / 2;
-    final centerY = -ry * hexagonHeight * 3 / 4;
+    final centerX =
+        selectedTile.x * hexagonWidth + selectedTile.y * hexagonWidth / 2;
+    final centerY = -selectedTile.y * hexagonHeight * 3 / 4;
 
     for (int i = 0; i < 6; i++) {
       final index = i * 4;
@@ -214,4 +191,34 @@ class CursorRenderingSystem extends _$CursorRenderingSystem {
   String get fShaderFile => 'CursorRenderingSystem';
   @override
   String get vShaderFile => 'CursorRenderingSystem';
+}
+
+@Generate(
+  VoidEntitySystem,
+  manager: [
+    GameStateManager,
+    CursorManager,
+  ],
+)
+class SelectedPowerRenderingSystem extends _$SelectedPowerRenderingSystem {
+  CanvasRenderingContext2D ctx;
+  SpriteSheet sheet;
+  SelectedPowerRenderingSystem(this.ctx, this.sheet);
+
+  @override
+  void processSystem() {
+    final sprite =
+        sheet.sprites[gameStateManager.selectedPower.toString().split('.')[1]];
+    final image = sheet.image;
+    final cursorX = cursorManager.cursorX;
+    final cursorY = cursorManager.cursorY;
+    ctx.drawImageToRect(
+        image,
+        new Rectangle(sprite.dst.left + cursorX, sprite.dst.top + cursorY,
+            sprite.dst.width, sprite.dst.height),
+        sourceRect: sprite.src);
+  }
+
+  @override
+  bool checkProcessing() => gameStateManager.selectedPower != null;
 }

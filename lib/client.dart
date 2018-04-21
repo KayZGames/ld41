@@ -14,7 +14,7 @@ class Game extends GameBase {
   CanvasRenderingContext2D hudCtx;
   DivElement container;
 
-  Game() : super.noAssets('ld41', '#game', webgl: true) {
+  Game() : super('ld41', '#game', webgl: true, bodyDefsName: null) {
     container = querySelector('#gamecontainer');
     hudCanvas = querySelector('#hud');
     hudCtx = hudCanvas.context2D;
@@ -26,6 +26,7 @@ class Game extends GameBase {
     var gameStateManager = new GameStateManager();
     world.addManager(gameStateManager);
     world.addManager(new WorldMapManager());
+    world.addManager(new CursorManager());
     var tagManager = new TagManager();
     world.addManager(tagManager);
 
@@ -79,6 +80,7 @@ class Game extends GameBase {
     return {
       GameBase.rendering: [
         new HudInteractionSystem(hudCanvas),
+        new ExecutePowerSystem(),
         new CameraControllerSystem(),
         new PrepareTerrainChangeSystem(),
         new TerrainChangeSystem(),
@@ -86,6 +88,7 @@ class Game extends GameBase {
         new TerrainRenderingSystem(gl),
         new CursorRenderingSystem(gl),
         new CanvasCleaningSystem(hudCanvas),
+        new SelectedPowerRenderingSystem(hudCtx, spriteSheet),
         new FpsRenderingSystem(hudCtx, fillStyle: 'white'),
         new TerrainStatsUpdatingSystem(),
         new FinishGameStartedSystem(),

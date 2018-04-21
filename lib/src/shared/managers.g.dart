@@ -18,3 +18,18 @@ abstract class _$WorldMapManager extends Manager {
 }
 
 abstract class _$GameStateManager extends Manager {}
+
+abstract class _$CursorManager extends Manager {
+  Mapper<Position> positionMapper;
+  Mapper<Camera> cameraMapper;
+  TagManager tagManager;
+  CameraManager cameraManager;
+  @override
+  void initialize() {
+    super.initialize();
+    positionMapper = new Mapper<Position>(Position, world);
+    cameraMapper = new Mapper<Camera>(Camera, world);
+    tagManager = world.getManager(TagManager);
+    cameraManager = world.getManager(CameraManager);
+  }
+}

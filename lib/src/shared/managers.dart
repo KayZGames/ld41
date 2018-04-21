@@ -47,9 +47,58 @@ class WorldMapManager extends _$WorldMapManager {
 @Generate(Manager)
 class GameStateManager extends _$GameStateManager {
   State state = State.started;
-  double cursorX, cursorY;
+  PowerType selectedPower;
+  int turn = 1;
 }
 
-enum State {
-  playersTurn, endTurn, started
+enum State { playersTurn, endTurn, started }
+
+@Generate(
+  Manager,
+  manager: [
+    TagManager,
+    CameraManager,
+  ],
+  mapper: [
+    Position,
+    Camera,
+  ],
+)
+class CursorManager extends _$CursorManager {
+  double cursorX, cursorY;
+
+  Point<int> getCurrentHexagonFromCursorPosition() {
+    final camera = tagManager.getEntity(cameraTag);
+    final cameraPosition = positionMapper[camera];
+    final zoom = cameraMapper[camera].zoom;
+    final relCursorX = cursorX - cameraManager.width / 2;
+    final relCursorY = cursorY - cameraManager.height / 2;
+
+    final cameraX = cameraPosition.x;
+    final cameraY = cameraPosition.y;
+    final cursorInCameraX = cameraX + relCursorX * zoom;
+    final cursorInCameraY = -cameraY + relCursorY * zoom;
+
+    final x =
+        (cursorInCameraX * sqrt(3) / 3 - cursorInCameraY * 1 / 3) / hexagonSize;
+    final y = (cursorInCameraY * 2 / 3) / hexagonSize;
+    final z = -x - y;
+
+    var rx = x.round();
+    var ry = y.round();
+    var rz = z.round();
+
+    final xDiff = (rx - x).abs();
+    final yDiff = (ry - y).abs();
+    final zDiff = (rz - z).abs();
+
+    if (xDiff > yDiff && xDiff > zDiff) {
+      rx = -ry - rz;
+    } else if (yDiff > zDiff) {
+      ry = -rx - rz;
+    } else {
+      rz = -rx - ry;
+    }
+    return new Point(rx, ry);
+  }
 }
