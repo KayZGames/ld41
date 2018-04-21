@@ -74,7 +74,7 @@ class HudInteractionSystem extends _$HudInteractionSystem {
       gameStateManager.selectedPower = selectedPower;
     } else if (cancelPower) {
       gameStateManager.selectedPower = null;
-    } else if (clicked) {
+    } else if (clicked && gameStateManager.selectedPower != null) {
       final selectedTile = cursorManager.getCurrentHexagonFromCursorPosition();
       final entity = worldMapManager.worldMap[selectedTile.x][selectedTile.y];
       entity

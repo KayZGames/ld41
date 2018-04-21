@@ -222,3 +222,23 @@ class SelectedPowerRenderingSystem extends _$SelectedPowerRenderingSystem {
   @override
   bool checkProcessing() => gameStateManager.selectedPower != null;
 }
+
+@Generate(
+  EntityProcessingSystem,
+  allOf: [
+    LogMessage,
+  ],
+)
+class LogMessageSystem extends _$LogMessageSystem {
+  final DivElement logMessagesElement = document.querySelector('#logmessages');
+  DivElement lastNode;
+  @override
+  void processEntity(Entity entity) {
+    final log = logMessageMapper[entity];
+    final newNode = new DivElement()
+      ..innerHtml = '[Turn ${log.turn}] ${log.message}';
+    logMessagesElement.insertBefore(newNode, lastNode);
+    lastNode = newNode;
+    entity.deleteFromWorld();
+  }
+}

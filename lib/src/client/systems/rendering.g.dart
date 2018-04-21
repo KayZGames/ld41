@@ -55,3 +55,13 @@ abstract class _$SelectedPowerRenderingSystem extends VoidEntitySystem {
     cursorManager = world.getManager(CursorManager);
   }
 }
+
+abstract class _$LogMessageSystem extends EntityProcessingSystem {
+  Mapper<LogMessage> logMessageMapper;
+  _$LogMessageSystem() : super(new Aspect.empty()..allOf([LogMessage]));
+  @override
+  void initialize() {
+    super.initialize();
+    logMessageMapper = new Mapper<LogMessage>(LogMessage, world);
+  }
+}

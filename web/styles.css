@@ -159,3 +159,24 @@ canvas {
   box-shadow: inset 0 0 4px 4px black;
   background-color: white;
 }
+
+.bottombar {
+  position: absolute;
+  bottom: 0;
+  left: 215px;
+  right: 215px;
+  height: 200px;
+  background-color: coral;
+  padding-top: 15px;
+  box-shadow: inset 0 15px 15px -14px black;
+}
+
+#logmessages {
+  overflow-y: hidden;
+  height: 100%;
+}
+
+#logmessages > div {
+  font-size: 16px;
+  margin-left: 5px;
+}

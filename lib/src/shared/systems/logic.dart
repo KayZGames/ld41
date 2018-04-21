@@ -183,7 +183,7 @@ class ExecutePowerSystem extends _$ExecutePowerSystem {
       world.createAndAddEntity(
           [new Human(), new TilePosition(tilePosition.x, tilePosition.y)]);
       world.createAndAddEntity(
-          [new LogMessage(gameStateManager.turn, 'Humans!!!')]);
+          [new LogMessage(gameStateManager.turn, 'Humans have appeared!!!')]);
     } else if (power == PowerType.forest) {
       var terrain = terrainMapper[entity];
       if (terrain.type == TerrainType.grass ||

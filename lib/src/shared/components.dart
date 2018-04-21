@@ -45,7 +45,7 @@ class Camera extends Component {
 
 class ExecutePower extends Component {
   PowerType power;
-  ExecutePower(power);
+  ExecutePower(this.power);
 }
 
 class Human extends Component {}

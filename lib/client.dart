@@ -93,6 +93,7 @@ class Game extends GameBase {
         new TerrainStatsUpdatingSystem(),
         new FinishGameStartedSystem(),
         new FinishEndTurnSystem(),
+        new LogMessageSystem(),
       ],
       GameBase.physics: [
         // add at least one
