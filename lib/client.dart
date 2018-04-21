@@ -66,14 +66,13 @@ class Game extends GameBase {
         endX--;
       }
     }
-    new Timer.periodic(const Duration(seconds: 5),
-        (_) => gameStateManager.state = State.endTurn);
   }
 
   @override
   Map<int, List<EntitySystem>> getSystems() {
     return {
       GameBase.rendering: [
+        new HudInteractionSystem(),
         new PrepareTerrainChangeSystem(),
         new TerrainChangeSystem(),
         new WebGlCanvasCleaningSystem(gl),
