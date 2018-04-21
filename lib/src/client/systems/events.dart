@@ -14,6 +14,10 @@ part 'events.g.dart';
 )
 class HudInteractionSystem extends _$HudInteractionSystem {
   bool endTurn = false;
+  final CanvasElement hud;
+  Point<num> mouseOffset = new Point(0, 0);
+
+  HudInteractionSystem(this.hud);
 
   @override
   void initialize() {
@@ -22,6 +26,8 @@ class HudInteractionSystem extends _$HudInteractionSystem {
         .querySelector('#endturn')
         .onClick
         .listen((event) => endTurn = event.button == 0);
+
+    hud.onMouseMove.listen((mouseEvent) => mouseOffset = mouseEvent.offset);
   }
 
   @override
@@ -29,6 +35,8 @@ class HudInteractionSystem extends _$HudInteractionSystem {
     if (gameStateManager.state == State.playersTurn && endTurn) {
       gameStateManager.state = State.endTurn;
     }
+    gameStateManager.cursorX = mouseOffset.x - hud.width / 2;
+    gameStateManager.cursorY = mouseOffset.y - hud.height / 2;
   }
 
   @override
@@ -59,14 +67,14 @@ class CameraControllerSystem extends _$CameraControllerSystem {
     final position = positionMapper[entity];
     final camera = cameraMapper[entity];
     if (up) {
-      position.y += 0.03 * camera.zoom;
+      position.y += 0.2 * camera.zoom * hexagonSize;
     } else if (down) {
-      position.y -= 0.03 * camera.zoom;
+      position.y -= 0.2 * camera.zoom * hexagonSize;
     }
     if (left) {
-      position.x -= 0.03 * camera.zoom;
+      position.x -= 0.2 * camera.zoom * hexagonSize;
     } else if (right) {
-      position.x += 0.03 * camera.zoom;
+      position.x += 0.2 * camera.zoom * hexagonSize;
     }
     if (zoomDelta > 0) {
       camera.zoom += 0.1 * camera.zoom;

@@ -60,7 +60,8 @@ class Game extends GameBase {
         }
         addEntity([
           new TilePosition(x, y),
-          new Position(x + y * cos(pi / 3), -y * sin(pi / 3)),
+          new Position(x * hexagonWidth + y * hexagonWidth / 2,
+              -y * hexagonHeight * 3 / 4),
           new Color(1.0, 0.0, 0.0, 1.0),
           new ChangeTerrain(),
           tile,
@@ -77,13 +78,13 @@ class Game extends GameBase {
   Map<int, List<EntitySystem>> getSystems() {
     return {
       GameBase.rendering: [
-        new HudInteractionSystem(),
+        new HudInteractionSystem(hudCanvas),
         new CameraControllerSystem(),
         new PrepareTerrainChangeSystem(),
         new TerrainChangeSystem(),
         new WebGlCanvasCleaningSystem(gl),
         new TerrainRenderingSystem(gl),
-//        new TerrainRenderingSystem2(gl),
+        new CursorRenderingSystem(gl),
         new CanvasCleaningSystem(hudCanvas),
         new FpsRenderingSystem(hudCtx, fillStyle: 'white'),
         new TerrainStatsUpdatingSystem(),

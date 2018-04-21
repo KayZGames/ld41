@@ -4,6 +4,7 @@ import 'dart:web_gl';
 import 'package:dartemis/dartemis.dart';
 import 'package:gamedev_helpers/gamedev_helpers.dart';
 import 'package:ld41/shared.dart';
+import 'package:ld41/src/shared/managers.dart';
 
 part 'rendering.g.dart';
 
@@ -16,6 +17,7 @@ part 'rendering.g.dart';
   ],
   manager: [
     TagManager,
+    CameraManager,
   ],
   mapper: [
     Camera,
@@ -26,12 +28,11 @@ class TerrainRenderingSystem extends _$TerrainRenderingSystem {
     const Attrib('pos', 2),
     const Attrib('color', 3),
   ];
-  static const double spacingNumber = 0.5725;
+  static const double spacingNumber = 0.98;
 
   Uint16List indices;
   Float32List items;
 
-  double scale = 0.2;
   double cameraX, cameraY;
 
   Matrix4 twodOrthographicMatrix;
@@ -44,18 +45,19 @@ class TerrainRenderingSystem extends _$TerrainRenderingSystem {
     final cameraPosition = positionMapper[camera];
     cameraX = cameraPosition.x;
     cameraY = cameraPosition.y;
+    final width = cameraManager.width;
+    final height = cameraManager.height;
 
-    final ratio = 16 / 9;
     final zoom = cameraMapper[camera].zoom;
     final orthographicMatrix = new Matrix4.identity();
     setOrthographicMatrix(
         orthographicMatrix,
-        cameraX - 1.0 * ratio * zoom,
-        cameraX + 1.0 * ratio * zoom,
-        cameraY - 1.0 * zoom,
-        cameraY + 1.0 * zoom,
-        2.0,
-        -2.0);
+        cameraX - (width / 2) * zoom,
+        cameraX + (width / 2) * zoom,
+        cameraY - (height / 2) * zoom,
+        cameraY + (height / 2) * zoom,
+        1.0,
+        -1.0);
     twodOrthographicMatrix = orthographicMatrix;
   }
 
@@ -64,8 +66,8 @@ class TerrainRenderingSystem extends _$TerrainRenderingSystem {
     final position = positionMapper[entity];
     final color = colorMapper[entity];
     var hexagonIndex = index * 5 * 7;
-    items[hexagonIndex] = position.x * scale - cameraX;
-    items[hexagonIndex + 1] = position.y * scale - cameraY;
+    items[hexagonIndex] = position.x;
+    items[hexagonIndex + 1] = position.y;
     items[hexagonIndex + 2] = color.r;
     items[hexagonIndex + 3] = color.g;
     items[hexagonIndex + 4] = color.b;
@@ -73,11 +75,9 @@ class TerrainRenderingSystem extends _$TerrainRenderingSystem {
     for (int i = 0; i < 6; i++) {
       var edgeIndex = hexagonIndex + 5 + i * 5;
       items[edgeIndex] =
-          (position.x + spacingNumber * cos(pi / 6 + i * pi / 3)) * scale -
-              cameraX;
+          position.x + spacingNumber * hexagonSize * cos(pi / 6 + i * pi / 3);
       items[edgeIndex + 1] =
-          (position.y + spacingNumber * sin(pi / 6 + i * pi / 3)) * scale -
-              cameraY;
+          position.y + spacingNumber * hexagonSize * sin(pi / 6 + i * pi / 3);
       items[edgeIndex + 2] = color.r;
       items[edgeIndex + 3] = color.g;
       items[edgeIndex + 4] = color.b;
@@ -112,138 +112,106 @@ class TerrainRenderingSystem extends _$TerrainRenderingSystem {
 }
 
 @Generate(
-  WebGlRenderingSystem,
-  allOf: [
-    TilePosition,
+  VoidWebGlRenderingSystem,
+  manager: [
+    GameStateManager,
+    TagManager,
+    CameraManager,
+  ],
+  mapper: [
     Position,
-    Color,
+    Camera,
   ],
 )
-class TerrainRenderingSystem2 extends _$TerrainRenderingSystem2 {
-  List<Attrib> attributes = const [
-    const Attrib('pos', 2),
-    const Attrib('color', 3),
-  ];
+class CursorRenderingSystem extends _$CursorRenderingSystem {
+  List<Attrib> attributes = const [const Attrib('pos', 2)];
 
-  Uint16List indices;
-  Float32List items;
+  Uint16List indices = new Uint16List(6 * 6);
+  Float32List items = new Float32List(12 * 2);
 
-  TerrainRenderingSystem2(gl) : super(gl);
+  CursorRenderingSystem(RenderingContext2 gl) : super(gl);
 
   @override
-  void processEntities(Iterable<Entity> entities) {
-    final length = entities.length;
-    if (length > 0) {
-      gl.useProgram(program);
-      if (length > maxLength) {
-        updateLength(length);
-        maxLength = length;
-      }
-      // length = 3 * (radius * radius + radius) + 1
-      final maxRadius = sqrt(length / 3).floor();
-      final offset = length ~/ 2;
-      for (final entity in entities) {
-        final tilePosition = tilePositionMapper[entity];
-        final position = positionMapper[entity];
-        final color = colorMapper[entity];
-        var hexagonIndex = offset;
-        if (tilePosition.y > 0) {
-          hexagonIndex = length - 1;
-          var row = maxRadius;
-          var rowCounter = 2;
-          while (row > tilePosition.y) {
-            hexagonIndex -= maxRadius + rowCounter;
-            row--;
-            rowCounter++;
-          }
-        } else if (tilePosition.y < 0) {
-          hexagonIndex = 0;
-          var row = -maxRadius;
-          var rowCounter = 2;
-          while (row < tilePosition.y) {
-            hexagonIndex += maxRadius + rowCounter;
-            row++;
-            rowCounter++;
-          }
-        }
-        hexagonIndex += tilePosition.x;
-        hexagonIndex *= 5;
-        items[hexagonIndex] = position.x * 0.2;
-        items[hexagonIndex + 1] = position.y * 0.2;
-        items[hexagonIndex + 2] = color.r;
-        items[hexagonIndex + 3] = color.g;
-        items[hexagonIndex + 4] = color.b;
-      }
-      var indexOffset = 0;
-      var triangleOffset = 0;
-      for (int row = 0; row < maxRadius; row++) {
-        final itemsInRow = maxRadius + row + 1;
-        for (int column = 0; column < itemsInRow; column++) {
-          final index = (indexOffset + column) * 3;
-          indices[index] = triangleOffset + column;
-          indices[index + 1] = triangleOffset + column + itemsInRow + 1;
-          indices[index + 2] = triangleOffset + column + itemsInRow;
-        }
-        indexOffset += itemsInRow;
-        triangleOffset += itemsInRow;
-      }
-      triangleOffset = 0;
-      for (int row = 0; row < maxRadius; row++) {
-        final itemsInRow = maxRadius + row + 1;
-        for (int column = 0; column < itemsInRow - 1; column++) {
-          final index = (indexOffset + column) * 3;
-          indices[index] = triangleOffset + column;
-          indices[index + 1] = triangleOffset + column + 1;
-          indices[index + 2] = triangleOffset + column + itemsInRow + 1;
-        }
-        indexOffset += itemsInRow - 1;
-        triangleOffset += itemsInRow;
-      }
-      triangleOffset = length - 1;
-      for (int row = 0; row > -maxRadius; row--) {
-        final itemsInRow = maxRadius + row.abs() + 1;
-        for (int column = 0; column < itemsInRow; column++) {
-          final index = (indexOffset + column) * 3;
-          indices[index] = triangleOffset - column;
-          indices[index + 1] = triangleOffset - column - itemsInRow - 1;
-          indices[index + 2] = triangleOffset - column - itemsInRow;
-        }
-        indexOffset += itemsInRow;
-        triangleOffset -= itemsInRow;
-      }
-      triangleOffset = length - 1;
-      for (int row = 0; row > -maxRadius; row--) {
-        final itemsInRow = maxRadius + row.abs() + 1;
-        for (int column = 0; column < itemsInRow - 1; column++) {
-          final index = (indexOffset + column) * 3;
-          indices[index] = triangleOffset - column;
-          indices[index + 1] = triangleOffset - column - 1;
-          indices[index + 2] = triangleOffset - column - itemsInRow - 1;
-        }
-        indexOffset += itemsInRow - 1;
-        triangleOffset -= itemsInRow;
-      }
-      render(length);
+  void render() {
+    final cursorX = gameStateManager.cursorX;
+    final cursorY = gameStateManager.cursorY;
+    final camera = tagManager.getEntity(cameraTag);
+    final cameraPosition = positionMapper[camera];
+    final zoom = cameraMapper[camera].zoom;
+
+    var cameraX = cameraPosition.x;
+    var cameraY = cameraPosition.y;
+    final cursorInCameraX = cameraX + cursorX * zoom;
+    final cursorInCameraY = -cameraY + cursorY * zoom;
+
+    final x =
+        (cursorInCameraX * sqrt(3) / 3 - cursorInCameraY * 1 / 3) / hexagonSize;
+    final y = (cursorInCameraY * 2 / 3) / hexagonSize;
+    final z = -x - y;
+
+    var rx = x.round();
+    var ry = y.round();
+    var rz = z.round();
+
+    var xDiff = (rx - x).abs();
+    var yDiff = (ry - y).abs();
+    var zDiff = (rz - z).abs();
+
+    if (xDiff > yDiff && xDiff > zDiff) {
+      rx = -ry - rz;
+    } else if (yDiff > zDiff) {
+      ry = -rx - rz;
+    } else {
+      rz = -rx - ry;
     }
-  }
 
-  @override
-  void processEntity(int index, Entity entity) => null;
+    final centerX = rx * hexagonWidth + ry * hexagonWidth / 2;
+    final centerY = -ry * hexagonHeight * 3 / 4;
 
-  @override
-  void render(int length) {
+    for (int i = 0; i < 6; i++) {
+      final index = i * 4;
+      items[index] = (centerX + hexagonSize * cos(pi / 6 + i * pi / 3) * 0.95);
+      items[index + 1] =
+          (centerY + hexagonSize * sin(pi / 6 + i * pi / 3) * 0.95);
+      items[index + 2] =
+          (centerX + hexagonSize * cos(pi / 6 + i * pi / 3) * 1.02);
+      items[index + 3] =
+          (centerY + hexagonSize * sin(pi / 6 + i * pi / 3) * 1.02);
+    }
+
+    for (int i = 0; i < 6; i++) {
+      final index = i * 6;
+      indices[index] = 2 * i;
+      indices[index + 1] = 2 * i + 1;
+      indices[index + 2] = 2 * i + 2;
+
+      indices[index + 3] = 2 * i + 1;
+      indices[index + 4] = 2 * i + 2;
+      indices[index + 5] = 2 * i + 3;
+    }
+    indices[6 * 6 - 1] = 1;
+    indices[6 * 6 - 2] = 0;
+    indices[6 * 6 - 4] = 0;
+
+    final width = cameraManager.width;
+    final height = cameraManager.height;
+
+    final orthographicMatrix = new Matrix4.identity();
+    setOrthographicMatrix(
+        orthographicMatrix,
+        cameraX - (width / 2) * zoom,
+        cameraX + (width / 2) * zoom,
+        cameraY - (height / 2) * zoom,
+        cameraY + (height / 2) * zoom,
+        1.0,
+        -1.0);
+    final location = gl.getUniformLocation(program, 'uViewProjectionMatrix');
+    gl.uniformMatrix4fv(location, false, orthographicMatrix.storage);
     drawTriangles(attributes, items, indices);
   }
 
   @override
-  void updateLength(int length) {
-    items = new Float32List(length * 5);
-    final maxRadius = sqrt(length / 3).floor();
-    indices = new Uint16List(3 * (maxRadius * maxRadius * 6));
-  }
-
+  String get fShaderFile => 'CursorRenderingSystem';
   @override
-  String get fShaderFile => 'TerrainRenderingSystem2';
-  @override
-  String get vShaderFile => 'TerrainRenderingSystem2';
+  String get vShaderFile => 'CursorRenderingSystem';
 }
