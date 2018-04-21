@@ -46,9 +46,9 @@ class WorldMapManager extends _$WorldMapManager {
 
 @Generate(Manager)
 class GameStateManager extends _$GameStateManager {
-  State state = State.playersTurn;
+  State state = State.started;
 }
 
 enum State {
-  playersTurn, endTurn
+  playersTurn, endTurn, started
 }

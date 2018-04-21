@@ -38,7 +38,16 @@ abstract class _$PrepareTerrainChangeSystem extends EntityProcessingSystem {
   }
 }
 
-abstract class _$EndTurnSystem extends VoidEntitySystem {
+abstract class _$FinishEndTurnSystem extends VoidEntitySystem {
+  GameStateManager gameStateManager;
+  @override
+  void initialize() {
+    super.initialize();
+    gameStateManager = world.getManager(GameStateManager);
+  }
+}
+
+abstract class _$FinishGameStartedSystem extends VoidEntitySystem {
   GameStateManager gameStateManager;
   @override
   void initialize() {

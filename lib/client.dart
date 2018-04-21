@@ -3,6 +3,7 @@ library client;
 import 'dart:html';
 import 'package:ld41/shared.dart';
 import 'package:gamedev_helpers/gamedev_helpers.dart';
+import 'package:ld41/src/client/systems/hud_rendering.dart';
 import 'package:ld41/src/shared/managers.dart';
 
 import 'src/client/systems/events.dart';
@@ -34,7 +35,8 @@ class Game extends GameBase {
             type != TerrainType.endOfWorld &&
             type != TerrainType.ocean &&
             type != TerrainType.glacier &&
-            type != TerrainType.shore)
+            type != TerrainType.coast &&
+            type != TerrainType.farm)
         .toList(growable: false);
     for (int y = -radius; y <= radius; y++) {
       for (int x = startX; x <= endX; x++) {
@@ -46,7 +48,7 @@ class Game extends GameBase {
         } else if (y.abs() >= radius - 3 || x < startX + 3 || x > endX - 3) {
           tile = new Terrain(TerrainType.ocean);
         } else if (y.abs() == radius - 4 || x == startX + 3 || x == endX - 3) {
-          tile = new Terrain(TerrainType.shore);
+          tile = new Terrain(TerrainType.coast);
         } else {
           tile = new Terrain(tilesForRandomDistribution[
               random.nextInt(tilesForRandomDistribution.length)]);
@@ -79,7 +81,9 @@ class Game extends GameBase {
 //        new TerrainRenderingSystem2(gl),
         new CanvasCleaningSystem(hudCanvas),
         new FpsRenderingSystem(hudCtx, fillStyle: 'white'),
-        new EndTurnSystem(),
+        new TerrainStatsUpdatingSystem(),
+        new FinishGameStartedSystem(),
+        new FinishEndTurnSystem(),
       ],
       GameBase.physics: [
         // add at least one

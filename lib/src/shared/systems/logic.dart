@@ -43,7 +43,7 @@ class TerrainChangeSystem extends _$TerrainChangeSystem {
         color.g = 1.0;
         color.b = 0.0;
         break;
-      case TerrainType.shore:
+      case TerrainType.coast:
         color.r = 1.0;
         color.g = 1.0;
         color.b = 0.0;
@@ -135,7 +135,7 @@ class PrepareTerrainChangeSystem extends _$PrepareTerrainChangeSystem {
     GameStateManager,
   ],
 )
-class EndTurnSystem extends _$EndTurnSystem {
+class FinishEndTurnSystem extends _$FinishEndTurnSystem {
   @override
   void processSystem() {
     gameStateManager.state = State.playersTurn;
@@ -143,4 +143,20 @@ class EndTurnSystem extends _$EndTurnSystem {
 
   @override
   bool checkProcessing() => gameStateManager.state == State.endTurn;
+}
+
+@Generate(
+  VoidEntitySystem,
+  manager: [
+    GameStateManager,
+  ],
+)
+class FinishGameStartedSystem extends _$FinishGameStartedSystem {
+  @override
+  void processSystem() {
+    gameStateManager.state = State.playersTurn;
+  }
+
+  @override
+  bool checkProcessing() => gameStateManager.state == State.started;
 }

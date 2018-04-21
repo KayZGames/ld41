@@ -40,7 +40,7 @@ enum TerrainType {
   desert,
   barren,
   farm,
-  shore,
+  coast,
   jungle,
   swamp,
   endOfWorld,
