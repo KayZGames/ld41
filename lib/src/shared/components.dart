@@ -1,27 +1,51 @@
 import 'package:dartemis/dartemis.dart';
 
-class Controller extends Component {
-  bool up, down, left, right;
-  bool upleft, upright, downleft, downright;
+class TilePosition extends Component {
+  int x, y, z;
+  TilePosition(this.x, this.y) : z = -x - y;
+}
 
-  Controller(
-      {this.up: false,
-      this.down: false,
-      this.left: false,
-      this.right: false,
-      this.upleft: false,
-      this.upright: false,
-      this.downleft: false,
-      this.downright: false});
+class Tile extends Component {
+  CellType type;
+  Tile(this.type);
+}
 
-  void reset() {
-    up = false;
-    down = false;
-    left = false;
-    right = false;
-    upleft = false;
-    upright = false;
-    downleft = false;
-    downright = false;
-  }
+class Temerature extends Component {
+  double celcius;
+  Temerature(this.celcius);
+
+  double get fahrenheit => celcius;
+}
+
+class Humidity extends Component {
+  double percentage;
+  Humidity(this.percentage);
+}
+
+class Fertility extends Component {
+  double percentage;
+  Fertility(this.percentage);
+}
+
+enum CellType {
+  glacier,
+  ocean,
+  lake,
+  grass,
+  forest,
+  desert,
+  barren,
+  farm,
+  village,
+  town,
+  city,
+  shore,
+  jungle,
+  swamp,
+  endOfWorld,
+}
+
+enum OverlayCellType {
+  fire,
+  flood,
 }

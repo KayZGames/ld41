@@ -21,15 +21,30 @@ class Game extends GameBase {
 
   @override
   void createEntities() {
-    addEntity([new Controller()]);
+    final radius = 3;
+    var startX = 0;
+    var endX = radius;
+    for (int y = -radius; y <= radius; y++) {
+      for (int x = startX; x <= endX; x++) {
+        addEntity([
+          new TilePosition(x, y),
+          new Position(x + y * cos(pi / 3), -y * sin(pi / 3)),
+          new Color(1.0, 0.0, 0.0, 1.0),
+        ]);
+      }
+      startX = max(startX - 1, -radius);
+      if (y >= 0) {
+        endX--;
+      }
+    }
   }
 
   @override
   Map<int, List<EntitySystem>> getSystems() {
     return {
       GameBase.rendering: [
-        new ControllerSystem(),
         new WebGlCanvasCleaningSystem(gl),
+        new TileRenderingSystem(gl),
         new CanvasCleaningSystem(hudCanvas),
         new FpsRenderingSystem(hudCtx, fillStyle: 'white'),
       ],
