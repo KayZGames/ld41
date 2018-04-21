@@ -35,7 +35,7 @@ class Camera extends Component {
   double _zoom;
   Camera([this._zoom = 1.0]);
   set zoom(double value) {
-    if (value >= 0.1 && value <= 10.0) {
+    if (value >= 0.1 && value <= 3.0) {
       _zoom = value;
     }
   }

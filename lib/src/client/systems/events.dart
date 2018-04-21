@@ -14,7 +14,6 @@ part 'events.g.dart';
 )
 class HudInteractionSystem extends _$HudInteractionSystem {
   bool endTurn = false;
-  int zoomDelta = 0;
 
   @override
   void initialize() {
@@ -30,7 +29,6 @@ class HudInteractionSystem extends _$HudInteractionSystem {
     if (gameStateManager.state == State.playersTurn && endTurn) {
       gameStateManager.state = State.endTurn;
     }
-    if (zoomDelta > 0) {}
   }
 
   @override
@@ -74,6 +72,11 @@ class CameraControllerSystem extends _$CameraControllerSystem {
       camera.zoom += 0.1 * camera.zoom;
     } else if (zoomDelta < 0) {
       camera.zoom -= 0.1 * camera.zoom;
+    }
+    if (isPressed(KeyCode.SPACE)) {
+      position
+        ..x = 0.0
+        ..y = 0.0;
     }
   }
 
