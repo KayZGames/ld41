@@ -26,6 +26,7 @@ class TerrainRenderingSystem extends _$TerrainRenderingSystem {
     const Attrib('pos', 2),
     const Attrib('color', 3),
   ];
+  static const double spacingNumber = 0.5725;
 
   Uint16List indices;
   Float32List items;
@@ -72,10 +73,10 @@ class TerrainRenderingSystem extends _$TerrainRenderingSystem {
     for (int i = 0; i < 6; i++) {
       var edgeIndex = hexagonIndex + 5 + i * 5;
       items[edgeIndex] =
-          (position.x + sin(pi / 5) * cos(pi / 6 + i * pi / 3)) * scale -
+          (position.x + spacingNumber * cos(pi / 6 + i * pi / 3)) * scale -
               cameraX;
       items[edgeIndex + 1] =
-          (position.y + sin(pi / 5) * sin(pi / 6 + i * pi / 3)) * scale -
+          (position.y + spacingNumber * sin(pi / 6 + i * pi / 3)) * scale -
               cameraY;
       items[edgeIndex + 2] = color.r;
       items[edgeIndex + 3] = color.g;
