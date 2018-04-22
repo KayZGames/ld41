@@ -99,6 +99,7 @@ class Game extends GameBase {
         new PrepareTerrainChangeSystem(),
         new HumanAiSystem(),
         new FireSystem(),
+        new FloodSystem(),
         new TerrainChangeSystem(),
         new TemperatureChangeSystem(),
         new FertilityChangeSystem(),

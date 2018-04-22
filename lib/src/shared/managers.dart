@@ -9,6 +9,7 @@ part 'managers.g.dart';
     TilePosition,
     Terrain,
     Fire,
+    Flood,
     Temperature,
     Fertility,
     Humidity,
@@ -25,6 +26,7 @@ class WorldMapManager extends _$WorldMapManager {
   ];
   final Map<int, Map<int, Entity>> worldMap = {};
   final Map<int, Map<int, Entity>> fireMap = {};
+  final Map<int, Map<int, Entity>> floodMap = {};
 
   @override
   void added(Entity entity) {
@@ -34,6 +36,9 @@ class WorldMapManager extends _$WorldMapManager {
     if (fireMapper.has(entity)) {
       _addEntityToMap(fireMap, entity);
     }
+    if (floodMapper.has(entity)) {
+      _addEntityToMap(floodMap, entity);
+    }
   }
 
   @override
@@ -42,6 +47,11 @@ class WorldMapManager extends _$WorldMapManager {
       _addEntityToMap(fireMap, entity);
     } else {
       _removeEntityFromMap(fireMap, entity);
+    }
+    if (floodMapper.has(entity)) {
+      _addEntityToMap(floodMap, entity);
+    } else {
+      _removeEntityFromMap(floodMap, entity);
     }
   }
 
@@ -89,6 +99,15 @@ class WorldMapManager extends _$WorldMapManager {
     return _getNeigbhors(fireMap, x, y).length;
   }
 
+  int getHighestAdjacentHighFlood(int x, int y) {
+    var result = 0;
+    final floodedNeighbors = _getNeigbhors(floodMap, x, y);
+    for (final floodedNeighbor in floodedNeighbors) {
+      result = max(floodMapper[floodedNeighbor].turnsRemaining, result);
+    }
+    return result;
+  }
+
   double getAverageSurroundingTemperature(int x, int y) {
     return _getAverage(x, y, (entity) => temperatureMapper[entity].celsius);
   }
@@ -110,6 +129,16 @@ class WorldMapManager extends _$WorldMapManager {
   }
 
   List<int> getDirectionToClosest(TerrainType type, int x, int y) {
+    final neighbors = _getNeigbhors(worldMap, x, y);
+    final grassland = neighbors
+        .where((entity) => terrainMapper[entity].type == TerrainType.grass)
+        .map((entity) => tilePositionMapper[entity])
+        .toList();
+    if (grassland.isNotEmpty) {
+      grassland.shuffle(random);
+      final target = grassland.first;
+      return [target.x - x, target.y - y];
+    }
     List<int> randomDirectionProvider = [-1, 0, 1];
     randomDirectionProvider.shuffle(random);
     return [randomDirectionProvider[0], randomDirectionProvider[1]];
@@ -223,8 +252,8 @@ class TerrainChangeManager extends _$TerrainChangeManager {
     _removeSprite(entity, Fire);
   }
 
-  void addFlood(Entity entity) {
-    _addSprite(entity, new Flood(), 'flood');
+  void addFlood(Entity entity, int turnsRemaining) {
+    _addSprite(entity, new Flood(turnsRemaining), 'flood');
   }
 
   void removeFlood(Entity entity) {
@@ -288,5 +317,10 @@ class TerrainChangeManager extends _$TerrainChangeManager {
   void removeSettlement(Entity entity) {
     changeTerrain(entity, terrainMapper[entity], TerrainType.grass);
     _removeSprite(entity, Settlement);
+  }
+
+  void douseFlames(Entity entity, int highestFlood) {
+    _removeSprite(entity, Fire);
+    addFlood(entity, highestFlood - 1);
   }
 }

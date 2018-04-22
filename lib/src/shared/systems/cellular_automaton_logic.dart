@@ -108,6 +108,7 @@ class PrepareHumidityChangeSystem extends _$PrepareHumidityChangeSystem {
   ],
   mapper: [
     Fire,
+    Flood,
   ],
 )
 class PrepareTerrainChangeSystem extends _$PrepareTerrainChangeSystem {
@@ -122,37 +123,47 @@ class PrepareTerrainChangeSystem extends _$PrepareTerrainChangeSystem {
     final tilePosition = tilePositionMapper[entity];
 
     var hasFire = fireMapper.has(entity);
+    var hasFlood = floodMapper.has(entity);
+    var x = tilePosition.x;
+    var y = tilePosition.y;
     if (hasFire) {
-      temperature.nextCelcius += 5.0;
-      humidity.nextPercentage -= 2.5;
+      final highestFlood = worldMapManager.getHighestAdjacentHighFlood(x, y);
+      if (highestFlood > 0) {
+        terrainChangeManager.addFlood(entity, highestFlood);
+      } else {
+        temperature.nextCelcius += 5.0;
+        humidity.nextPercentage -= 2.5;
+        fertility.nextPercentage += 1.0;
+      }
+    } else if (hasFlood) {
+      temperature.nextCelcius -= 1.0;
+      humidity.nextPercentage += 1.0;
+      fertility.nextPercentage += 1.0;
     } else {
-      final fires =
-          worldMapManager.getSurroundingFires(tilePosition.x, tilePosition.y);
-      if (fires >= fireResistances[terrain.type].fireNeeded) {
-        terrainChangeManager.addFire(
-            entity, fireResistances[terrain.type].turnsToBurn);
+      final highestFlood = worldMapManager.getHighestAdjacentHighFlood(x, y);
+      final fires = worldMapManager.getSurroundingFires(x, y);
+      var type = terrain.type;
+      if (highestFlood > 0) {
+        terrainChangeManager.addFlood(entity, highestFlood - 1);
+      } else if (fires >= fireResistances[type].fireNeeded) {
+        terrainChangeManager.addFire(entity, fireResistances[type].turnsToBurn);
         firesSpread++;
       } else {
-        final possibleConversions = terrainConversion[terrain.type];
-        final target = checkForConversion(terrain.type, possibleConversions,
-            humidity, temperature, fertility);
+        final possibleConversions = terrainConversion[type];
+        final target = checkForConversion(
+            type, possibleConversions, humidity, temperature, fertility);
         if (target != null) {
           terrainChangeManager.changeTerrain(entity, terrain, target);
         } else {
-          final surroundingTypes = worldMapManager.getSurroundingTerrainTypes(
-              tilePosition.x, tilePosition.y);
-          if (terrain.type == TerrainType.grass) {
+          final surroundingTypes =
+              worldMapManager.getSurroundingTerrainTypes(x, y);
+          if (type == TerrainType.grass) {
             final settlement = surroundingTypes[TerrainType.settlement];
-//        final forests = surroundingTypes[TerrainType.forest];
-//        final jungles = surroundingTypes[TerrainType.jungle];
             if (settlement != null) {
               terrainChangeManager.changeTerrain(
                   entity, terrain, TerrainType.farm);
             }
-//        else if (jungles != null || (forests != null && forests > 1)) {
-//          terrainChangeManager.changeTerrain(entity, terrain, TerrainType.forest);
-//        }
-          } else if (terrain.type == TerrainType.farm) {
+          } else if (type == TerrainType.farm) {
             final settlement = surroundingTypes[TerrainType.settlement];
             if (settlement == null) {
               terrainChangeManager.changeTerrain(

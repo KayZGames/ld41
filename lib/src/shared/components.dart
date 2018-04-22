@@ -61,7 +61,10 @@ class Fire extends Component {
   Fire(this.turnsToBurn);
 }
 
-class Flood extends Component {}
+class Flood extends Component {
+  int turnsRemaining;
+  Flood(this.turnsRemaining);
+}
 
 class Settlement extends Component {
   int food;

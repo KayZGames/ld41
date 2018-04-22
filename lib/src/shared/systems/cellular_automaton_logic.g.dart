@@ -70,6 +70,7 @@ abstract class _$PrepareTerrainChangeSystem extends EntityProcessingSystem {
   Mapper<Humidity> humidityMapper;
   Mapper<Fertility> fertilityMapper;
   Mapper<Fire> fireMapper;
+  Mapper<Flood> floodMapper;
   WorldMapManager worldMapManager;
   GameStateManager gameStateManager;
   TerrainChangeManager terrainChangeManager;
@@ -85,6 +86,7 @@ abstract class _$PrepareTerrainChangeSystem extends EntityProcessingSystem {
     humidityMapper = new Mapper<Humidity>(Humidity, world);
     fertilityMapper = new Mapper<Fertility>(Fertility, world);
     fireMapper = new Mapper<Fire>(Fire, world);
+    floodMapper = new Mapper<Flood>(Flood, world);
     worldMapManager = world.getManager(WorldMapManager);
     gameStateManager = world.getManager(GameStateManager);
     terrainChangeManager = world.getManager(TerrainChangeManager);

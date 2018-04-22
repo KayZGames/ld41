@@ -24,8 +24,39 @@ class FireSystem extends _$FireSystem {
     if (fire.turnsToBurn <= 0) {
       final terrain = terrainMapper[entity];
       terrainChangeManager.burnDown(entity, terrain);
+    } else {
+      fire.turnsToBurn--;
     }
-    fire.turnsToBurn--;
+  }
+
+  @override
+  void end() {
+    world.processEntityChanges();
+  }
+
+  @override
+  bool checkProcessing() => gameStateManager.state == State.endTurn;
+}
+
+@Generate(
+  EntityProcessingSystem,
+  allOf: [
+    Flood,
+  ],
+  manager: [
+    TerrainChangeManager,
+    GameStateManager,
+  ],
+)
+class FloodSystem extends _$FloodSystem {
+  @override
+  void processEntity(Entity entity) {
+    final flood = floodMapper[entity];
+    if (flood.turnsRemaining <= 0) {
+      terrainChangeManager.removeFlood(entity);
+    } else {
+      flood.turnsRemaining--;
+    }
   }
 
   @override
@@ -141,7 +172,7 @@ class ExecutePowerSystem extends _$ExecutePowerSystem {
               Severity.warning)
         ]);
       } else if (power == PowerType.flood) {
-        terrainChangeManager.addFlood(entity);
+        terrainChangeManager.addFlood(entity, 6);
         world.createAndAddEntity([
           new LogMessage(
               'A flood!! Get onto higher ground! Oh no, it\'s a flat earth!',
@@ -218,7 +249,6 @@ class HumanAiSystem extends _$HumanAiSystem {
       final position = positionMapper[entity];
       final direction = worldMapManager.getDirectionToClosest(
           TerrainType.grass, tilePosition.x, tilePosition.y);
-      print(direction);
       tilePosition.x += direction[0];
       tilePosition.y += direction[1];
       position.x =

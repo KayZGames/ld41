@@ -22,6 +22,20 @@ abstract class _$FireSystem extends EntityProcessingSystem {
   }
 }
 
+abstract class _$FloodSystem extends EntityProcessingSystem {
+  Mapper<Flood> floodMapper;
+  TerrainChangeManager terrainChangeManager;
+  GameStateManager gameStateManager;
+  _$FloodSystem() : super(new Aspect.empty()..allOf([Flood]));
+  @override
+  void initialize() {
+    super.initialize();
+    floodMapper = new Mapper<Flood>(Flood, world);
+    terrainChangeManager = world.getManager(TerrainChangeManager);
+    gameStateManager = world.getManager(GameStateManager);
+  }
+}
+
 abstract class _$FinishEndTurnSystem extends VoidEntitySystem {
   GameStateManager gameStateManager;
   @override
