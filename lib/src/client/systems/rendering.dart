@@ -14,17 +14,17 @@ part 'rendering.g.dart';
   allOf: [
     TilePosition,
     Position,
-    Color,
   ],
   manager: [
     TagManager,
     ViewProjectionManager,
+    GameStateManager,
   ],
   mapper: [
     Camera,
   ],
 )
-class TerrainRenderingSystem extends _$TerrainRenderingSystem {
+abstract class TileRenderingSystem extends _$TileRenderingSystem {
   List<Attrib> attributes = const [
     const Attrib('pos', 2),
     const Attrib('color', 3),
@@ -35,10 +35,9 @@ class TerrainRenderingSystem extends _$TerrainRenderingSystem {
   Float32List items;
 
   double cameraX, cameraY;
-
   Matrix4 twodOrthographicMatrix;
 
-  TerrainRenderingSystem(gl) : super(gl);
+  TileRenderingSystem(RenderingContext2 gl, Aspect aspect) : super(gl, aspect);
 
   @override
   void begin() {
@@ -52,16 +51,18 @@ class TerrainRenderingSystem extends _$TerrainRenderingSystem {
         viewProjectionManager.getOrthographicMatrix(cameraPosition, zoom);
   }
 
+  List<double> _getColor(Entity entity);
+
   @override
   void processEntity(int index, Entity entity) {
     final position = positionMapper[entity];
-    final color = colorMapper[entity];
+    final color = _getColor(entity);
     var hexagonIndex = index * 5 * 7;
     items[hexagonIndex] = position.x;
     items[hexagonIndex + 1] = position.y;
-    items[hexagonIndex + 2] = color.r;
-    items[hexagonIndex + 3] = color.g;
-    items[hexagonIndex + 4] = color.b;
+    items[hexagonIndex + 2] = color[0];
+    items[hexagonIndex + 3] = color[1];
+    items[hexagonIndex + 4] = color[2];
 
     for (int i = 0; i < 6; i++) {
       var edgeIndex = hexagonIndex + 5 + i * 5;
@@ -69,9 +70,9 @@ class TerrainRenderingSystem extends _$TerrainRenderingSystem {
           position.x + spacingNumber * hexagonSize * cos(pi / 6 + i * pi / 3);
       items[edgeIndex + 1] =
           position.y + spacingNumber * hexagonSize * sin(pi / 6 + i * pi / 3);
-      items[edgeIndex + 2] = color.r;
-      items[edgeIndex + 3] = color.g;
-      items[edgeIndex + 4] = color.b;
+      items[edgeIndex + 2] = color[0];
+      items[edgeIndex + 3] = color[1];
+      items[edgeIndex + 4] = color[2];
     }
     final triangleIndiceIndex = index * 3 * 6;
     final triangleIndex = index * 7;
@@ -100,6 +101,129 @@ class TerrainRenderingSystem extends _$TerrainRenderingSystem {
   String get fShaderFile => 'TerrainRenderingSystem';
   @override
   String get vShaderFile => 'TerrainRenderingSystem';
+}
+
+@Generate(
+  TileRenderingSystem,
+  allOf: [
+    Color,
+  ],
+)
+class TerrainRenderingSystem extends _$TerrainRenderingSystem {
+  TerrainRenderingSystem(gl) : super(gl);
+
+  @override
+  List<double> _getColor(Entity entity) {
+    final color = colorMapper[entity];
+    return [color.r, color.g, color.b];
+  }
+
+  @override
+  bool checkProcessing() => gameStateManager.selectedView == 'terrain';
+}
+
+@Generate(
+  TileRenderingSystem,
+  allOf: [
+    Temperature,
+  ],
+)
+class TemperatureRenderingSystem extends _$TemperatureRenderingSystem {
+  TemperatureRenderingSystem(gl) : super(gl);
+
+  @override
+  List<double> _getColor(Entity entity) {
+    final temperature = temperatureMapper[entity];
+    final red = max(0.0, min(1.0, (temperature.celsius - 19) / 10));
+    final green = max(
+        0.0,
+        min(
+            1.0,
+            temperature.celsius < 10.0
+                ? (temperature.celsius + 5) / 20.0
+                : 1.0 - (temperature.celsius - 27) / 30.0));
+    final blue = max(
+        0.0,
+        min(
+            1.0,
+            temperature.celsius < 30
+                ? 1.0 - (temperature.celsius - 12) / 8
+                : (temperature.celsius - 56) / 15));
+    return [red, green, blue];
+  }
+
+  @override
+  bool checkProcessing() => gameStateManager.selectedView == 'temperature';
+}
+
+@Generate(
+  TileRenderingSystem,
+  allOf: [
+    Humidity,
+  ],
+)
+class HumidityRenderingSystem extends _$HumidityRenderingSystem {
+  HumidityRenderingSystem(RenderingContext2 gl) : super(gl);
+
+  @override
+  List<double> _getColor(Entity entity) {
+    final humidity = humidityMapper[entity];
+    final red = 1.0 - max(0.0, min(1.0, (humidity.percentage - 30) / 10));
+    final green = 1.0 -
+        max(
+            0.0,
+            min(
+                1.0,
+                humidity.percentage < 10.0
+                    ? (humidity.percentage - 6) / 20.0
+                    : 1.0 - (humidity.percentage - 38) / 30.0));
+    final blue = 1.0 -
+        max(
+            0.0,
+            min(
+                1.0,
+                humidity.percentage < 30
+                    ? 1.0 - (humidity.percentage - 23) / 8
+                    : (humidity.percentage - 68) / 15));
+    return [red, green, blue];
+  }
+
+  @override
+  bool checkProcessing() => gameStateManager.selectedView == 'humidity';
+}
+
+@Generate(
+  TileRenderingSystem,
+  allOf: [
+    Fertility,
+  ],
+)
+class FertilityRenderingSystem extends _$FertilityRenderingSystem {
+  FertilityRenderingSystem(RenderingContext2 gl) : super(gl);
+
+  @override
+  List<double> _getColor(Entity entity) {
+    final fertility = fertilityMapper[entity];
+    final red = max(0.0, min(1.0, (fertility.percentage - 30) / 10));
+    final green = max(
+        0.0,
+        min(
+            1.0,
+            fertility.percentage < 10.0
+                ? (fertility.percentage - 6) / 20.0
+                : 1.0 - (fertility.percentage - 38) / 30.0));
+    final blue = max(
+        0.0,
+        min(
+            1.0,
+            fertility.percentage < 30
+                ? 1.0 - (fertility.percentage - 23) / 8
+                : (fertility.percentage - 68) / 15));
+    return [red, green, blue];
+  }
+
+  @override
+  bool checkProcessing() => gameStateManager.selectedView == 'fertility';
 }
 
 @Generate(

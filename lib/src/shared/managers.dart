@@ -9,6 +9,9 @@ part 'managers.g.dart';
     TilePosition,
     Terrain,
     Fire,
+    Temperature,
+    Fertility,
+    Humidity,
   ],
 )
 class WorldMapManager extends _$WorldMapManager {
@@ -61,7 +64,8 @@ class WorldMapManager extends _$WorldMapManager {
       var column = map[x + direction[0]];
       if (column != null) {
         final entity = column[y + direction[1]];
-        if (entity != null) {
+        if (entity != null &&
+            terrainMapper[entity].type != TerrainType.endOfWorld) {
           result.add(entity);
         }
       }
@@ -85,6 +89,26 @@ class WorldMapManager extends _$WorldMapManager {
   int getSurroundingFires(int x, int y) {
     return _getNeigbhors(fireMap, x, y).length;
   }
+
+  double getAverageSurroundingTemperature(int x, int y) {
+    return _getAverage(x, y, (entity) => temperatureMapper[entity].celsius);
+  }
+
+  double getAverageSurroundingFertility(int x, int y) {
+    return _getAverage(x, y, (entity) => fertilityMapper[entity].percentage);
+  }
+
+  double getAverageSurroundingHumidity(int x, int y) {
+    return _getAverage(x, y, (entity) => humidityMapper[entity].percentage);
+  }
+
+  double _getAverage(int x, int y, double getValue(Entity entity)) {
+    final neighbors = _getNeigbhors(worldMap, x, y);
+    final sum = neighbors
+        .map((entity) => getValue(entity))
+        .fold(0.0, (sum, element) => sum += element);
+    return sum / neighbors.length;
+  }
 }
 
 @Generate(Manager)
@@ -92,6 +116,7 @@ class GameStateManager extends _$GameStateManager {
   State state = State.started;
   PowerType selectedPower;
   int turn = 1;
+  String selectedView = 'terrain';
 }
 
 enum State { playersTurn, endTurn, started }

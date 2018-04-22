@@ -83,10 +83,15 @@
         <div class="full">1000</div>
       </div>
       <div class="power human"
-           title="Create underlings who pray to you and increae the FAITH in you (as an almighty God you obviously know that you have to do this in your first turn).
+           title="Create believers who pray to you and increae FAITH.
+
 They need grassland to settle and additional grassland to create farmland.">
         <span>Humans</span><span>(1001 FAITH)</span></div>
-      <div class="power forest" title="Create new forests. Turns grassland, barren and farmland into forest and swamp into jungle."><span>Forest</span><span>(50 FAITH)</span></div>
+      <div class="power forest"
+           title="Create new forests.
+
+Turns grassland, barren and farmland into forest and swamp into jungle."><span>Forest</span><span>(50 FAITH)</span>
+      </div>
       <div class="power fire" title="Burn the FAITHless (or the forests for some farmland)"><span>Fire</span><span>(100 FAITH)</span>
       </div>
       <div class="power flood" title="Drown the FAITHless (or the fires threatening your cities)">
@@ -96,9 +101,17 @@ They need grassland to settle and additional grassland to create farmland.">
       END TURN
     </div>
   </div>
-  <div class='bottombar'>
-    <div id='logmessages'>
+  <div class="bottombar">
+    <div id="logmessages">
 
+    </div>
+  </div>
+  <div class="topbar">
+    <div id="visualconfig">
+      <label><input type="radio" name="visualconfig" id='terrainRadio' value="terrain" checked>Terrain</label>
+      <label><input type="radio" name="visualconfig" id='temperatureRadio' value="temperature">Temperature</label>
+      <label><input type="radio" name="visualconfig" id='humidityRadio' value="humidity">Humidity</label>
+      <label><input type="radio" name="visualconfig" id='fertilityRadio' value="fertility">Fertility</label>
     </div>
   </div>
 </div>

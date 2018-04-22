@@ -12,21 +12,24 @@ class Terrain extends Component {
   Terrain(this.type) : nextType = type;
 }
 
-class Temerature extends Component {
-  double celcius;
-  Temerature(this.celcius);
+class Temperature extends Component {
+  double celsius;
+  double nextCelcius;
+  Temperature(this.celsius) : nextCelcius = celsius;
 
-  double get fahrenheit => celcius;
+  double get fahrenheit => celsius * 9 / 5 + 32;
 }
 
 class Humidity extends Component {
   double percentage;
-  Humidity(this.percentage);
+  double nextPercentage;
+  Humidity(this.percentage) : nextPercentage = percentage;
 }
 
 class Fertility extends Component {
   double percentage;
-  Fertility(this.percentage);
+  double nextPercentage;
+  Fertility(this.percentage) : nextPercentage = percentage;
 }
 
 class ChangeTerrain extends Component {}

@@ -10,12 +10,18 @@ abstract class _$WorldMapManager extends Manager {
   Mapper<TilePosition> tilePositionMapper;
   Mapper<Terrain> terrainMapper;
   Mapper<Fire> fireMapper;
+  Mapper<Temperature> temperatureMapper;
+  Mapper<Fertility> fertilityMapper;
+  Mapper<Humidity> humidityMapper;
   @override
   void initialize() {
     super.initialize();
     tilePositionMapper = new Mapper<TilePosition>(TilePosition, world);
     terrainMapper = new Mapper<Terrain>(Terrain, world);
     fireMapper = new Mapper<Fire>(Fire, world);
+    temperatureMapper = new Mapper<Temperature>(Temperature, world);
+    fertilityMapper = new Mapper<Fertility>(Fertility, world);
+    humidityMapper = new Mapper<Humidity>(Humidity, world);
   }
 }
 

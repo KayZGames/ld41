@@ -6,24 +6,68 @@ part of 'rendering.dart';
 // Generator: SystemGenerator
 // **************************************************************************
 
-abstract class _$TerrainRenderingSystem extends WebGlRenderingSystem {
+abstract class _$TileRenderingSystem extends WebGlRenderingSystem {
   Mapper<TilePosition> tilePositionMapper;
   Mapper<Position> positionMapper;
-  Mapper<Color> colorMapper;
   Mapper<Camera> cameraMapper;
   TagManager tagManager;
   ViewProjectionManager viewProjectionManager;
-  _$TerrainRenderingSystem(RenderingContext2 gl)
-      : super(gl, new Aspect.empty()..allOf([TilePosition, Position, Color]));
+  GameStateManager gameStateManager;
+  _$TileRenderingSystem(RenderingContext2 gl, Aspect aspect)
+      : super(gl, aspect..allOf([TilePosition, Position]));
   @override
   void initialize() {
     super.initialize();
     tilePositionMapper = new Mapper<TilePosition>(TilePosition, world);
     positionMapper = new Mapper<Position>(Position, world);
-    colorMapper = new Mapper<Color>(Color, world);
     cameraMapper = new Mapper<Camera>(Camera, world);
     tagManager = world.getManager(TagManager);
     viewProjectionManager = world.getManager(ViewProjectionManager);
+    gameStateManager = world.getManager(GameStateManager);
+  }
+}
+
+abstract class _$TerrainRenderingSystem extends TileRenderingSystem {
+  Mapper<Color> colorMapper;
+  _$TerrainRenderingSystem(RenderingContext2 gl)
+      : super(gl, new Aspect.empty()..allOf([Color]));
+  @override
+  void initialize() {
+    super.initialize();
+    colorMapper = new Mapper<Color>(Color, world);
+  }
+}
+
+abstract class _$TemperatureRenderingSystem extends TileRenderingSystem {
+  Mapper<Temperature> temperatureMapper;
+  _$TemperatureRenderingSystem(RenderingContext2 gl)
+      : super(gl, new Aspect.empty()..allOf([Temperature]));
+  @override
+  void initialize() {
+    super.initialize();
+    temperatureMapper = new Mapper<Temperature>(Temperature, world);
+  }
+}
+
+abstract class _$HumidityRenderingSystem extends TileRenderingSystem {
+  Mapper<Humidity> humidityMapper;
+  _$HumidityRenderingSystem(RenderingContext2 gl)
+      : super(gl, new Aspect.empty()..allOf([Humidity]));
+  @override
+  void initialize() {
+    super.initialize();
+    humidityMapper = new Mapper<Humidity>(Humidity, world);
+  }
+}
+
+abstract class _$FertilityRenderingSystem extends TileRenderingSystem {
+  Mapper<Fertility> fertilityMapper;
+  _$FertilityRenderingSystem(RenderingContext2 gl)
+      : super(gl, new Aspect.empty()..allOf([Fertility]));
+  @override
+  void initialize() {
+    super.initialize();
+    fertilityMapper = new Mapper<Fertility>(Fertility, world);
   }
 }
 

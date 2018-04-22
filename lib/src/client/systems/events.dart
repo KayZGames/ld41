@@ -50,6 +50,12 @@ class HudInteractionSystem extends _$HudInteractionSystem {
         .querySelector('.power.flood')
         .onClick
         .listen((event) => selectedPower = PowerType.flood);
+    document
+        .querySelectorAll('input[name="visualconfig"]')
+        .onChange
+        .listen((event) {
+      gameStateManager.selectedView = (event.target as RadioButtonInputElement).value;
+    });
 
     hud.onMouseMove.listen((mouseEvent) => mouseOffset = mouseEvent.offset);
     hud.onContextMenu.listen((event) => event.preventDefault());

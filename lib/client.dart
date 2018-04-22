@@ -5,6 +5,7 @@ import 'package:ld41/shared.dart';
 import 'package:gamedev_helpers/gamedev_helpers.dart';
 import 'package:ld41/src/client/systems/hud_rendering.dart';
 import 'package:ld41/src/shared/managers.dart';
+import 'package:ld41/src/shared/systems/cellular_automaton_logic.dart';
 
 import 'src/client/systems/events.dart';
 import 'src/client/systems/rendering.dart';
@@ -61,20 +62,35 @@ class Game extends GameBase {
           tile = new Terrain(tilesForRandomDistribution[
               random.nextInt(tilesForRandomDistribution.length)]);
         }
-        addEntity([
+        var components = [
           new TilePosition(x, y),
           new Position(x * hexagonWidth + y * hexagonWidth / 2,
               -y * hexagonHeight * 3 / 4),
           new Color(1.0, 0.0, 0.0, 1.0),
           new ChangeTerrain(),
           tile,
-        ]);
+        ];
+        if (tile.type != TerrainType.endOfWorld) {
+          components.addAll([
+            new Temperature(temperatureRange[tile.type].start),
+            new Humidity(humidityRange[tile.type].start),
+            new Fertility(fertilityRange[tile.type].start),
+          ]);
+        }
+        addEntity(components);
       }
       startX = max(startX - 1, -radius);
       if (y >= 0) {
         endX--;
       }
     }
+
+    addEntity([
+      new LogMessage(
+          0,
+          'You created a world by randomly throwing pieces of mud together. But it feels empty. Find a nice piece of grassland and let some humans settle there.',
+          Severity.info)
+    ]);
   }
 
   @override
@@ -85,10 +101,20 @@ class Game extends GameBase {
         new ExecutePowerSystem(),
         new CameraControllerSystem(),
         new PrepareTerrainChangeSystem(),
+        new PrepareTemperatureChangeSystem(),
+        new PrepareFertilityChangeSystem(),
+        new PrepareHumidityChangeSystem(),
         new FireSystem(),
         new TerrainChangeSystem(),
+        new TemperatureChangeSystem(),
+        new FertilityChangeSystem(),
+        new HumidityChangeSystem(),
+        // rendering
         new WebGlCanvasCleaningSystem(gl),
         new TerrainRenderingSystem(gl),
+        new TemperatureRenderingSystem(gl),
+        new HumidityRenderingSystem(gl),
+        new FertilityRenderingSystem(gl),
         new SpriteRenderingSystem(gl, spriteSheet),
         new CursorRenderingSystem(gl),
         new CanvasCleaningSystem(hudCanvas),
