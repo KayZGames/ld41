@@ -9,6 +9,7 @@ part 'cellular_automaton_logic.g.dart';
   allOf: [
     Temperature,
     TilePosition,
+    Terrain,
   ],
   manager: [
     WorldMapManager,
@@ -18,11 +19,14 @@ part 'cellular_automaton_logic.g.dart';
 class PrepareTemperatureChangeSystem extends _$PrepareTemperatureChangeSystem {
   @override
   void processEntity(Entity entity) {
+    final terrain = terrainMapper[entity];
     final tilePosition = tilePositionMapper[entity];
     final avgTemp = worldMapManager.getAverageSurroundingTemperature(
         tilePosition.x, tilePosition.y);
     final temperature = temperatureMapper[entity];
-    temperature.nextCelcius = temperature.celsius * 0.95 + avgTemp * 0.05;
+    final baseTemp = temperatureRange[terrain.type].start;
+    temperature.nextCelcius =
+        baseTemp * 0.01 + temperature.celsius * 0.95 + avgTemp * 0.04;
   }
 
   @override
@@ -34,6 +38,7 @@ class PrepareTemperatureChangeSystem extends _$PrepareTemperatureChangeSystem {
   allOf: [
     Fertility,
     TilePosition,
+    Terrain,
   ],
   manager: [
     WorldMapManager,
@@ -43,11 +48,14 @@ class PrepareTemperatureChangeSystem extends _$PrepareTemperatureChangeSystem {
 class PrepareFertilityChangeSystem extends _$PrepareFertilityChangeSystem {
   @override
   void processEntity(Entity entity) {
+    final terrain = terrainMapper[entity];
     final tilePosition = tilePositionMapper[entity];
-    final avgTemp = worldMapManager.getAverageSurroundingFertility(
+    final avgFertility = worldMapManager.getAverageSurroundingFertility(
         tilePosition.x, tilePosition.y);
     final fertility = fertilityMapper[entity];
-    fertility.nextPercentage = fertility.percentage * 0.95 + avgTemp * 0.05;
+    final baseFertility = fertilityRange[terrain.type].start;
+    fertility.nextPercentage =
+        baseFertility * 0.01 + fertility.percentage * 0.95 + avgFertility * 0.04;
   }
 
   @override
@@ -59,6 +67,7 @@ class PrepareFertilityChangeSystem extends _$PrepareFertilityChangeSystem {
   allOf: [
     Humidity,
     TilePosition,
+    Terrain,
   ],
   manager: [
     WorldMapManager,
@@ -68,11 +77,14 @@ class PrepareFertilityChangeSystem extends _$PrepareFertilityChangeSystem {
 class PrepareHumidityChangeSystem extends _$PrepareHumidityChangeSystem {
   @override
   void processEntity(Entity entity) {
+    final terrain = terrainMapper[entity];
     final tilePosition = tilePositionMapper[entity];
-    final avgTemp = worldMapManager.getAverageSurroundingHumidity(
+    final avgHumidity = worldMapManager.getAverageSurroundingHumidity(
         tilePosition.x, tilePosition.y);
     final humidity = humidityMapper[entity];
-    humidity.nextPercentage = humidity.percentage * 0.95 + avgTemp * 0.05;
+    final baseHumidity = humidityRange[terrain.type].start;
+    humidity.nextPercentage =
+        baseHumidity * 0.01 + humidity.percentage * 0.95 + avgHumidity * 0.04;
   }
 
   @override
@@ -106,7 +118,10 @@ class PrepareTerrainChangeSystem extends _$PrepareTerrainChangeSystem {
     if (terrain.type == TerrainType.grass) {
       final forests = surroundingTypes[TerrainType.forest];
       final jungles = surroundingTypes[TerrainType.jungle];
-      if (jungles != null || (forests != null && forests > 1)) {
+      final settlement = surroundingTypes[TerrainType.settlement];
+      if (settlement != null) {
+        terrainChangeManager.changeTerrain(entity, terrain, TerrainType.farm);
+      } else if (jungles != null || (forests != null && forests > 1)) {
         terrainChangeManager.changeTerrain(entity, terrain, TerrainType.forest);
       }
     } else if (terrain.type == TerrainType.forest) {

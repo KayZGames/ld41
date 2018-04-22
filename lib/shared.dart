@@ -25,6 +25,7 @@ const Map<TerrainType, Range> temperatureRange = {
   TerrainType.desert: const Range(35.0, 100.0, 50.0),
   TerrainType.swamp: const Range(10.0, 35.0, 25.0),
   TerrainType.farm: const Range(10.0, 30.0, 20.0),
+  TerrainType.settlement: const Range(10.0, 30.0, 20.0),
 };
 
 const Map<TerrainType, Range> humidityRange = {
@@ -38,7 +39,8 @@ const Map<TerrainType, Range> humidityRange = {
   TerrainType.lake: const Range(20.0, 80.0, 50.0),
   TerrainType.desert: const Range(0.0, 10.0, 0.0),
   TerrainType.swamp: const Range(30.0, 100.0, 60.0),
-  TerrainType.farm: const Range(15.0, 45.0, 40.0),
+  TerrainType.farm: const Range(15.0, 45.0, 30.0),
+  TerrainType.settlement: const Range(15.0, 45.0, 40.0),
 };
 
 const Map<TerrainType, Range> fertilityRange = {
@@ -53,6 +55,7 @@ const Map<TerrainType, Range> fertilityRange = {
   TerrainType.desert: const Range(0.0, 10.0, 0.0),
   TerrainType.swamp: const Range(15.0, 50.0, 30.0),
   TerrainType.farm: const Range(15.0, 50.0, 30.0),
+  TerrainType.settlement: const Range(15.0, 25.0, 20.0),
 };
 
 final Map<TerrainType, Vector3> colorMap = {
@@ -67,6 +70,7 @@ final Map<TerrainType, Vector3> colorMap = {
   TerrainType.desert: new Vector3(255 / 255, 223 / 255, 65 / 255),
   TerrainType.swamp: new Vector3(137 / 255, 120 / 255, 50 / 255),
   TerrainType.farm: new Vector3(229 / 255, 176 / 255, 96 / 255),
+  TerrainType.settlement: new Vector3(200 / 255, 200 / 255, 200 / 255),
 };
 
 final Map<PowerType, int> powerCostMap = {

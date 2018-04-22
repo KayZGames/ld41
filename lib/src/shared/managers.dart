@@ -277,7 +277,7 @@ class TerrainChangeManager extends _$TerrainChangeManager {
   }
 
   void addSettlement(Entity entity, Terrain terrain) {
-    changeTerrain(entity, terrain, TerrainType.farm);
+    changeTerrain(entity, terrain, TerrainType.settlement);
     _addSprite(entity, new Settlement(), 'settlement');
   }
 }

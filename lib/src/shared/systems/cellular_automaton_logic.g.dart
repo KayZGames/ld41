@@ -9,15 +9,17 @@ part of 'cellular_automaton_logic.dart';
 abstract class _$PrepareTemperatureChangeSystem extends EntityProcessingSystem {
   Mapper<Temperature> temperatureMapper;
   Mapper<TilePosition> tilePositionMapper;
+  Mapper<Terrain> terrainMapper;
   WorldMapManager worldMapManager;
   GameStateManager gameStateManager;
   _$PrepareTemperatureChangeSystem()
-      : super(new Aspect.empty()..allOf([Temperature, TilePosition]));
+      : super(new Aspect.empty()..allOf([Temperature, TilePosition, Terrain]));
   @override
   void initialize() {
     super.initialize();
     temperatureMapper = new Mapper<Temperature>(Temperature, world);
     tilePositionMapper = new Mapper<TilePosition>(TilePosition, world);
+    terrainMapper = new Mapper<Terrain>(Terrain, world);
     worldMapManager = world.getManager(WorldMapManager);
     gameStateManager = world.getManager(GameStateManager);
   }
@@ -26,15 +28,17 @@ abstract class _$PrepareTemperatureChangeSystem extends EntityProcessingSystem {
 abstract class _$PrepareFertilityChangeSystem extends EntityProcessingSystem {
   Mapper<Fertility> fertilityMapper;
   Mapper<TilePosition> tilePositionMapper;
+  Mapper<Terrain> terrainMapper;
   WorldMapManager worldMapManager;
   GameStateManager gameStateManager;
   _$PrepareFertilityChangeSystem()
-      : super(new Aspect.empty()..allOf([Fertility, TilePosition]));
+      : super(new Aspect.empty()..allOf([Fertility, TilePosition, Terrain]));
   @override
   void initialize() {
     super.initialize();
     fertilityMapper = new Mapper<Fertility>(Fertility, world);
     tilePositionMapper = new Mapper<TilePosition>(TilePosition, world);
+    terrainMapper = new Mapper<Terrain>(Terrain, world);
     worldMapManager = world.getManager(WorldMapManager);
     gameStateManager = world.getManager(GameStateManager);
   }
@@ -43,15 +47,17 @@ abstract class _$PrepareFertilityChangeSystem extends EntityProcessingSystem {
 abstract class _$PrepareHumidityChangeSystem extends EntityProcessingSystem {
   Mapper<Humidity> humidityMapper;
   Mapper<TilePosition> tilePositionMapper;
+  Mapper<Terrain> terrainMapper;
   WorldMapManager worldMapManager;
   GameStateManager gameStateManager;
   _$PrepareHumidityChangeSystem()
-      : super(new Aspect.empty()..allOf([Humidity, TilePosition]));
+      : super(new Aspect.empty()..allOf([Humidity, TilePosition, Terrain]));
   @override
   void initialize() {
     super.initialize();
     humidityMapper = new Mapper<Humidity>(Humidity, world);
     tilePositionMapper = new Mapper<TilePosition>(TilePosition, world);
+    terrainMapper = new Mapper<Terrain>(Terrain, world);
     worldMapManager = world.getManager(WorldMapManager);
     gameStateManager = world.getManager(GameStateManager);
   }

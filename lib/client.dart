@@ -44,6 +44,7 @@ class Game extends GameBase {
             type != TerrainType.ocean &&
             type != TerrainType.glacier &&
             type != TerrainType.coast &&
+            type != TerrainType.settlement &&
             type != TerrainType.farm)
         .toList(growable: false);
     for (int y = -radius; y <= radius; y++) {
