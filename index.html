@@ -66,6 +66,11 @@
         <div class="count">0</div>
       </div>
       <div></div>
+      <div id="settlement">
+        <div class="icon"></div>
+        <div class="name">Settlement</div>
+        <div class="count">0</div>
+      </div>
       <div id="farm">
         <div class="icon"></div>
         <div class="name">Farmland</div>
@@ -77,8 +82,8 @@
     <div class="powers">
       <div class="title">Godly Powers</div>
       <div id="energy">
-        <div class="percentage" style="width:100%"></div>
-        <label title="1001/1000">FAITH</label>
+        <div id='faithpercent' class="percentage" style="width:100%"></div>
+        <label id='faithtitle' title="1001/1000">FAITH</label>
         <div class="empty">0</div>
         <div class="full">1000</div>
       </div>
@@ -86,19 +91,19 @@
            title="Create believers who pray to you and increae FAITH.
 
 They need grassland to settle and additional grassland to create farmland.">
-        <span>Humans</span><span>(1001 FAITH)</span></div>
+        <span>Humans</span><span>(<span id='humanCost'>1001</span> FAITH)</span></div>
       <div class="power forest"
            title="Create new forests.
 
-Turns grassland, barren and farmland into forest and swamp into jungle."><span>Forest</span><span>(50 FAITH)</span>
+Turns grassland, barren and farmland into forest and swamp into jungle."><span>Forest</span><span>(<span id='forestCost'>50</span> FAITH)</span>
       </div>
-      <div class="power fire" title="Burn the FAITHless (or the forests for some farmland)"><span>Fire</span><span>(100 FAITH)</span>
+      <div class="power fire" title="Burn the FAITHless (or the forests for some farmland)"><span>Fire</span><span>(<span id='fireCost'>100</span> FAITH)</span>
       </div>
       <div class="power flood" title="Drown the FAITHless (or the fires threatening your cities)">
-        <span>Flood</span><span>(200 FAITH)</span></div>
+        <span>Flood</span><span>(<span id='floodCost'>300</span> FAITH)</span></div>
     </div>
     <div id="endturn">
-      END TURN
+      END TURN <div id='currentTurn'></div>
     </div>
   </div>
   <div class="bottombar">
