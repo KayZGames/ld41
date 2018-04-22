@@ -132,9 +132,9 @@ class PrepareTerrainChangeSystem extends _$PrepareTerrainChangeSystem {
         fertility.nextPercentage += 1.0;
       }
     } else if (hasFlood) {
-      temperature.nextCelcius -= 1.0;
-      humidity.nextPercentage += 1.0;
-      fertility.nextPercentage += 1.0;
+      temperature.nextCelcius -= 1.25;
+      humidity.nextPercentage += 2.0;
+      fertility.nextPercentage += 2.0;
     } else {
       final highestFlood = worldMapManager.getHighestAdjacentHighFlood(x, y);
       final fires = worldMapManager.getSurroundingFires(x, y);

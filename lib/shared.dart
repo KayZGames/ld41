@@ -95,7 +95,7 @@ final Map<TerrainType, List<TerrainType>> terrainConversion = {
     TerrainType.desert,
   ],
   TerrainType.jungle: [TerrainType.swamp, TerrainType.forest],
-  TerrainType.desert: [TerrainType.barren],
+  TerrainType.desert: [TerrainType.barren, TerrainType.grass, TerrainType.swamp],
   TerrainType.lake: [TerrainType.swamp, TerrainType.barren],
   TerrainType.farm: [],
   TerrainType.coast: [],
