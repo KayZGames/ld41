@@ -66,17 +66,24 @@ abstract class _$PrepareHumidityChangeSystem extends EntityProcessingSystem {
 abstract class _$PrepareTerrainChangeSystem extends EntityProcessingSystem {
   Mapper<Terrain> terrainMapper;
   Mapper<TilePosition> tilePositionMapper;
+  Mapper<Temperature> temperatureMapper;
+  Mapper<Humidity> humidityMapper;
+  Mapper<Fertility> fertilityMapper;
   Mapper<Fire> fireMapper;
   WorldMapManager worldMapManager;
   GameStateManager gameStateManager;
   TerrainChangeManager terrainChangeManager;
   _$PrepareTerrainChangeSystem()
-      : super(new Aspect.empty()..allOf([Terrain, TilePosition]));
+      : super(new Aspect.empty()
+          ..allOf([Terrain, TilePosition, Temperature, Humidity, Fertility]));
   @override
   void initialize() {
     super.initialize();
     terrainMapper = new Mapper<Terrain>(Terrain, world);
     tilePositionMapper = new Mapper<TilePosition>(TilePosition, world);
+    temperatureMapper = new Mapper<Temperature>(Temperature, world);
+    humidityMapper = new Mapper<Humidity>(Humidity, world);
+    fertilityMapper = new Mapper<Fertility>(Fertility, world);
     fireMapper = new Mapper<Fire>(Fire, world);
     worldMapManager = world.getManager(WorldMapManager);
     gameStateManager = world.getManager(GameStateManager);

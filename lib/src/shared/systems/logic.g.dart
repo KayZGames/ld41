@@ -92,6 +92,7 @@ abstract class _$SettlementGrowthSystem extends EntityProcessingSystem {
   Mapper<Settlement> settlementMapper;
   Mapper<TilePosition> tilePositionMapper;
   Mapper<Renderable> renderableMapper;
+  Mapper<Fire> fireMapper;
   WorldMapManager worldMapManager;
   TerrainChangeManager terrainChangeManager;
   GameStateManager gameStateManager;
@@ -104,6 +105,7 @@ abstract class _$SettlementGrowthSystem extends EntityProcessingSystem {
     settlementMapper = new Mapper<Settlement>(Settlement, world);
     tilePositionMapper = new Mapper<TilePosition>(TilePosition, world);
     renderableMapper = new Mapper<Renderable>(Renderable, world);
+    fireMapper = new Mapper<Fire>(Fire, world);
     worldMapManager = world.getManager(WorldMapManager);
     terrainChangeManager = world.getManager(TerrainChangeManager);
     gameStateManager = world.getManager(GameStateManager);

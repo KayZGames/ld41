@@ -57,8 +57,8 @@ class Human extends Component {
 }
 
 class Fire extends Component {
-  int turnsBurned;
-  Fire(this.turnsBurned);
+  int turnsToBurn;
+  Fire(this.turnsToBurn);
 }
 
 class Flood extends Component {}

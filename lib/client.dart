@@ -15,7 +15,7 @@ class Game extends GameBase {
   CanvasRenderingContext2D hudCtx;
   DivElement container;
 
-  Game() : super('ld41', '#game', webgl: true, bodyDefsName: null) {
+  Game() : super('ld41', '#game', webgl: true, bodyDefsName: null, depthTest: false) {
     container = querySelector('#gamecontainer');
     hudCanvas = querySelector('#hud');
     hudCtx = hudCanvas.context2D;
@@ -93,10 +93,10 @@ class Game extends GameBase {
         new HudInteractionSystem(hudCanvas),
         new ExecutePowerSystem(),
         new CameraControllerSystem(),
-        new PrepareTerrainChangeSystem(),
         new PrepareTemperatureChangeSystem(),
         new PrepareFertilityChangeSystem(),
         new PrepareHumidityChangeSystem(),
+        new PrepareTerrainChangeSystem(),
         new HumanAiSystem(),
         new FireSystem(),
         new TerrainChangeSystem(),

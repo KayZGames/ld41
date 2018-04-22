@@ -56,10 +56,16 @@ abstract class _$ViewProjectionManager extends Manager {
 abstract class _$TerrainChangeManager extends Manager {
   Mapper<TilePosition> tilePositionMapper;
   Mapper<Terrain> terrainMapper;
+  Mapper<Humidity> humidityMapper;
+  Mapper<Temperature> temperatureMapper;
+  Mapper<Fertility> fertilityMapper;
   @override
   void initialize() {
     super.initialize();
     tilePositionMapper = new Mapper<TilePosition>(TilePosition, world);
     terrainMapper = new Mapper<Terrain>(Terrain, world);
+    humidityMapper = new Mapper<Humidity>(Humidity, world);
+    temperatureMapper = new Mapper<Temperature>(Temperature, world);
+    fertilityMapper = new Mapper<Fertility>(Fertility, world);
   }
 }

@@ -211,14 +211,11 @@ class ViewProjectionManager extends _$ViewProjectionManager {
 
 @Generate(
   Manager,
-  mapper: [
-    TilePosition,
-    Terrain,
-  ],
+  mapper: [TilePosition, Terrain, Humidity, Temperature, Fertility],
 )
 class TerrainChangeManager extends _$TerrainChangeManager {
-  void addFire(Entity entity, {bool startedByGod: false}) {
-    _addSprite(entity, new Fire(startedByGod ? 1 : 0), 'fire');
+  void addFire(Entity entity, int turnsToBurn, {bool startedByGod: false}) {
+    _addSprite(entity, new Fire(turnsToBurn + (startedByGod ? -1 : 0)), 'fire');
   }
 
   void burnDown(Entity entity, Terrain terrain) {
@@ -251,8 +248,14 @@ class TerrainChangeManager extends _$TerrainChangeManager {
     _removeSprite(entity, Human);
   }
 
-  void changeTerrain(Entity entity, Terrain terrain, TerrainType to) {
+  void changeTerrain(Entity entity, Terrain terrain, TerrainType to,
+      {bool startedByGod: false}) {
     terrain.nextType = to;
+    if (startedByGod) {
+      humidityMapper[entity].percentage = humidityRange[to].start;
+      fertilityMapper[entity].percentage = fertilityRange[to].start;
+      temperatureMapper[entity].celsius = temperatureRange[to].start;
+    }
     entity
       ..addComponent(new ChangeTerrain())
       ..changedInWorld();

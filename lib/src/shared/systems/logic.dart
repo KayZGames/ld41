@@ -21,11 +21,11 @@ class FireSystem extends _$FireSystem {
   @override
   void processEntity(Entity entity) {
     final fire = fireMapper[entity];
-    fire.turnsBurned++;
-    if (fire.turnsBurned > 1) {
+    if (fire.turnsToBurn <= 0) {
       final terrain = terrainMapper[entity];
       terrainChangeManager.burnDown(entity, terrain);
     }
+    fire.turnsToBurn--;
   }
 
   @override
@@ -112,12 +112,15 @@ class ExecutePowerSystem extends _$ExecutePowerSystem {
             terrain.type == TerrainType.barren ||
             terrain.type == TerrainType.farm) {
           terrainChangeManager.changeTerrain(
-              entity, terrain, TerrainType.forest);
+              entity, terrain, TerrainType.forest,
+              startedByGod: true);
           world.createAndAddEntity(
               [new LogMessage('A new forest has grown.', Severity.info)]);
-        } else if (terrain.type == TerrainType.swamp) {
+        } else if (terrain.type == TerrainType.swamp ||
+            terrain.type == TerrainType.forest) {
           terrainChangeManager.changeTerrain(
-              entity, terrain, TerrainType.jungle);
+              entity, terrain, TerrainType.jungle,
+              startedByGod: true);
           world.createAndAddEntity(
               [new LogMessage('A new jungle has grown.', Severity.info)]);
         } else {
@@ -130,7 +133,9 @@ class ExecutePowerSystem extends _$ExecutePowerSystem {
           ]);
         }
       } else if (power == PowerType.fire) {
-        terrainChangeManager.addFire(entity, startedByGod: true);
+        terrainChangeManager.addFire(
+            entity, fireResistances[terrainMapper[entity].type].turnsToBurn,
+            startedByGod: true);
         world.createAndAddEntity([
           new LogMessage('A fire has started!! Why is there no fire brigade?!',
               Severity.warning)
@@ -239,6 +244,9 @@ class HumanAiSystem extends _$HumanAiSystem {
     TilePosition,
     Renderable,
   ],
+  mapper: [
+    Fire,
+  ],
 )
 class SettlementGrowthSystem extends _$SettlementGrowthSystem {
   @override
@@ -249,6 +257,10 @@ class SettlementGrowthSystem extends _$SettlementGrowthSystem {
         tilePosition.x, tilePosition.y);
     final food = 1 + (surroundingTerrainTypes[TerrainType.farm] ?? 0);
     settlement.food += food;
+    settlement.food -= (settlement.population / 2).ceil();
+    if (fireMapper.has(entity)) {
+      settlement.food = settlement.food ~/ 2;
+    }
     if (settlement.population < 7 &&
         settlement.food >
             10 + 4 * settlement.population * settlement.population) {

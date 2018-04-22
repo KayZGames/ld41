@@ -14,48 +14,48 @@ const double hexagonWidth = 1.732 * hexagonSize;
 const double hexagonHeight = 2 * hexagonSize;
 
 const Map<TerrainType, Range> temperatureRange = {
-  TerrainType.glacier: const Range(-100.0, 5.0, -25.0),
+  TerrainType.glacier: const Range(-100.0, 10.0, -35.0),
   TerrainType.ocean: const Range(-5.0, 20.0, 10.0),
   TerrainType.coast: const Range(-5.0, 50.0, 15.0),
   TerrainType.grass: const Range(-5.0, 30.0, 25.0),
-  TerrainType.forest: const Range(-5.0, 25.0, 16.0),
+  TerrainType.forest: const Range(-5.0, 35.0, 16.0),
   TerrainType.jungle: const Range(25.0, 50.0, 30.0),
   TerrainType.barren: const Range(25.0, 35.0, 30.0),
   TerrainType.lake: const Range(-5.0, 30.0, 14.0),
   TerrainType.desert: const Range(35.0, 100.0, 50.0),
-  TerrainType.swamp: const Range(10.0, 35.0, 25.0),
-  TerrainType.farm: const Range(10.0, 30.0, 20.0),
-  TerrainType.settlement: const Range(10.0, 40.0, 30.0),
+  TerrainType.swamp: const Range(10.0, 30.0, 20.0),
+  TerrainType.farm: const Range(10.0, 35.0, 30.0),
+  TerrainType.settlement: const Range(20.0, 50.0, 40.0),
 };
 
 const Map<TerrainType, Range> humidityRange = {
   TerrainType.glacier: const Range(0.0, 20.0, 10.0),
-  TerrainType.ocean: const Range(20.0, 80.0, 50.0),
+  TerrainType.ocean: const Range(20.0, 80.0, 40.0),
   TerrainType.coast: const Range(20.0, 50.0, 40.0),
-  TerrainType.grass: const Range(15.0, 40.0, 35.0),
-  TerrainType.forest: const Range(20.0, 60.0, 50.0),
+  TerrainType.grass: const Range(15.0, 60.0, 35.0),
+  TerrainType.forest: const Range(20.0, 70.0, 50.0),
   TerrainType.jungle: const Range(50.0, 100.0, 70.0),
   TerrainType.barren: const Range(10.0, 30.0, 25.0),
   TerrainType.lake: const Range(20.0, 80.0, 50.0),
   TerrainType.desert: const Range(0.0, 10.0, 0.0),
-  TerrainType.swamp: const Range(30.0, 100.0, 60.0),
+  TerrainType.swamp: const Range(40.0, 100.0, 60.0),
   TerrainType.farm: const Range(15.0, 45.0, 30.0),
-  TerrainType.settlement: const Range(15.0, 45.0, 30.0),
+  TerrainType.settlement: const Range(10.0, 30.0, 20.0),
 };
 
 const Map<TerrainType, Range> fertilityRange = {
   TerrainType.glacier: const Range(0.0, 20.0, 0.0),
-  TerrainType.ocean: const Range(20.0, 80.0, 40.0),
+  TerrainType.ocean: const Range(20.0, 80.0, 30.0),
   TerrainType.coast: const Range(0.0, 20.0, 10.0),
   TerrainType.grass: const Range(15.0, 50.0, 25.0),
-  TerrainType.forest: const Range(25.0, 60.0, 40.0),
-  TerrainType.jungle: const Range(50.0, 100.0, 70.0),
+  TerrainType.forest: const Range(20.0, 60.0, 40.0),
+  TerrainType.jungle: const Range(40.0, 100.0, 70.0),
   TerrainType.barren: const Range(0.0, 20.0, 10.0),
   TerrainType.lake: const Range(20.0, 80.0, 40.0),
   TerrainType.desert: const Range(0.0, 10.0, 0.0),
   TerrainType.swamp: const Range(15.0, 50.0, 30.0),
   TerrainType.farm: const Range(15.0, 50.0, 30.0),
-  TerrainType.settlement: const Range(15.0, 25.0, 20.0),
+  TerrainType.settlement: const Range(5.0, 20.0, 10.0),
 };
 
 final Map<TerrainType, Vector3> colorMap = {
@@ -73,6 +73,52 @@ final Map<TerrainType, Vector3> colorMap = {
   TerrainType.settlement: new Vector3(200 / 255, 200 / 255, 200 / 255),
 };
 
+final Map<TerrainType, List<TerrainType>> terrainConversion = {
+  TerrainType.grass: [
+    TerrainType.forest,
+    TerrainType.swamp,
+    TerrainType.barren
+  ],
+  TerrainType.forest: [
+    TerrainType.grass,
+    TerrainType.jungle,
+    TerrainType.swamp
+  ],
+  TerrainType.swamp: [
+    TerrainType.grass,
+    TerrainType.jungle,
+    TerrainType.forest,
+    TerrainType.barren
+  ],
+  TerrainType.barren: [
+    TerrainType.grass,
+    TerrainType.desert,
+  ],
+  TerrainType.jungle: [TerrainType.swamp, TerrainType.forest],
+  TerrainType.desert: [TerrainType.barren],
+  TerrainType.lake: [TerrainType.swamp, TerrainType.barren],
+  TerrainType.farm: [],
+  TerrainType.coast: [],
+  TerrainType.ocean: [TerrainType.glacier],
+  TerrainType.glacier: [TerrainType.ocean],
+  TerrainType.settlement: [],
+};
+
+Map<TerrainType, FireResistance> fireResistances = {
+  TerrainType.glacier: const FireResistance(7, 0),
+  TerrainType.ocean: const FireResistance(7, 0),
+  TerrainType.coast: const FireResistance(4, 1),
+  TerrainType.grass: const FireResistance(7, 0),
+  TerrainType.forest: const FireResistance(1, 2),
+  TerrainType.jungle: const FireResistance(3, 3),
+  TerrainType.barren: const FireResistance(7, 0),
+  TerrainType.lake: const FireResistance(7, 0),
+  TerrainType.desert: const FireResistance(7, 0),
+  TerrainType.swamp: const FireResistance(2, 3),
+  TerrainType.farm: const FireResistance(1, 2),
+  TerrainType.settlement: const FireResistance(3, 5),
+};
+
 final Map<PowerType, int> powerCostMap = {
   PowerType.human: 1001,
   PowerType.forest: 50,
@@ -83,4 +129,11 @@ final Map<PowerType, int> powerCostMap = {
 class Range {
   final double min, max, start;
   const Range(this.min, this.max, this.start);
+  bool isInRange(double value) => value >= min && value <= max;
+}
+
+class FireResistance {
+  final int fireNeeded;
+  final int turnsToBurn;
+  const FireResistance(this.fireNeeded, this.turnsToBurn);
 }
