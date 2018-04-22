@@ -50,14 +50,24 @@ class ExecutePower extends Component {
 
 class Human extends Component {}
 
-class Fire extends Component {}
+class Fire extends Component {
+  int turnsBurned;
+  Fire(this.turnsBurned);
+}
 
 class Flood extends Component {}
 
 class LogMessage extends Component {
   int turn;
   String message;
-  LogMessage(this.turn, this.message);
+  Severity severity;
+  LogMessage(this.turn, this.message, this.severity);
+}
+
+enum Severity {
+  info,
+  warning,
+  danger,
 }
 
 enum TerrainType {

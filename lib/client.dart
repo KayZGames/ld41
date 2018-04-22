@@ -28,6 +28,7 @@ class Game extends GameBase {
     world.addManager(new WorldMapManager());
     world.addManager(new CursorManager());
     world.addManager(new ViewProjectionManager());
+    world.addManager(new TerrainChangeManager());
     var tagManager = new TagManager();
     world.addManager(tagManager);
 
@@ -84,6 +85,7 @@ class Game extends GameBase {
         new ExecutePowerSystem(),
         new CameraControllerSystem(),
         new PrepareTerrainChangeSystem(),
+        new FireSystem(),
         new TerrainChangeSystem(),
         new WebGlCanvasCleaningSystem(gl),
         new TerrainRenderingSystem(gl),

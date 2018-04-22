@@ -9,11 +9,13 @@ part of 'managers.dart';
 abstract class _$WorldMapManager extends Manager {
   Mapper<TilePosition> tilePositionMapper;
   Mapper<Terrain> terrainMapper;
+  Mapper<Fire> fireMapper;
   @override
   void initialize() {
     super.initialize();
     tilePositionMapper = new Mapper<TilePosition>(TilePosition, world);
     terrainMapper = new Mapper<Terrain>(Terrain, world);
+    fireMapper = new Mapper<Fire>(Fire, world);
   }
 }
 
@@ -44,3 +46,5 @@ abstract class _$ViewProjectionManager extends Manager {
     cameraManager = world.getManager(CameraManager);
   }
 }
+
+abstract class _$TerrainChangeManager extends Manager {}

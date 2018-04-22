@@ -100,9 +100,15 @@ class TerrainChangeSystem extends _$TerrainChangeSystem {
   manager: [
     WorldMapManager,
     GameStateManager,
+    TerrainChangeManager,
+  ],
+  mapper: [
+    Fire,
   ],
 )
 class PrepareTerrainChangeSystem extends _$PrepareTerrainChangeSystem {
+  int firesSpread = 0;
+
   @override
   void processEntity(Entity entity) {
     final terrain = terrainMapper[entity];
@@ -111,13 +117,71 @@ class PrepareTerrainChangeSystem extends _$PrepareTerrainChangeSystem {
     final surroundingTypes = worldMapManager.getSurroundingTerrainTypes(
         tilePosition.x, tilePosition.y);
     if (terrain.type == TerrainType.grass) {
-      var forests = surroundingTypes[TerrainType.forest];
-      if (forests != null) {
-        terrain.nextType = TerrainType.forest;
-        entity
-          ..addComponent(new ChangeTerrain())
-          ..changedInWorld();
+      final forests = surroundingTypes[TerrainType.forest];
+      final jungles = surroundingTypes[TerrainType.jungle];
+      if (jungles != null || (forests != null && forests > 1)) {
+        terrainChangeManager.changeTerrain(entity, terrain, TerrainType.forest);
       }
+    } else if (terrain.type == TerrainType.forest) {
+      if (!fireMapper.has(entity)) {
+        final fires =
+            worldMapManager.getSurroundingFires(tilePosition.x, tilePosition.y);
+        if (fires > 0) {
+          terrainChangeManager.addFire(entity);
+          firesSpread++;
+        }
+      }
+    } else if (terrain.type == TerrainType.barren) {
+      final grasslands = surroundingTypes[TerrainType.grass];
+      final forests = surroundingTypes[TerrainType.forest];
+      final jungles = surroundingTypes[TerrainType.jungle];
+      if (forests != null ||
+          jungles != null ||
+          (grasslands != null && grasslands > 1)) {
+        terrainChangeManager.changeTerrain(entity, terrain, TerrainType.grass);
+      }
+    }
+  }
+
+  @override
+  void end() {
+    if (firesSpread > 0) {
+      world.createAndAddEntity([
+        new LogMessage(
+            gameStateManager.turn,
+            'The fire is spreading!! $firesSpread new ${firesSpread == 1
+                ? 'fire has'
+                : 'fires have'} started!',
+            Severity.warning)
+      ]);
+    }
+    firesSpread = 0;
+    world.processEntityChanges();
+  }
+
+  @override
+  bool checkProcessing() => gameStateManager.state == State.endTurn;
+}
+
+@Generate(
+  EntityProcessingSystem,
+  allOf: [
+    Fire,
+    Terrain,
+  ],
+  manager: [
+    TerrainChangeManager,
+    GameStateManager,
+  ],
+)
+class FireSystem extends _$FireSystem {
+  @override
+  void processEntity(Entity entity) {
+    final fire = fireMapper[entity];
+    fire.turnsBurned++;
+    if (fire.turnsBurned > 1) {
+      final terrain = terrainMapper[entity];
+      terrainChangeManager.burnDown(entity, terrain);
     }
   }
 
@@ -171,6 +235,7 @@ class FinishGameStartedSystem extends _$FinishGameStartedSystem {
   ],
   manager: [
     GameStateManager,
+    TerrainChangeManager,
   ],
 )
 class ExecutePowerSystem extends _$ExecutePowerSystem {
@@ -179,47 +244,45 @@ class ExecutePowerSystem extends _$ExecutePowerSystem {
     final power = executePowerMapper[entity].power;
     entity.removeComponent(ExecutePower);
     if (power == PowerType.human) {
-      entity
-        ..addComponent(new Human())
-        ..addComponent(new Renderable('human', facesRight: false))
-        ..addComponent(new Orientation(pi));
-      world.createAndAddEntity(
-          [new LogMessage(gameStateManager.turn, 'Humans have appeared!!!')]);
+      terrainChangeManager.addHuman(entity);
+      world.createAndAddEntity([
+        new LogMessage(
+            gameStateManager.turn, 'Humans have appeared!!!', Severity.info)
+      ]);
     } else if (power == PowerType.forest) {
       var terrain = terrainMapper[entity];
       if (terrain.type == TerrainType.grass ||
           terrain.type == TerrainType.barren ||
           terrain.type == TerrainType.farm) {
-        terrain.nextType = TerrainType.forest;
-        entity.addComponent(new ChangeTerrain());
-        world.createAndAddEntity(
-            [new LogMessage(gameStateManager.turn, 'A new forest has grown.')]);
+        terrainChangeManager.changeTerrain(entity, terrain, TerrainType.forest);
+        world.createAndAddEntity([
+          new LogMessage(
+              gameStateManager.turn, 'A new forest has grown.', Severity.info)
+        ]);
       } else if (terrain.type == TerrainType.swamp) {
-        terrain.nextType = TerrainType.jungle;
-        entity.addComponent(new ChangeTerrain());
-        world.createAndAddEntity(
-            [new LogMessage(gameStateManager.turn, 'A new jungle has grown.')]);
+        terrainChangeManager.changeTerrain(entity, terrain, TerrainType.jungle);
+        world.createAndAddEntity([
+          new LogMessage(
+              gameStateManager.turn, 'A new jungle has grown.', Severity.info)
+        ]);
       }
     } else if (power == PowerType.fire) {
-      entity
-        ..addComponent(new Fire())
-        ..addComponent(new Renderable('fire', facesRight: false))
-        ..addComponent(new Orientation(pi));
+      terrainChangeManager.addFire(entity, startedByGod: true);
       world.createAndAddEntity([
-        new LogMessage(gameStateManager.turn,
-            'A fire has started!! Why is there no fire brigade?!')
+        new LogMessage(
+            gameStateManager.turn,
+            'A fire has started!! Why is there no fire brigade?!',
+            Severity.warning)
       ]);
     } else if (power == PowerType.flood) {
-      entity
-        ..addComponent(new Flood())
-        ..addComponent(new Renderable('flood', facesRight: false))
-        ..addComponent(new Orientation(pi));
+      terrainChangeManager.addFlood(entity);
       world.createAndAddEntity([
-        new LogMessage(gameStateManager.turn,
-            'A flood!! Get onto higher ground! Oh no, it\'s a flat earth!')
+        new LogMessage(
+            gameStateManager.turn,
+            'A flood!! Get onto higher ground! Oh no, it\'s a flat earth!',
+            Severity.warning)
       ]);
     }
-    entity.changedInWorld();
   }
 
   @override

@@ -3,7 +3,14 @@ import 'package:ld41/shared.dart';
 
 part 'managers.g.dart';
 
-@Generate(Manager, mapper: [TilePosition, Terrain])
+@Generate(
+  Manager,
+  mapper: [
+    TilePosition,
+    Terrain,
+    Fire,
+  ],
+)
 class WorldMapManager extends _$WorldMapManager {
   final List<List<int>> neighborDirections = [
     [-1, 1],
@@ -14,33 +21,69 @@ class WorldMapManager extends _$WorldMapManager {
     [-1, 0],
   ];
   final Map<int, Map<int, Entity>> worldMap = {};
+  final Map<int, Map<int, Entity>> fireMap = {};
 
   @override
   void added(Entity entity) {
     if (terrainMapper.has(entity)) {
-      final tilePosition = tilePositionMapper[entity];
-      worldMap.putIfAbsent(tilePosition.x, () => <int, Entity>{});
-      worldMap[tilePosition.x][tilePosition.y] = entity;
+      _addEntityToMap(worldMap, entity);
+    }
+    if (fireMapper.has(entity)) {
+      _addEntityToMap(fireMap, entity);
     }
   }
 
-  List<Entity> getNeigbhors(int x, int y) {
+  @override
+  void changed(Entity entity) {
+    if (fireMapper.has(entity)) {
+      _addEntityToMap(fireMap, entity);
+    } else {
+      _removeEntityFromMap(fireMap, entity);
+    }
+  }
+
+  void _addEntityToMap(Map<int, Map<int, Entity>> map, Entity entity) {
+    final tilePosition = tilePositionMapper[entity];
+    map.putIfAbsent(tilePosition.x, () => <int, Entity>{});
+    map[tilePosition.x][tilePosition.y] = entity;
+  }
+
+  void _removeEntityFromMap(Map<int, Map<int, Entity>> map, Entity entity) {
+    final tilePosition = tilePositionMapper[entity];
+    if (map.containsKey(tilePosition.x)) {
+      map[tilePosition.x].remove(tilePosition.y);
+    }
+  }
+
+  List<Entity> _getNeigbhors(Map<int, Map<int, Entity>> map, int x, int y) {
     final result = <Entity>[];
     for (final direction in neighborDirections) {
-      result.add(worldMap[x + direction[0]][y + direction[1]]);
+      var column = map[x + direction[0]];
+      if (column != null) {
+        final entity = column[y + direction[1]];
+        if (entity != null) {
+          result.add(entity);
+        }
+      }
     }
     return result;
   }
 
   Map<TerrainType, int> getSurroundingTerrainTypes(int x, int y) {
     final result = <TerrainType, int>{};
-    final neighbors = getNeigbhors(x, y);
+    final neighbors = _getNeigbhors(worldMap, x, y);
     for (final neighbor in neighbors) {
-      var type = terrainMapper[neighbor].type;
-      result.putIfAbsent(type, () => 0);
-      result[type]++;
+      if (!fireMapper.has(neighbor)) {
+        var type = terrainMapper[neighbor].type;
+        result.putIfAbsent(type, () => 0);
+        result[type]++;
+      }
     }
     return result;
+  }
+
+  int getSurroundingFires(int x, int y) {
+    return _getNeigbhors(fireMap, x, y).length;
   }
 }
 
@@ -129,5 +172,56 @@ class ViewProjectionManager extends _$ViewProjectionManager {
         1.0,
         -1.0);
     return orthographicMatrix;
+  }
+}
+
+@Generate(Manager)
+class TerrainChangeManager extends _$TerrainChangeManager {
+  void addFire(Entity entity, {bool startedByGod: false}) {
+    _addSprite(entity, new Fire(startedByGod ? 1 : 0), 'fire');
+  }
+
+  void burnDown(Entity entity, Terrain terrain) {
+    changeTerrain(entity, terrain, TerrainType.barren);
+    _removeSprite(entity, Fire);
+  }
+
+  void addFlood(Entity entity) {
+    _addSprite(entity, new Flood(), 'flood');
+  }
+
+  void removeFlood(Entity entity) {
+    _removeSprite(entity, Flood);
+  }
+
+  void addHuman(Entity entity) {
+    _addSprite(entity, new Human(), 'human');
+  }
+
+  void removeHuman(Entity entity) {
+    _removeSprite(entity, Human);
+  }
+
+  void changeTerrain(Entity entity, Terrain terrain, TerrainType to) {
+    terrain.nextType = to;
+    entity
+      ..addComponent(new ChangeTerrain())
+      ..changedInWorld();
+  }
+
+  void _addSprite(Entity entity, Component component, String sprite) {
+    entity
+      ..addComponent(component)
+      ..addComponent(new Renderable(sprite, facesRight: false))
+      ..addComponent(new Orientation(pi))
+      ..changedInWorld();
+  }
+
+  void _removeSprite(Entity entity, Type type) {
+    entity
+      ..removeComponent(type)
+      ..removeComponent(Renderable)
+      ..removeComponent(Orientation)
+      ..changedInWorld();
   }
 }
