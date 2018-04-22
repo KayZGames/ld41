@@ -10,7 +10,6 @@ part 'logic.g.dart';
   EntityProcessingSystem,
   allOf: [
     Fire,
-    Terrain,
   ],
   manager: [
     TerrainChangeManager,
@@ -22,8 +21,7 @@ class FireSystem extends _$FireSystem {
   void processEntity(Entity entity) {
     final fire = fireMapper[entity];
     if (fire.turnsToBurn <= 0) {
-      final terrain = terrainMapper[entity];
-      terrainChangeManager.burnDown(entity, terrain);
+      terrainChangeManager.burnDown(entity);
     } else {
       fire.turnsToBurn--;
     }
@@ -142,15 +140,13 @@ class ExecutePowerSystem extends _$ExecutePowerSystem {
         if (terrain.type == TerrainType.grass ||
             terrain.type == TerrainType.barren ||
             terrain.type == TerrainType.farm) {
-          terrainChangeManager.changeTerrain(
-              entity, terrain, TerrainType.forest,
+          terrainChangeManager.changeTerrain(entity, TerrainType.forest,
               startedByGod: true);
           world.createAndAddEntity(
               [new LogMessage('A new forest has grown.', Severity.info)]);
         } else if (terrain.type == TerrainType.swamp ||
             terrain.type == TerrainType.forest) {
-          terrainChangeManager.changeTerrain(
-              entity, terrain, TerrainType.jungle,
+          terrainChangeManager.changeTerrain(entity, TerrainType.jungle,
               startedByGod: true);
           world.createAndAddEntity(
               [new LogMessage('A new jungle has grown.', Severity.info)]);
@@ -197,7 +193,6 @@ class ExecutePowerSystem extends _$ExecutePowerSystem {
   ],
   mapper: [
     Terrain,
-    Fire,
   ],
   manager: [
     WorldMapManager,
@@ -238,11 +233,18 @@ class HumanAiSystem extends _$HumanAiSystem {
             'A group of settlers found a nice place to die and drowned.',
             Severity.warning)
       ]);
-    } else if (fireMapper.has(terrainTile)) {
+    } else if (worldMapManager.hasFire(tilePosition.x, tilePosition.y)) {
       entity.deleteFromWorld();
       world.createAndAddEntity([
         new LogMessage(
             'A group of settlers burned to a crisp in a fiery firestorm.',
+            Severity.warning)
+      ]);
+    } else if (worldMapManager.hasFlood(tilePosition.x, tilePosition.y)) {
+      entity.deleteFromWorld();
+      world.createAndAddEntity([
+        new LogMessage(
+            'A group of settlers was drowned in a sudden flood of biblical proportions.',
             Severity.warning)
       ]);
     } else {
@@ -279,6 +281,8 @@ class HumanAiSystem extends _$HumanAiSystem {
   ],
 )
 class SettlementGrowthSystem extends _$SettlementGrowthSystem {
+  int spawnedSettlers = 0;
+
   @override
   void processEntity(Entity entity) {
     final settlement = settlementMapper[entity];
@@ -304,11 +308,7 @@ class SettlementGrowthSystem extends _$SettlementGrowthSystem {
     if (settlement.faithCreated >= 100 && settlement.food > 5) {
       terrainChangeManager.addHuman(entity, food: min(15, settlement.food));
       settlement.faithCreated = 0;
-      world.createAndAddEntity([
-        new LogMessage(
-            'A settlement decided to send out a new group of settlers.',
-            Severity.info)
-      ]);
+      spawnedSettlers++;
     }
     final renderable = renderableMapper[entity];
     renderable.name = 'settlement${settlement.population}';
@@ -320,6 +320,20 @@ class SettlementGrowthSystem extends _$SettlementGrowthSystem {
             Severity.warning)
       ]);
     }
+  }
+
+  @override
+  void end() {
+    if (spawnedSettlers > 0) {
+      world.createAndAddEntity([
+        new LogMessage(
+            '$spawnedSettlers settlement${spawnedSettlers > 1
+                ? 's'
+                : ''} decided to send out a new group of settlers.',
+            Severity.info)
+      ]);
+    }
+    spawnedSettlers = 0;
   }
 
   @override

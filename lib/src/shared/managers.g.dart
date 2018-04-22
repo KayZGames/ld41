@@ -61,6 +61,8 @@ abstract class _$TerrainChangeManager extends Manager {
   Mapper<Humidity> humidityMapper;
   Mapper<Temperature> temperatureMapper;
   Mapper<Fertility> fertilityMapper;
+  Mapper<Settlement> settlementMapper;
+  WorldMapManager worldMapManager;
   @override
   void initialize() {
     super.initialize();
@@ -69,5 +71,7 @@ abstract class _$TerrainChangeManager extends Manager {
     humidityMapper = new Mapper<Humidity>(Humidity, world);
     temperatureMapper = new Mapper<Temperature>(Temperature, world);
     fertilityMapper = new Mapper<Fertility>(Fertility, world);
+    settlementMapper = new Mapper<Settlement>(Settlement, world);
+    worldMapManager = world.getManager(WorldMapManager);
   }
 }

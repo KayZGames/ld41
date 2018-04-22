@@ -8,15 +8,13 @@ part of 'logic.dart';
 
 abstract class _$FireSystem extends EntityProcessingSystem {
   Mapper<Fire> fireMapper;
-  Mapper<Terrain> terrainMapper;
   TerrainChangeManager terrainChangeManager;
   GameStateManager gameStateManager;
-  _$FireSystem() : super(new Aspect.empty()..allOf([Fire, Terrain]));
+  _$FireSystem() : super(new Aspect.empty()..allOf([Fire]));
   @override
   void initialize() {
     super.initialize();
     fireMapper = new Mapper<Fire>(Fire, world);
-    terrainMapper = new Mapper<Terrain>(Terrain, world);
     terrainChangeManager = world.getManager(TerrainChangeManager);
     gameStateManager = world.getManager(GameStateManager);
   }
@@ -82,7 +80,6 @@ abstract class _$HumanAiSystem extends EntityProcessingSystem {
   Mapper<TilePosition> tilePositionMapper;
   Mapper<Position> positionMapper;
   Mapper<Terrain> terrainMapper;
-  Mapper<Fire> fireMapper;
   WorldMapManager worldMapManager;
   TerrainChangeManager terrainChangeManager;
   GameStateManager gameStateManager;
@@ -95,7 +92,6 @@ abstract class _$HumanAiSystem extends EntityProcessingSystem {
     tilePositionMapper = new Mapper<TilePosition>(TilePosition, world);
     positionMapper = new Mapper<Position>(Position, world);
     terrainMapper = new Mapper<Terrain>(Terrain, world);
-    fireMapper = new Mapper<Fire>(Fire, world);
     worldMapManager = world.getManager(WorldMapManager);
     terrainChangeManager = world.getManager(TerrainChangeManager);
     gameStateManager = world.getManager(GameStateManager);

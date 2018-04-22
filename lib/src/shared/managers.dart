@@ -55,6 +55,12 @@ class WorldMapManager extends _$WorldMapManager {
     }
   }
 
+  @override
+  void deleted(Entity entity) {
+    _removeEntityFromMap(fireMap, entity);
+    _removeEntityFromMap(floodMap, entity);
+  }
+
   void _addEntityToMap(Map<int, Map<int, Entity>> map, Entity entity) {
     final tilePosition = tilePositionMapper[entity];
     map.putIfAbsent(tilePosition.x, () => <int, Entity>{});
@@ -63,7 +69,9 @@ class WorldMapManager extends _$WorldMapManager {
 
   void _removeEntityFromMap(Map<int, Map<int, Entity>> map, Entity entity) {
     final tilePosition = tilePositionMapper[entity];
-    if (map.containsKey(tilePosition.x)) {
+    if (tilePosition != null &&
+        map[tilePosition.x] != null &&
+        map[tilePosition.x][tilePosition.y] == entity) {
       map[tilePosition.x].remove(tilePosition.y);
     }
   }
@@ -71,15 +79,21 @@ class WorldMapManager extends _$WorldMapManager {
   List<Entity> _getNeigbhors(Map<int, Map<int, Entity>> map, int x, int y) {
     final result = <Entity>[];
     for (final direction in neighborDirections) {
-      var column = map[x + direction[0]];
-      if (column != null) {
-        final entity = column[y + direction[1]];
-        if (entity != null) {
-          result.add(entity);
-        }
+      final entity = _getEntity(map, x + direction[0], y + direction[1]);
+      if (entity != null) {
+        result.add(entity);
       }
     }
     return result;
+  }
+
+  Entity _getEntity(Map<int, Map<int, Entity>> map, int x, int y) {
+    var column = map[x];
+    if (column != null) {
+      final entity = column[y];
+      return entity;
+    }
+    return null;
   }
 
   Map<TerrainType, int> getSurroundingTerrainTypes(int x, int y) {
@@ -143,6 +157,9 @@ class WorldMapManager extends _$WorldMapManager {
     randomDirectionProvider.shuffle(random);
     return [randomDirectionProvider[0], randomDirectionProvider[1]];
   }
+
+  bool hasFire(int x, int y) => _getEntity(fireMap, x, y) != null;
+  bool hasFlood(int x, int y) => _getEntity(floodMap, x, y) != null;
 }
 
 @Generate(Manager)
@@ -240,45 +257,68 @@ class ViewProjectionManager extends _$ViewProjectionManager {
 
 @Generate(
   Manager,
-  mapper: [TilePosition, Terrain, Humidity, Temperature, Fertility],
+  mapper: [
+    TilePosition,
+    Terrain,
+    Humidity,
+    Temperature,
+    Fertility,
+    Settlement,
+  ],
+  manager: [
+    WorldMapManager,
+  ],
 )
 class TerrainChangeManager extends _$TerrainChangeManager {
   void addFire(Entity entity, int turnsToBurn, {bool startedByGod: false}) {
-    _addSprite(entity, new Fire(turnsToBurn + (startedByGod ? -1 : 0)), 'fire');
+    _addThingAt(
+        entity, new Fire(turnsToBurn + (startedByGod ? -1 : 0)), 'fire');
   }
 
-  void burnDown(Entity entity, Terrain terrain) {
-    changeTerrain(entity, terrain, TerrainType.barren);
-    _removeSprite(entity, Fire);
+  void burnDown(Entity entity) {
+    final tilePosition = tilePositionMapper[entity];
+    final target = worldMapManager.worldMap[tilePosition.x][tilePosition.y];
+    if (settlementMapper.has(target)) {
+      removeSettlement(target);
+      world.createAndAddEntity(
+          [new LogMessage('A settlement has burned down.', Severity.warning)]);
+    }
+    changeTerrain(target, TerrainType.barren);
+    entity.deleteFromWorld();
   }
 
   void addFlood(Entity entity, int turnsRemaining) {
-    _addSprite(entity, new Flood(turnsRemaining), 'flood');
+    _addThingAt(entity, new Flood(turnsRemaining), 'flood');
   }
 
   void removeFlood(Entity entity) {
-    _removeSprite(entity, Flood);
+    entity.deleteFromWorld();
   }
 
   void addHuman(Entity entity, {int food: 10}) {
-    final tilePosition = tilePositionMapper[entity];
+    _addThingAt(entity, new Human(food), 'human');
+  }
+
+  void _addThingAt(Entity terrainTile, Component component, String sprite) {
+    final tilePosition = tilePositionMapper[terrainTile];
     var x = tilePosition.x;
     var y = tilePosition.y;
-    final human = world.createAndAddEntity([
+    final entity = world.createAndAddEntity([
       new TilePosition(x, y),
       new Position(
           x * hexagonWidth + y * hexagonWidth / 2, -y * hexagonHeight * 3 / 4)
     ]);
-    _addSprite(human, new Human(food), 'human', changedInWorld: false);
-    world.addEntity(human);
+    _addSprite(entity, component, sprite, changedInWorld: false);
+    world.addEntity(entity);
   }
 
   void removeHuman(Entity entity) {
-    _removeSprite(entity, Human);
+    entity.deleteFromWorld();
   }
 
-  void changeTerrain(Entity entity, Terrain terrain, TerrainType to,
+  void changeTerrain(Entity entity, TerrainType to,
       {bool startedByGod: false}) {
+    final terrain = terrainMapper[entity];
     terrain.nextType = to;
     if (startedByGod) {
       humidityMapper[entity].percentage = humidityRange[to].start;
@@ -310,17 +350,18 @@ class TerrainChangeManager extends _$TerrainChangeManager {
   }
 
   void addSettlement(Entity entity, Terrain terrain, int food) {
-    changeTerrain(entity, terrain, TerrainType.settlement);
+    changeTerrain(entity, TerrainType.settlement);
     _addSprite(entity, new Settlement(food), 'settlement1');
   }
 
   void removeSettlement(Entity entity) {
-    changeTerrain(entity, terrainMapper[entity], TerrainType.grass);
+    changeTerrain(entity, TerrainType.grass);
     _removeSprite(entity, Settlement);
   }
 
   void douseFlames(Entity entity, int highestFlood) {
-    _removeSprite(entity, Fire);
     addFlood(entity, highestFlood - 1);
+    final tilePosition = tilePositionMapper[entity];
+    worldMapManager.fireMap[tilePosition.x][tilePosition.y].deleteFromWorld();
   }
 }

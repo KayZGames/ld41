@@ -173,7 +173,7 @@ canvas {
 }
 
 #logmessages {
-  overflow-y: hidden;
+  overflow-y: scroll;
   height: 100%;
 }
 

@@ -106,10 +106,6 @@ class PrepareHumidityChangeSystem extends _$PrepareHumidityChangeSystem {
     GameStateManager,
     TerrainChangeManager,
   ],
-  mapper: [
-    Fire,
-    Flood,
-  ],
 )
 class PrepareTerrainChangeSystem extends _$PrepareTerrainChangeSystem {
   int firesSpread = 0;
@@ -122,14 +118,14 @@ class PrepareTerrainChangeSystem extends _$PrepareTerrainChangeSystem {
     final fertility = fertilityMapper[entity];
     final tilePosition = tilePositionMapper[entity];
 
-    var hasFire = fireMapper.has(entity);
-    var hasFlood = floodMapper.has(entity);
     var x = tilePosition.x;
     var y = tilePosition.y;
+    var hasFire = worldMapManager.hasFire(x, y);
+    var hasFlood = worldMapManager.hasFlood(x, y);
     if (hasFire) {
       final highestFlood = worldMapManager.getHighestAdjacentHighFlood(x, y);
       if (highestFlood > 0) {
-        terrainChangeManager.addFlood(entity, highestFlood);
+        terrainChangeManager.douseFlames(entity, highestFlood);
       } else {
         temperature.nextCelcius += 5.0;
         humidity.nextPercentage -= 2.5;
@@ -153,21 +149,19 @@ class PrepareTerrainChangeSystem extends _$PrepareTerrainChangeSystem {
         final target = checkForConversion(
             type, possibleConversions, humidity, temperature, fertility);
         if (target != null) {
-          terrainChangeManager.changeTerrain(entity, terrain, target);
+          terrainChangeManager.changeTerrain(entity, target);
         } else {
           final surroundingTypes =
               worldMapManager.getSurroundingTerrainTypes(x, y);
           if (type == TerrainType.grass) {
             final settlement = surroundingTypes[TerrainType.settlement];
             if (settlement != null) {
-              terrainChangeManager.changeTerrain(
-                  entity, terrain, TerrainType.farm);
+              terrainChangeManager.changeTerrain(entity, TerrainType.farm);
             }
           } else if (type == TerrainType.farm) {
             final settlement = surroundingTypes[TerrainType.settlement];
             if (settlement == null) {
-              terrainChangeManager.changeTerrain(
-                  entity, terrain, TerrainType.grass);
+              terrainChangeManager.changeTerrain(entity, TerrainType.grass);
             }
           }
         }
