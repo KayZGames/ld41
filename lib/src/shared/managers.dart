@@ -108,6 +108,12 @@ class WorldMapManager extends _$WorldMapManager {
         .fold(0.0, (sum, element) => sum += element);
     return sum / neighbors.length;
   }
+
+  List<int> getDirectionToClosest(TerrainType type, int x, int y) {
+    List<int> randomDirectionProvider = [-1, 0, 1];
+    randomDirectionProvider.shuffle(random);
+    return [randomDirectionProvider[0], randomDirectionProvider[1]];
+  }
 }
 
 @Generate(Manager)
@@ -203,7 +209,12 @@ class ViewProjectionManager extends _$ViewProjectionManager {
   }
 }
 
-@Generate(Manager)
+@Generate(
+  Manager,
+  mapper: [
+    TilePosition,
+  ],
+)
 class TerrainChangeManager extends _$TerrainChangeManager {
   void addFire(Entity entity, {bool startedByGod: false}) {
     _addSprite(entity, new Fire(startedByGod ? 1 : 0), 'fire');
@@ -222,8 +233,17 @@ class TerrainChangeManager extends _$TerrainChangeManager {
     _removeSprite(entity, Flood);
   }
 
-  void addHuman(Entity entity) {
-    _addSprite(entity, new Human(), 'human');
+  void addHuman(Entity entity, {int food: 10}) {
+    final tilePosition = tilePositionMapper[entity];
+    var x = tilePosition.x;
+    var y = tilePosition.y;
+    final human = world.createAndAddEntity([
+      new TilePosition(x, y),
+      new Position(
+          x * hexagonWidth + y * hexagonWidth / 2, -y * hexagonHeight * 3 / 4)
+    ]);
+    _addSprite(human, new Human(food), 'human', changedInWorld: false);
+    world.addEntity(human);
   }
 
   void removeHuman(Entity entity) {
@@ -237,12 +257,15 @@ class TerrainChangeManager extends _$TerrainChangeManager {
       ..changedInWorld();
   }
 
-  void _addSprite(Entity entity, Component component, String sprite) {
+  void _addSprite(Entity entity, Component component, String sprite,
+      {bool changedInWorld: true}) {
     entity
       ..addComponent(component)
       ..addComponent(new Renderable(sprite, facesRight: false))
-      ..addComponent(new Orientation(pi))
-      ..changedInWorld();
+      ..addComponent(new Orientation(pi));
+    if (changedInWorld) {
+      entity.changedInWorld();
+    }
   }
 
   void _removeSprite(Entity entity, Type type) {
@@ -251,5 +274,10 @@ class TerrainChangeManager extends _$TerrainChangeManager {
       ..removeComponent(Renderable)
       ..removeComponent(Orientation)
       ..changedInWorld();
+  }
+
+  void addSettlement(Entity entity, Terrain terrain) {
+    changeTerrain(entity, terrain, TerrainType.farm);
+    _addSprite(entity, new Settlement(), 'settlement');
   }
 }

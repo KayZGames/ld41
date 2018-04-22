@@ -51,7 +51,10 @@ class ExecutePower extends Component {
   ExecutePower(this.power);
 }
 
-class Human extends Component {}
+class Human extends Component {
+  int food;
+  Human(this.food);
+}
 
 class Fire extends Component {
   int turnsBurned;
@@ -59,6 +62,8 @@ class Fire extends Component {
 }
 
 class Flood extends Component {}
+
+class Settlement extends Component {}
 
 class LogMessage extends Component {
   int turn;

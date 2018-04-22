@@ -102,7 +102,7 @@ class ExecutePowerSystem extends _$ExecutePowerSystem {
         ..removeComponent(ExecutePower)
         ..changedInWorld();
       if (power == PowerType.human) {
-        terrainChangeManager.addHuman(entity);
+        terrainChangeManager.addHuman(entity, food: 5);
         world.createAndAddEntity([
           new LogMessage(
               gameStateManager.turn, 'Humans have appeared!!!', Severity.info)
@@ -159,4 +159,83 @@ class ExecutePowerSystem extends _$ExecutePowerSystem {
   void end() {
     world.processEntityChanges();
   }
+}
+
+@Generate(
+  EntityProcessingSystem,
+  allOf: [
+    Human,
+    TilePosition,
+    Position,
+  ],
+  mapper: [
+    Terrain,
+    Fire,
+  ],
+  manager: [
+    WorldMapManager,
+    TerrainChangeManager,
+    GameStateManager,
+  ],
+)
+class HumanAiSystem extends _$HumanAiSystem {
+  @override
+  void processEntity(Entity entity) {
+    final human = humanMapper[entity];
+    human.food--;
+    final tilePosition = tilePositionMapper[entity];
+    var terrainTile = worldMapManager.worldMap[tilePosition.x][tilePosition.y];
+    final terrain = terrainMapper[terrainTile];
+    if (terrain.type == TerrainType.desert) {
+      human.food--;
+    }
+    if (terrain.type == TerrainType.grass) {
+      terrainChangeManager.addSettlement(terrainTile, terrain);
+      entity.deleteFromWorld();
+      world.createAndAddEntity([
+        new LogMessage(
+            gameStateManager.turn,
+            'A group of settlers found a nice place to live and started a new settlement.',
+            Severity.info)
+      ]);
+    } else if (human.food < 0) {
+      world.createAndAddEntity([
+        new LogMessage(
+            gameStateManager.turn,
+            'A group of settlers has run out of food before finding a place to settle. They decided against cannibalism and starved to death with a clear conscience. If God had at least created some animals to hunt...',
+            Severity.warning)
+      ]);
+      entity.deleteFromWorld();
+    } else if (terrain.type == TerrainType.lake ||
+        terrain.type == TerrainType.ocean) {
+      entity.deleteFromWorld();
+      world.createAndAddEntity([
+        new LogMessage(
+            gameStateManager.turn,
+            'A group of settlers found a nice place to die and drowned.',
+            Severity.warning)
+      ]);
+    } else if (fireMapper.has(terrainTile)) {
+      entity.deleteFromWorld();
+      world.createAndAddEntity([
+        new LogMessage(
+            gameStateManager.turn,
+            'A group of settlers burned to a crisp in a fiery firestorm.',
+            Severity.warning)
+      ]);
+    } else {
+      final position = positionMapper[entity];
+      final direction = worldMapManager.getDirectionToClosest(
+          TerrainType.grass, tilePosition.x, tilePosition.y);
+      print(direction);
+      tilePosition.x += direction[0];
+      tilePosition.y += direction[1];
+      position.x =
+          tilePosition.x * hexagonWidth + tilePosition.y * hexagonWidth / 2;
+      position.y = -tilePosition.y * hexagonHeight * 3 / 4;
+    }
+  }
+
+  @override
+  bool checkProcessing() => gameStateManager.state == State.endTurn;
 }

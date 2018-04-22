@@ -62,3 +62,28 @@ abstract class _$ExecutePowerSystem extends EntityProcessingSystem {
     terrainChangeManager = world.getManager(TerrainChangeManager);
   }
 }
+
+abstract class _$HumanAiSystem extends EntityProcessingSystem {
+  Mapper<Human> humanMapper;
+  Mapper<TilePosition> tilePositionMapper;
+  Mapper<Position> positionMapper;
+  Mapper<Terrain> terrainMapper;
+  Mapper<Fire> fireMapper;
+  WorldMapManager worldMapManager;
+  TerrainChangeManager terrainChangeManager;
+  GameStateManager gameStateManager;
+  _$HumanAiSystem()
+      : super(new Aspect.empty()..allOf([Human, TilePosition, Position]));
+  @override
+  void initialize() {
+    super.initialize();
+    humanMapper = new Mapper<Human>(Human, world);
+    tilePositionMapper = new Mapper<TilePosition>(TilePosition, world);
+    positionMapper = new Mapper<Position>(Position, world);
+    terrainMapper = new Mapper<Terrain>(Terrain, world);
+    fireMapper = new Mapper<Fire>(Fire, world);
+    worldMapManager = world.getManager(WorldMapManager);
+    terrainChangeManager = world.getManager(TerrainChangeManager);
+    gameStateManager = world.getManager(GameStateManager);
+  }
+}
