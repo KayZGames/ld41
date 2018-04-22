@@ -12,8 +12,9 @@
 <div id="gamecontainer">
   <canvas id="game" width="800px" height="600px"></canvas>
   <canvas id="hud" width="800px" height="600px"></canvas>
-  <div id="sidebar">
-    <div id="terrainstats">
+  <div class="sidebar left">
+    <div class="terrainstats">
+      <div class="title">Terrain Info</div>
       <div id="glacier">
         <div class="icon"></div>
         <div class="name">Glacier</div>
@@ -71,8 +72,46 @@
         <div class="count">0</div>
       </div>
     </div>
+  </div>
+  <div class="sidebar right">
+    <div class="powers">
+      <div class="title">Godly Powers</div>
+      <div id="energy">
+        <div class="percentage" style="width:100%"></div>
+        <label title="1001/1000">FAITH</label>
+        <div class="empty">0</div>
+        <div class="full">1000</div>
+      </div>
+      <div class="power human"
+           title="Create believers who pray to you and increae FAITH.
+
+They need grassland to settle and additional grassland to create farmland.">
+        <span>Humans</span><span>(1001 FAITH)</span></div>
+      <div class="power forest"
+           title="Create new forests.
+
+Turns grassland, barren and farmland into forest and swamp into jungle."><span>Forest</span><span>(50 FAITH)</span>
+      </div>
+      <div class="power fire" title="Burn the FAITHless (or the forests for some farmland)"><span>Fire</span><span>(100 FAITH)</span>
+      </div>
+      <div class="power flood" title="Drown the FAITHless (or the fires threatening your cities)">
+        <span>Flood</span><span>(200 FAITH)</span></div>
+    </div>
     <div id="endturn">
       END TURN
+    </div>
+  </div>
+  <div class="bottombar">
+    <div id="logmessages">
+
+    </div>
+  </div>
+  <div class="topbar">
+    <div id="visualconfig">
+      <label><input type="radio" name="visualconfig" id='terrainRadio' value="terrain" checked>Terrain</label>
+      <label><input type="radio" name="visualconfig" id='temperatureRadio' value="temperature">Temperature</label>
+      <label><input type="radio" name="visualconfig" id='humidityRadio' value="humidity">Humidity</label>
+      <label><input type="radio" name="visualconfig" id='fertilityRadio' value="fertility">Fertility</label>
     </div>
   </div>
 </div>
