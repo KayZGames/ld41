@@ -7576,35 +7576,35 @@ k.fixed$length=Array
 k=new F.dd(0,null,null,n,P.P(s,m),P.P(s,m),null,null,0,null,new S.v(l,!1,H.d(k,p),0),r.a,0,0,null,null,null)
 k.D(r)
 r=new S.z(0,0,0)
-r.a=r.I(0,[C.w,C.e,C.h])
+r.a=r.I(0,[C.w,C.f,C.h])
 l=D.y(16,!1)
 m=new Array(16)
 m.fixed$length=Array
 m=new D.dV(null,null,null,null,null,0,null,new S.v(l,!1,H.d(m,p),0),r.a,0,0,null,null,null)
 m.D(r)
 r=new S.z(0,0,0)
-r.a=r.I(0,[C.u,C.e,C.h])
+r.a=r.I(0,[C.u,C.f,C.h])
 l=D.y(16,!1)
 s=new Array(16)
 s.fixed$length=Array
 s=new D.dT(null,null,null,null,null,0,null,new S.v(l,!1,H.d(s,p),0),r.a,0,0,null,null,null)
 s.D(r)
 r=new S.z(0,0,0)
-r.a=r.I(0,[C.v,C.e,C.h])
+r.a=r.I(0,[C.v,C.f,C.h])
 l=D.y(16,!1)
 n=new Array(16)
 n.fixed$length=Array
 n=new D.dU(null,null,null,null,null,0,null,new S.v(l,!1,H.d(n,p),0),r.a,0,0,null,null,null)
 n.D(r)
 r=new S.z(0,0,0)
-r.a=r.I(0,[C.h,C.e,C.w,C.v,C.u])
+r.a=r.I(0,[C.h,C.f,C.w,C.v,C.u])
 l=D.y(16,!1)
 j=new Array(16)
 j.fixed$length=Array
 j=new D.dW(0,null,null,null,null,null,null,null,null,0,null,new S.v(l,!1,H.d(j,p),0),r.a,0,0,null,null,null)
 j.D(r)
 r=new S.z(0,0,0)
-r.a=r.I(0,[C.as,C.e,C.p])
+r.a=r.I(0,[C.as,C.f,C.p])
 l=D.y(16,!1)
 i=new Array(16)
 i.fixed$length=Array
@@ -7661,7 +7661,7 @@ b.D(new S.z(0,0,0))
 l=new S.z(0,0,0)
 a=l.I(0,[C.U])
 l.a=a
-l.a=l.I(a,[C.e,C.p])
+l.a=l.I(a,[C.f,C.p])
 a=P.i
 a0=P.c6
 a1=D.y(16,!1)
@@ -7673,7 +7673,7 @@ a2.a$=r
 l=new S.z(0,0,0)
 a1=l.I(0,[C.w])
 l.a=a1
-l.a=l.I(a1,[C.e,C.p])
+l.a=l.I(a1,[C.f,C.p])
 a1=D.y(16,!1)
 a3=new Array(16)
 a3.fixed$length=Array
@@ -7683,7 +7683,7 @@ a3.a$=r
 l=new S.z(0,0,0)
 a1=l.I(0,[C.v])
 l.a=a1
-l.a=l.I(a1,[C.e,C.p])
+l.a=l.I(a1,[C.f,C.p])
 a1=D.y(16,!1)
 a4=new Array(16)
 a4.fixed$length=Array
@@ -7693,7 +7693,7 @@ a4.a$=r
 l=new S.z(0,0,0)
 a1=l.I(0,[C.u])
 l.a=a1
-l.a=l.I(a1,[C.e,C.p])
+l.a=l.I(a1,[C.f,C.p])
 a1=D.y(16,!1)
 a5=new Array(16)
 a5.fixed$length=Array
@@ -7746,7 +7746,7 @@ a9.fixed$length=Array
 a9=new F.eh(a6,null,null,0,null,new S.v(r,!1,H.d(a9,p),0),a.a,0,0,null,null,null)
 a9.D(a)
 a=new S.z(0,0,0)
-a.a=a.I(0,[C.Q,C.e,C.P])
+a.a=a.I(0,[C.Q,C.f,C.P])
 r=D.y(16,!1)
 a6=new Array(16)
 a6.fixed$length=Array
@@ -7896,7 +7896,7 @@ t.k(0,q,"camera")
 t=H.w(C.H,0)
 p=P.j5(new H.b7(C.H,new F.iq(),[t]),!1,t)
 for(o=0,n=20,m=-20;m<=20;++m){for(t=m*86.6/2,s=-m*100*3/4,r=Math.abs(m),l=r!==17,k=r<18,r=r===20,j=o+2,i=n-2,h=o;h<=n;++h){if(r)g=new G.Q(C.r,C.r)
-else if(!k||h<j||h>i)g=new G.Q(C.l,C.l)
+else if(!k||h<j||h>i)g=new G.Q(C.m,C.m)
 else if(!l||h===j||h===i)g=new G.Q(C.x,C.x)
 else{f=p[$.$get$nL().dW(p.length)]
 g=new G.Q(f,f)}f=$.$get$nt().h(0,g.a).a
@@ -7929,7 +7929,7 @@ t.textBaseline="top"
 t.font="16px Verdana"}}
 F.iq.prototype={
 $1:function(a){var t=J.p(a)
-return!t.A(a,C.l)&&!t.A(a,C.r)&&!t.A(a,C.x)&&!t.A(a,C.t)&&!t.A(a,C.o)},
+return!t.A(a,C.m)&&!t.A(a,C.r)&&!t.A(a,C.x)&&!t.A(a,C.t)&&!t.A(a,C.o)},
 $S:function(){return{func:1,args:[,]}}}
 F.A.prototype={}
 F.aZ.prototype={
@@ -8272,7 +8272,7 @@ a.e.e.t(0,a)}}
 M.kh.prototype={}
 M.cL.prototype={
 p:function(a){this.cV(0)
-this.r1=S.f(C.e,this.b,G.a0)
+this.r1=S.f(C.f,this.b,G.a0)
 this.r2=S.f(C.p,this.b,F.a8)
 this.rx=S.f(C.E,this.b,G.an)
 this.ry=this.b.z.h(0,C.W)
@@ -8455,7 +8455,7 @@ O.ln.prototype={
 $1:function(a){var t,s
 t=this.a.c.b
 s=a.a
-return J.bd(t.a[s])===C.f},
+return J.bd(t.a[s])===C.e},
 $S:function(){return{func:1,args:[,]}}}
 O.lo.prototype={
 $1:function(a){var t,s
@@ -8639,7 +8639,7 @@ a.r.b0(a,S.ad(C.a6))
 a.e.d.t(0,a)}}
 O.m2.prototype={
 p:function(a){this.bm(0)
-this.b=S.f(C.e,this.a,G.a0)
+this.b=S.f(C.f,this.a,G.a0)
 this.c=S.f(C.h,this.a,G.Q)
 this.d=S.f(C.V,this.a,G.bj)
 this.e=S.f(C.a5,this.a,G.b_)
@@ -8659,7 +8659,7 @@ this.b=S.f(C.E,this.a,G.an)
 this.c=this.a.z.h(0,C.T)}}
 O.lZ.prototype={
 p:function(a){this.bm(0)
-this.b=S.f(C.e,this.a,G.a0)
+this.b=S.f(C.f,this.a,G.a0)
 this.c=S.f(C.h,this.a,G.Q)
 this.d=S.f(C.v,this.a,G.ah)
 this.e=S.f(C.w,this.a,G.aj)
@@ -8722,9 +8722,9 @@ n=t.b.b.a[s]
 s=J.n(n)
 J.ay(t.x.ch.h(0,s.gj(n)),s.gl(n)).ha()}else{p.b=p.gct()+5
 q.sZ(q.gZ()-2.5)
-o.sZ(o.gZ()+1)}}else if(k!=null){p.b=p.gct()-1
-q.sZ(q.gZ()+1)
-o.sZ(o.gZ()+1)}else{j=this.k2.cN(m,l)
+o.sZ(o.gZ()+1)}}else if(k!=null){p.b=p.gct()-1.25
+q.sZ(q.gZ()+2)
+o.sZ(o.gZ()+2)}else{j=this.k2.cN(m,l)
 t=this.k2
 i=t.aZ(t.ch,m,l).length
 h=J.bd(r)
@@ -8732,7 +8732,7 @@ if(j>0)this.k4.aF(a,new G.b_(j-1),"flood")
 else if(i>=$.$get$nw().h(0,h).a){this.k4.fQ(a,$.$get$nw().h(0,h).b);++this.ak}else{g=this.h_(h,$.$get$pW().h(0,h),q,p,o)
 if(g!=null)this.k4.aA(a,g)
 else{f=this.k2.cO(m,l)
-if(h===C.f){if(f.h(0,C.t)!=null)this.k4.aA(a,C.o)}else if(h===C.o)if(f.h(0,C.t)==null)this.k4.aA(a,C.f)}}}},
+if(h===C.e){if(f.h(0,C.t)!=null)this.k4.aA(a,C.o)}else if(h===C.o)if(f.h(0,C.t)==null)this.k4.aA(a,C.e)}}}},
 h_:function(a,b,c,d,e){var t,s,r,q,p
 t=C.J.h(0,a)
 s=c.a
@@ -8796,28 +8796,28 @@ t.saz(q,s[2])}}
 D.lS.prototype={
 p:function(a){this.P(0)
 this.fx=S.f(C.w,this.b,G.aj)
-this.fy=S.f(C.e,this.b,G.a0)
+this.fy=S.f(C.f,this.b,G.a0)
 this.go=S.f(C.h,this.b,G.Q)
 this.id=this.b.z.h(0,C.C)
 this.k1=this.b.z.h(0,C.d)}}
 D.lQ.prototype={
 p:function(a){this.P(0)
 this.fx=S.f(C.u,this.b,G.ag)
-this.fy=S.f(C.e,this.b,G.a0)
+this.fy=S.f(C.f,this.b,G.a0)
 this.go=S.f(C.h,this.b,G.Q)
 this.id=this.b.z.h(0,C.C)
 this.k1=this.b.z.h(0,C.d)}}
 D.lR.prototype={
 p:function(a){this.P(0)
 this.fx=S.f(C.v,this.b,G.ah)
-this.fy=S.f(C.e,this.b,G.a0)
+this.fy=S.f(C.f,this.b,G.a0)
 this.go=S.f(C.h,this.b,G.Q)
 this.id=this.b.z.h(0,C.C)
 this.k1=this.b.z.h(0,C.d)}}
 D.lT.prototype={
 p:function(a){this.P(0)
 this.fx=S.f(C.h,this.b,G.Q)
-this.fy=S.f(C.e,this.b,G.a0)
+this.fy=S.f(C.f,this.b,G.a0)
 this.go=S.f(C.w,this.b,G.aj)
 this.id=S.f(C.v,this.b,G.ah)
 this.k1=S.f(C.u,this.b,G.ag)
@@ -8850,9 +8850,9 @@ if(r.gbh()<=0){t=this.fy
 q=t.b.b.a[s]
 s=J.n(q)
 p=J.ay(t.x.Q.h(0,s.gj(q)),s.gl(q))
-if(t.r.ao(p)!=null){t.aA(p,C.f)
+if(t.r.ao(p)!=null){t.aA(p,C.e)
 t.dm(p,C.Q)
-t.a.T([new G.L("A settlement has burned down.",C.z)])}t.aA(p,C.k)
+t.a.T([new G.L("A settlement has burned down.",C.z)])}t.aA(p,C.l)
 a.e.e.t(0,a)}else r.sbh(r.gbh()-1)},
 ai:function(a){this.b.be()},
 M:function(){return this.go.c===C.j}}
@@ -8890,8 +8890,8 @@ a.e.d.t(0,a)
 if(r===C.L){this.k3.aF(a,new G.bO(5),"human")
 this.b.T([new G.L("Humans have appeared!!!",C.D)])}else if(r===C.M){o=this.fy.b.a[s]
 t=J.n(o)
-if(t.gq(o)===C.f||t.gq(o)===C.k||t.gq(o)===C.o){this.k3.ck(a,C.n,!0)
-this.b.T([new G.L("A new forest has grown.",C.D)])}else if(t.gq(o)===C.m||t.gq(o)===C.n){this.k3.ck(a,C.y,!0)
+if(t.gq(o)===C.e||t.gq(o)===C.l||t.gq(o)===C.o){this.k3.ck(a,C.n,!0)
+this.b.T([new G.L("A new forest has grown.",C.D)])}else if(t.gq(o)===C.k||t.gq(o)===C.n){this.k3.ck(a,C.y,!0)
 this.b.T([new G.L("A new jungle has grown.",C.D)])}else{n=this.id.b.a[s]
 n.sG(Math.min(100,n.gG()+1))
 this.b.T([new G.L("This "+H.c(J.aV(t.gq(o)).split(".")[1])+" can't really support a forest, but the fertility increases.",C.D)])}}else if(r===C.N){this.k3.dA(a,$.$get$nw().h(0,J.bd(this.fy.b.a[s])).b,!0)
@@ -8911,13 +8911,13 @@ n=p.a
 m=o.a[n]
 o=J.n(m)
 if(o.gq(m)===C.A)r.sa4(r.ga4()-1)
-if(o.gq(m)===C.f){t=this.k2
+if(o.gq(m)===C.e){t=this.k2
 s=r.ga4()
 t.aA(p,C.t)
 t.f5(p,new G.bR(s,1,0),"settlement1")
 a.e.e.t(0,a)
 this.b.T([new G.L("A group of settlers found a nice place to live and started a new settlement.",C.D)])}else if(r.ga4()<=0){this.b.T([new G.L("A group of settlers has run out of food before finding a place to settle. They decided against cannibalism and starved to death with a clear conscience. If God had at least created some animals to hunt...",C.z)])
-a.e.e.t(0,a)}else if(o.gq(m)===C.B||o.gq(m)===C.l){a.e.e.t(0,a)
+a.e.e.t(0,a)}else if(o.gq(m)===C.B||o.gq(m)===C.m){a.e.e.t(0,a)
 this.b.T([new G.L("A group of settlers found a nice place to die and drowned.",C.z)])}else{o=this.k1
 n=t.gj(q)
 l=t.gl(q)
@@ -8927,7 +8927,7 @@ n=t.gj(q)
 l=t.gl(q)
 if(o.aY(o.cx,n,l)!=null){a.e.e.t(0,a)
 this.b.T([new G.L("A group of settlers was drowned in a sudden flood of biblical proportions.",C.z)])}else{k=this.go.b.a[s]
-j=this.k1.ek(C.f,t.gj(q),t.gl(q))
+j=this.k1.ek(C.e,t.gj(q),t.gl(q))
 t.sj(q,J.I(t.gj(q),j[0]))
 t.sl(q,J.I(t.gl(q),j[1]))
 s=J.n(k)
@@ -8955,7 +8955,7 @@ t=r.c+=t
 if(t>=100&&r.a>5){this.k2.aF(a,new G.bO(Math.min(15,r.a)),"human")
 r.c=0;++this.Y}J.qf(this.go.b.a[s],"settlement"+r.b)
 if(r.b===0){t=this.k2
-t.aA(a,C.f)
+t.aA(a,C.e)
 t.dm(a,C.Q)
 this.b.T([new G.L("A settlement starved and nature took back what belongs to nature.",C.z)])}},
 ai:function(a){var t,s
@@ -8992,7 +8992,7 @@ this.k3=this.b.z.h(0,C.G)}}
 Q.lM.prototype={
 p:function(a){this.P(0)
 this.fx=S.f(C.as,this.b,G.bO)
-this.fy=S.f(C.e,this.b,G.a0)
+this.fy=S.f(C.f,this.b,G.a0)
 this.go=S.f(C.p,this.b,F.a8)
 this.id=S.f(C.h,this.b,G.Q)
 this.k1=this.b.z.h(0,C.C)
@@ -9001,7 +9001,7 @@ this.k3=this.b.z.h(0,C.d)}}
 Q.lV.prototype={
 p:function(a){this.P(0)
 this.fx=S.f(C.Q,this.b,G.bR)
-this.fy=S.f(C.e,this.b,G.a0)
+this.fy=S.f(C.f,this.b,G.a0)
 this.go=S.f(C.P,this.b,F.bQ)
 this.id=S.f(C.V,this.b,G.bj)
 this.k1=this.b.z.h(0,C.C)
@@ -10570,18 +10570,18 @@ C.ai=function getTagFallback(o) {
 C.aO=new P.iY(null,null)
 C.aP=new P.iZ(null)
 C.r=new G.U(0,"TerrainType.glacier")
-C.l=new G.U(1,"TerrainType.ocean")
+C.m=new G.U(1,"TerrainType.ocean")
 C.B=new G.U(2,"TerrainType.lake")
-C.f=new G.U(3,"TerrainType.grass")
+C.e=new G.U(3,"TerrainType.grass")
 C.n=new G.U(4,"TerrainType.forest")
 C.A=new G.U(5,"TerrainType.desert")
-C.k=new G.U(6,"TerrainType.barren")
+C.l=new G.U(6,"TerrainType.barren")
 C.o=new G.U(7,"TerrainType.farm")
 C.x=new G.U(8,"TerrainType.coast")
 C.y=new G.U(9,"TerrainType.jungle")
-C.m=new G.U(10,"TerrainType.swamp")
+C.k=new G.U(10,"TerrainType.swamp")
 C.t=new G.U(11,"TerrainType.settlement")
-C.H=H.d(makeConstList([C.r,C.l,C.B,C.f,C.n,C.A,C.k,C.o,C.x,C.y,C.m,C.t]),[G.U])
+C.H=H.d(makeConstList([C.r,C.m,C.B,C.e,C.n,C.A,C.l,C.o,C.x,C.y,C.k,C.t]),[G.U])
 C.aQ=H.d(makeConstList(["*::class","*::dir","*::draggable","*::hidden","*::id","*::inert","*::itemprop","*::itemref","*::itemscope","*::lang","*::spellcheck","*::title","*::translate","A::accesskey","A::coords","A::hreflang","A::name","A::shape","A::tabindex","A::target","A::type","AREA::accesskey","AREA::alt","AREA::coords","AREA::nohref","AREA::shape","AREA::tabindex","AREA::target","AUDIO::controls","AUDIO::loop","AUDIO::mediagroup","AUDIO::muted","AUDIO::preload","BDO::dir","BODY::alink","BODY::bgcolor","BODY::link","BODY::text","BODY::vlink","BR::clear","BUTTON::accesskey","BUTTON::disabled","BUTTON::name","BUTTON::tabindex","BUTTON::type","BUTTON::value","CANVAS::height","CANVAS::width","CAPTION::align","COL::align","COL::char","COL::charoff","COL::span","COL::valign","COL::width","COLGROUP::align","COLGROUP::char","COLGROUP::charoff","COLGROUP::span","COLGROUP::valign","COLGROUP::width","COMMAND::checked","COMMAND::command","COMMAND::disabled","COMMAND::label","COMMAND::radiogroup","COMMAND::type","DATA::value","DEL::datetime","DETAILS::open","DIR::compact","DIV::align","DL::compact","FIELDSET::disabled","FONT::color","FONT::face","FONT::size","FORM::accept","FORM::autocomplete","FORM::enctype","FORM::method","FORM::name","FORM::novalidate","FORM::target","FRAME::name","H1::align","H2::align","H3::align","H4::align","H5::align","H6::align","HR::align","HR::noshade","HR::size","HR::width","HTML::version","IFRAME::align","IFRAME::frameborder","IFRAME::height","IFRAME::marginheight","IFRAME::marginwidth","IFRAME::width","IMG::align","IMG::alt","IMG::border","IMG::height","IMG::hspace","IMG::ismap","IMG::name","IMG::usemap","IMG::vspace","IMG::width","INPUT::accept","INPUT::accesskey","INPUT::align","INPUT::alt","INPUT::autocomplete","INPUT::autofocus","INPUT::checked","INPUT::disabled","INPUT::inputmode","INPUT::ismap","INPUT::list","INPUT::max","INPUT::maxlength","INPUT::min","INPUT::multiple","INPUT::name","INPUT::placeholder","INPUT::readonly","INPUT::required","INPUT::size","INPUT::step","INPUT::tabindex","INPUT::type","INPUT::usemap","INPUT::value","INS::datetime","KEYGEN::disabled","KEYGEN::keytype","KEYGEN::name","LABEL::accesskey","LABEL::for","LEGEND::accesskey","LEGEND::align","LI::type","LI::value","LINK::sizes","MAP::name","MENU::compact","MENU::label","MENU::type","METER::high","METER::low","METER::max","METER::min","METER::value","OBJECT::typemustmatch","OL::compact","OL::reversed","OL::start","OL::type","OPTGROUP::disabled","OPTGROUP::label","OPTION::disabled","OPTION::label","OPTION::selected","OPTION::value","OUTPUT::for","OUTPUT::name","P::align","PRE::width","PROGRESS::max","PROGRESS::min","PROGRESS::value","SELECT::autocomplete","SELECT::disabled","SELECT::multiple","SELECT::name","SELECT::required","SELECT::size","SELECT::tabindex","SOURCE::type","TABLE::align","TABLE::bgcolor","TABLE::border","TABLE::cellpadding","TABLE::cellspacing","TABLE::frame","TABLE::rules","TABLE::summary","TABLE::width","TBODY::align","TBODY::char","TBODY::charoff","TBODY::valign","TD::abbr","TD::align","TD::axis","TD::bgcolor","TD::char","TD::charoff","TD::colspan","TD::headers","TD::height","TD::nowrap","TD::rowspan","TD::scope","TD::valign","TD::width","TEXTAREA::accesskey","TEXTAREA::autocomplete","TEXTAREA::cols","TEXTAREA::disabled","TEXTAREA::inputmode","TEXTAREA::name","TEXTAREA::placeholder","TEXTAREA::readonly","TEXTAREA::required","TEXTAREA::rows","TEXTAREA::tabindex","TEXTAREA::wrap","TFOOT::align","TFOOT::char","TFOOT::charoff","TFOOT::valign","TH::abbr","TH::align","TH::axis","TH::bgcolor","TH::char","TH::charoff","TH::colspan","TH::headers","TH::height","TH::nowrap","TH::rowspan","TH::scope","TH::valign","TH::width","THEAD::align","THEAD::char","THEAD::charoff","THEAD::valign","TR::align","TR::bgcolor","TR::char","TR::charoff","TR::valign","TRACK::default","TRACK::kind","TRACK::label","TRACK::srclang","UL::compact","UL::type","VIDEO::controls","VIDEO::height","VIDEO::loop","VIDEO::mediagroup","VIDEO::muted","VIDEO::preload","VIDEO::width"]),[P.i])
 C.L=new G.br(0,"PowerType.human")
 C.M=new G.br(1,"PowerType.forest")
@@ -10608,7 +10608,7 @@ C.b7=new F.A(35,100,50)
 C.an=new F.A(10,30,20)
 C.aY=new F.A(10,35,30)
 C.ap=new F.A(20,50,40)
-C.I=new H.cd([C.r,C.bc,C.l,C.bd,C.x,C.bh,C.f,C.bf,C.n,C.bg,C.y,C.b6,C.k,C.b5,C.B,C.be,C.A,C.b7,C.m,C.an,C.o,C.aY,C.t,C.ap],[null,null])
+C.I=new H.cd([C.r,C.bc,C.m,C.bd,C.x,C.bh,C.e,C.bf,C.n,C.bg,C.y,C.b6,C.l,C.b5,C.B,C.be,C.A,C.b7,C.k,C.an,C.o,C.aY,C.t,C.ap],[null,null])
 C.aW=new F.A(0,20,0)
 C.b3=new F.A(20,80,30)
 C.a_=new F.A(0,20,10)
@@ -10619,7 +10619,7 @@ C.aq=new F.A(20,80,40)
 C.am=new F.A(0,10,0)
 C.ao=new F.A(15,50,30)
 C.bb=new F.A(5,20,10)
-C.K=new H.cd([C.r,C.aW,C.l,C.b3,C.x,C.a_,C.f,C.b_,C.n,C.b1,C.y,C.b9,C.k,C.a_,C.B,C.aq,C.A,C.am,C.m,C.ao,C.o,C.ao,C.t,C.bb],[null,null])
+C.K=new H.cd([C.r,C.aW,C.m,C.b3,C.x,C.a_,C.e,C.b_,C.n,C.b1,C.y,C.b9,C.l,C.a_,C.B,C.aq,C.A,C.am,C.k,C.ao,C.o,C.ao,C.t,C.bb],[null,null])
 C.b0=new F.A(15,60,35)
 C.b2=new F.A(20,70,50)
 C.ba=new F.A(50,100,70)
@@ -10627,7 +10627,7 @@ C.aX=new F.A(10,30,25)
 C.b4=new F.A(20,80,50)
 C.b8=new F.A(40,100,60)
 C.aZ=new F.A(15,45,30)
-C.J=new H.cd([C.r,C.a_,C.l,C.aq,C.x,C.ap,C.f,C.b0,C.n,C.b2,C.y,C.ba,C.k,C.aX,C.B,C.b4,C.A,C.am,C.m,C.b8,C.o,C.aZ,C.t,C.an],[null,null])
+C.J=new H.cd([C.r,C.a_,C.m,C.aq,C.x,C.ap,C.e,C.b0,C.n,C.b2,C.y,C.ba,C.l,C.aX,C.B,C.b4,C.A,C.am,C.k,C.b8,C.o,C.aZ,C.t,C.an],[null,null])
 C.D=new G.e4(0,"Severity.info")
 C.z=new G.e4(1,"Severity.warning")
 C.a0=new O.cv(0,"State.playersTurn")
@@ -10656,7 +10656,7 @@ C.W=H.G("ed")
 C.w=H.G("aj")
 C.G=H.G("ef")
 C.h=H.G("Q")
-C.e=H.G("a0")
+C.f=H.G("a0")
 C.a7=H.G("ej")
 C.C=H.G("em")})();(function staticFields(){$.p8="$cachedFunction"
 $.p9="$cachedInvocation"
@@ -10718,9 +10718,9 @@ lazy($,"oQ","$get$oQ",function(){return P.qN("^\\S+$",!0,!1)})
 lazy($,"nS","$get$nS",function(){return H.qH([0,1,1,2,1,2,2,3,1,2,2,3,2,3,3,4,1,2,2,3,2,3,3,4,2,3,3,4,3,4,4,5,1,2,2,3,2,3,3,4,2,3,3,4,3,4,4,5,2,3,3,4,3,4,4,5,3,4,4,5,4,5,5,6,1,2,2,3,2,3,3,4,2,3,3,4,3,4,4,5,2,3,3,4,3,4,4,5,3,4,4,5,4,5,5,6,2,3,3,4,3,4,4,5,3,4,4,5,4,5,5,6,3,4,4,5,4,5,5,6,4,5,5,6,5,6,6,7,1,2,2,3,2,3,3,4,2,3,3,4,3,4,4,5,2,3,3,4,3,4,4,5,3,4,4,5,4,5,5,6,2,3,3,4,3,4,4,5,3,4,4,5,4,5,5,6,3,4,4,5,4,5,5,6,4,5,5,6,5,6,6,7,2,3,3,4,3,4,4,5,3,4,4,5,4,5,5,6,3,4,4,5,4,5,5,6,4,5,5,6,5,6,6,7,3,4,4,5,4,5,5,6,4,5,5,6,5,6,6,7,4,5,5,6,5,6,6,7,5,6,6,7,6,7,7,8])})
 lazy($,"oM","$get$oM",function(){return P.P(P.cB,S.di)})
 lazy($,"nL","$get$nL",function(){return P.qJ(null)})
-lazy($,"nt","$get$nt",function(){return P.a7([C.r,T.al(0.7411764705882353,0.8666666666666667,0.9882352941176471),C.l,T.al(0.1607843137254902,0.5686274509803921,0.8313725490196079),C.x,T.al(0.9647058823529412,0.9294117647058824,0.8745098039215686),C.f,T.al(0.6705882352941176,0.9882352941176471,0.5882352941176471),C.n,T.al(0.3333333333333333,0.6509803921568628,0.25098039215686274),C.y,T.al(0.027450980392156862,0.4470588235294118,0.07058823529411765),C.k,T.al(0.49019607843137253,0.3176470588235294,0.17254901960784313),C.B,T.al(0.03529411764705882,0.4196078431372549,0.7137254901960784),C.A,T.al(1,0.8745098039215686,0.2549019607843137),C.m,T.al(0.5372549019607843,0.47058823529411764,0.19607843137254902),C.o,T.al(0.8980392156862745,0.6901960784313725,0.3764705882352941),C.t,T.al(0.7843137254901961,0.7843137254901961,0.7843137254901961)])})
-lazy($,"pW","$get$pW",function(){return P.a7([C.f,[C.n,C.m,C.k],C.n,[C.f,C.y,C.m],C.m,[C.f,C.y,C.n,C.k],C.k,[C.f,C.A],C.y,[C.m,C.n],C.A,[C.k],C.B,[C.m,C.k],C.o,[],C.x,[],C.l,[C.r],C.r,[C.l],C.t,[]])})
-lazy($,"nw","$get$nw",function(){return P.a7([C.r,C.F,C.l,C.F,C.x,C.aE,C.f,C.F,C.n,C.ag,C.y,C.aC,C.k,C.F,C.B,C.F,C.A,C.F,C.m,C.aB,C.o,C.ag,C.t,C.aD])})
+lazy($,"nt","$get$nt",function(){return P.a7([C.r,T.al(0.7411764705882353,0.8666666666666667,0.9882352941176471),C.m,T.al(0.1607843137254902,0.5686274509803921,0.8313725490196079),C.x,T.al(0.9647058823529412,0.9294117647058824,0.8745098039215686),C.e,T.al(0.6705882352941176,0.9882352941176471,0.5882352941176471),C.n,T.al(0.3333333333333333,0.6509803921568628,0.25098039215686274),C.y,T.al(0.027450980392156862,0.4470588235294118,0.07058823529411765),C.l,T.al(0.49019607843137253,0.3176470588235294,0.17254901960784313),C.B,T.al(0.03529411764705882,0.4196078431372549,0.7137254901960784),C.A,T.al(1,0.8745098039215686,0.2549019607843137),C.k,T.al(0.5372549019607843,0.47058823529411764,0.19607843137254902),C.o,T.al(0.8980392156862745,0.6901960784313725,0.3764705882352941),C.t,T.al(0.7843137254901961,0.7843137254901961,0.7843137254901961)])})
+lazy($,"pW","$get$pW",function(){return P.a7([C.e,[C.n,C.k,C.l],C.n,[C.e,C.y,C.k],C.k,[C.e,C.y,C.n,C.l],C.l,[C.e,C.A],C.y,[C.k,C.n],C.A,[C.l,C.e,C.k],C.B,[C.k,C.l],C.o,[],C.x,[],C.m,[C.r],C.r,[C.m],C.t,[]])})
+lazy($,"nw","$get$nw",function(){return P.a7([C.r,C.F,C.m,C.F,C.x,C.aE,C.e,C.F,C.n,C.ag,C.y,C.aC,C.l,C.F,C.B,C.F,C.A,C.F,C.k,C.aB,C.o,C.ag,C.t,C.aD])})
 lazy($,"fq","$get$fq",function(){return P.a7([C.L,1001,C.M,50,C.N,100,C.O,200])})})()
 var u={
 createNewIsolate:function(){return $},
