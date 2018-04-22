@@ -342,7 +342,8 @@ class LogMessageSystem extends _$LogMessageSystem {
   void processEntity(Entity entity) {
     final log = logMessageMapper[entity];
     final newNode = new DivElement()
-      ..innerHtml = '[Turn ${gameStateManager.turn}] ${log.message}';
+      ..innerHtml = '[Turn ${gameStateManager.turn}] ${log.message}'
+      ..classes.add(log.severity.toString().split('.')[1]);
     logMessagesElement.insertBefore(newNode, lastNode);
     lastNode = newNode;
     entity.deleteFromWorld();
