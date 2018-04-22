@@ -54,7 +54,8 @@ class HudInteractionSystem extends _$HudInteractionSystem {
         .querySelectorAll('input[name="visualconfig"]')
         .onChange
         .listen((event) {
-      gameStateManager.selectedView = (event.target as RadioButtonInputElement).value;
+      gameStateManager.selectedView =
+          (event.target as RadioButtonInputElement).value;
     });
 
     hud.onMouseMove.listen((mouseEvent) => mouseOffset = mouseEvent.offset);
@@ -76,17 +77,23 @@ class HudInteractionSystem extends _$HudInteractionSystem {
     cursorManager.cursorX = mouseOffset.x;
     cursorManager.cursorY = mouseOffset.y;
 
-    if (selectedPower != null) {
+    if (selectedPower != null &&
+        powerCostMap[selectedPower] <= gameStateManager.faith) {
       gameStateManager.selectedPower = selectedPower;
     } else if (cancelPower) {
       gameStateManager.selectedPower = null;
     } else if (clicked && gameStateManager.selectedPower != null) {
       final selectedTile = cursorManager.getCurrentHexagonFromCursorPosition();
-      final entity = worldMapManager.worldMap[selectedTile.x][selectedTile.y];
-      entity
-        ..addComponent(new ExecutePower(gameStateManager.selectedPower))
-        ..changedInWorld();
-      gameStateManager.selectedPower = null;
+      var column = worldMapManager.worldMap[selectedTile.x];
+      if (column != null) {
+        final entity = column[selectedTile.y];
+        if (entity != null) {
+          entity
+            ..addComponent(new ExecutePower(gameStateManager.selectedPower))
+            ..changedInWorld();
+          gameStateManager.selectedPower = null;
+        }
+      }
     }
   }
 

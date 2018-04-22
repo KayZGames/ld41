@@ -17,3 +17,12 @@ abstract class _$TerrainStatsUpdatingSystem extends EntityProcessingSystem {
     gameStateManager = world.getManager(GameStateManager);
   }
 }
+
+abstract class _$GodlyPowersStatusSystem extends VoidEntitySystem {
+  GameStateManager gameStateManager;
+  @override
+  void initialize() {
+    super.initialize();
+    gameStateManager = world.getManager(GameStateManager);
+  }
+}

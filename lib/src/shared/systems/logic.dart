@@ -6,8 +6,6 @@ import 'package:ld41/src/shared/managers.dart';
 
 part 'logic.g.dart';
 
-
-
 @Generate(
   EntityProcessingSystem,
   allOf: [
@@ -50,6 +48,10 @@ class FinishEndTurnSystem extends _$FinishEndTurnSystem {
   void processSystem() {
     gameStateManager.state = State.playersTurn;
     gameStateManager.turn++;
+    if (gameStateManager.isIdleTurn) {
+      gameStateManager.idleTurns++;
+    }
+    gameStateManager.isIdleTurn = true;
   }
 
   @override
@@ -82,51 +84,74 @@ class FinishGameStartedSystem extends _$FinishGameStartedSystem {
     GameStateManager,
     TerrainChangeManager,
   ],
+  mapper: [
+    Temperature,
+    Fertility,
+    Humidity,
+  ],
 )
 class ExecutePowerSystem extends _$ExecutePowerSystem {
   @override
   void processEntity(Entity entity) {
     final power = executePowerMapper[entity].power;
-    entity.removeComponent(ExecutePower);
-    if (power == PowerType.human) {
-      terrainChangeManager.addHuman(entity);
-      world.createAndAddEntity([
-        new LogMessage(
-            gameStateManager.turn, 'Humans have appeared!!!', Severity.info)
-      ]);
-    } else if (power == PowerType.forest) {
-      var terrain = terrainMapper[entity];
-      if (terrain.type == TerrainType.grass ||
-          terrain.type == TerrainType.barren ||
-          terrain.type == TerrainType.farm) {
-        terrainChangeManager.changeTerrain(entity, terrain, TerrainType.forest);
+    var powerCost = powerCostMap[power];
+    if (gameStateManager.faith >= powerCost) {
+      gameStateManager.isIdleTurn = false;
+      gameStateManager.faith -= powerCost;
+      entity
+        ..removeComponent(ExecutePower)
+        ..changedInWorld();
+      if (power == PowerType.human) {
+        terrainChangeManager.addHuman(entity);
         world.createAndAddEntity([
           new LogMessage(
-              gameStateManager.turn, 'A new forest has grown.', Severity.info)
+              gameStateManager.turn, 'Humans have appeared!!!', Severity.info)
         ]);
-      } else if (terrain.type == TerrainType.swamp) {
-        terrainChangeManager.changeTerrain(entity, terrain, TerrainType.jungle);
+      } else if (power == PowerType.forest) {
+        var terrain = terrainMapper[entity];
+        if (terrain.type == TerrainType.grass ||
+            terrain.type == TerrainType.barren ||
+            terrain.type == TerrainType.farm) {
+          terrainChangeManager.changeTerrain(
+              entity, terrain, TerrainType.forest);
+          world.createAndAddEntity([
+            new LogMessage(
+                gameStateManager.turn, 'A new forest has grown.', Severity.info)
+          ]);
+        } else if (terrain.type == TerrainType.swamp) {
+          terrainChangeManager.changeTerrain(
+              entity, terrain, TerrainType.jungle);
+          world.createAndAddEntity([
+            new LogMessage(
+                gameStateManager.turn, 'A new jungle has grown.', Severity.info)
+          ]);
+        } else {
+          var fertility = fertilityMapper[entity];
+          fertility.percentage = min(100.0, fertility.percentage + 1.0);
+          world.createAndAddEntity([
+            new LogMessage(
+                gameStateManager.turn,
+                'This ${terrain.type.toString().split('.')[1]} can\'t really support a forest, but the fertility increases.',
+                Severity.info)
+          ]);
+        }
+      } else if (power == PowerType.fire) {
+        terrainChangeManager.addFire(entity, startedByGod: true);
         world.createAndAddEntity([
           new LogMessage(
-              gameStateManager.turn, 'A new jungle has grown.', Severity.info)
+              gameStateManager.turn,
+              'A fire has started!! Why is there no fire brigade?!',
+              Severity.warning)
+        ]);
+      } else if (power == PowerType.flood) {
+        terrainChangeManager.addFlood(entity);
+        world.createAndAddEntity([
+          new LogMessage(
+              gameStateManager.turn,
+              'A flood!! Get onto higher ground! Oh no, it\'s a flat earth!',
+              Severity.warning)
         ]);
       }
-    } else if (power == PowerType.fire) {
-      terrainChangeManager.addFire(entity, startedByGod: true);
-      world.createAndAddEntity([
-        new LogMessage(
-            gameStateManager.turn,
-            'A fire has started!! Why is there no fire brigade?!',
-            Severity.warning)
-      ]);
-    } else if (power == PowerType.flood) {
-      terrainChangeManager.addFlood(entity);
-      world.createAndAddEntity([
-        new LogMessage(
-            gameStateManager.turn,
-            'A flood!! Get onto higher ground! Oh no, it\'s a flat earth!',
-            Severity.warning)
-      ]);
     }
   }
 

@@ -151,6 +151,11 @@ canvas {
   background-color: burlywood;
 }
 
+.power.disabled, .power.disabled:hover {
+  box-shadow: inset 0 0 4px 3px gray;
+  background-color: lightgray;
+}
+
 .power:hover {
   box-shadow: inset 0 0 4px 4px black;
   background-color: white;

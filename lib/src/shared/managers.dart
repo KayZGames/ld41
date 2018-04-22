@@ -115,7 +115,11 @@ class GameStateManager extends _$GameStateManager {
   State state = State.started;
   PowerType selectedPower;
   int turn = 1;
+  int idleTurns = 0;
+  bool isIdleTurn = true;
   String selectedView = 'terrain';
+  int faith = 1001;
+  final int maxFaith = 1000;
 }
 
 enum State { playersTurn, endTurn, started }

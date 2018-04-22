@@ -43,6 +43,9 @@ abstract class _$FinishGameStartedSystem extends VoidEntitySystem {
 abstract class _$ExecutePowerSystem extends EntityProcessingSystem {
   Mapper<ExecutePower> executePowerMapper;
   Mapper<Terrain> terrainMapper;
+  Mapper<Temperature> temperatureMapper;
+  Mapper<Fertility> fertilityMapper;
+  Mapper<Humidity> humidityMapper;
   GameStateManager gameStateManager;
   TerrainChangeManager terrainChangeManager;
   _$ExecutePowerSystem()
@@ -52,6 +55,9 @@ abstract class _$ExecutePowerSystem extends EntityProcessingSystem {
     super.initialize();
     executePowerMapper = new Mapper<ExecutePower>(ExecutePower, world);
     terrainMapper = new Mapper<Terrain>(Terrain, world);
+    temperatureMapper = new Mapper<Temperature>(Temperature, world);
+    fertilityMapper = new Mapper<Fertility>(Fertility, world);
+    humidityMapper = new Mapper<Humidity>(Humidity, world);
     gameStateManager = world.getManager(GameStateManager);
     terrainChangeManager = world.getManager(TerrainChangeManager);
   }

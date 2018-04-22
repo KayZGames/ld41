@@ -84,7 +84,7 @@ enum TerrainType {
   farm,
   coast,
   jungle,
-  swamp,
+  swamp
 }
 
 enum OverlayCellType {
@@ -93,3 +93,5 @@ enum OverlayCellType {
 }
 
 enum PowerType { human, forest, fire, flood }
+
+

@@ -59,3 +59,44 @@ class TerrainStatsUpdatingSystem extends _$TerrainStatsUpdatingSystem {
       gameStateManager.state == State.endTurn ||
       gameStateManager.state == State.started;
 }
+
+@Generate(
+  VoidEntitySystem,
+  manager: [
+    GameStateManager,
+  ],
+)
+class GodlyPowersStatusSystem extends _$GodlyPowersStatusSystem {
+  final Element currentTurn = querySelector('#currentTurn');
+  final Element faithTitle = querySelector('#faithtitle');
+  final Element faithpercent = querySelector('#faithpercent');
+
+  @override
+  void initialize() {
+    super.initialize();
+    for (final powerType in PowerType.values) {
+      final powerCost = powerCostMap[powerType];
+      querySelector('#${powerType.toString().split('.')[1]}Cost').innerHtml =
+          '$powerCost';
+    }
+  }
+
+  @override
+  void processSystem() {
+    currentTurn.innerHtml = '${gameStateManager.turn}';
+    faithTitle.title = '${gameStateManager.faith}/${gameStateManager.maxFaith}';
+    faithpercent.style.width =
+        '${100 * gameStateManager.faith/gameStateManager.maxFaith}%';
+    for (final powerType in PowerType.values) {
+      final powerElement =
+          querySelector('.power.${powerType.toString().split('.')[1]}');
+      final powerCost = powerCostMap[powerType];
+      var isDisabled = powerElement.classes.contains('disabled');
+      if (powerCost > gameStateManager.faith && !isDisabled) {
+        powerElement.classes.add('disabled');
+      } else if (powerCost <= gameStateManager.faith && isDisabled) {
+        powerElement.classes.remove('disabled');
+      }
+    }
+  }
+}

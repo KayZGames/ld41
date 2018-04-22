@@ -36,7 +36,7 @@ class Game extends GameBase {
     final camera = addEntity([new Position(0.0, 0.0), new Camera()]);
     tagManager.register(camera, cameraTag);
 
-    final radius = 20;
+    final radius = worldRadius;
     var startX = 0;
     var endX = radius;
     final tilesForRandomDistribution = TerrainType.values
@@ -115,6 +115,7 @@ class Game extends GameBase {
         new SelectedPowerRenderingSystem(hudCtx, spriteSheet),
         new FpsRenderingSystem(hudCtx, fillStyle: 'white'),
         new TerrainStatsUpdatingSystem(),
+        new GodlyPowersStatusSystem(),
         new FinishGameStartedSystem(),
         new FinishEndTurnSystem(),
         new LogMessageSystem(),

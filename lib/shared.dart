@@ -7,6 +7,7 @@ export 'package:gamedev_helpers/gamedev_helpers_shared.dart';
 export 'src/shared/components.dart';
 export 'src/shared/systems/logic.dart';
 
+const int worldRadius = 20;
 const String cameraTag = 'camera';
 const double hexagonSize = 50.0;
 const double hexagonWidth = 1.732 * hexagonSize;
@@ -66,6 +67,13 @@ final Map<TerrainType, Vector3> colorMap = {
   TerrainType.desert: new Vector3(255 / 255, 223 / 255, 65 / 255),
   TerrainType.swamp: new Vector3(137 / 255, 120 / 255, 50 / 255),
   TerrainType.farm: new Vector3(229 / 255, 176 / 255, 96 / 255),
+};
+
+final Map<PowerType, int> powerCostMap = {
+  PowerType.human: 1001,
+  PowerType.forest: 50,
+  PowerType.fire: 100,
+  PowerType.flood: 200,
 };
 
 class Range {
