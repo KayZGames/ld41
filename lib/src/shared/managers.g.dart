@@ -55,9 +55,11 @@ abstract class _$ViewProjectionManager extends Manager {
 
 abstract class _$TerrainChangeManager extends Manager {
   Mapper<TilePosition> tilePositionMapper;
+  Mapper<Terrain> terrainMapper;
   @override
   void initialize() {
     super.initialize();
     tilePositionMapper = new Mapper<TilePosition>(TilePosition, world);
+    terrainMapper = new Mapper<Terrain>(Terrain, world);
   }
 }

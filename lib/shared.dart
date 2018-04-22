@@ -25,7 +25,7 @@ const Map<TerrainType, Range> temperatureRange = {
   TerrainType.desert: const Range(35.0, 100.0, 50.0),
   TerrainType.swamp: const Range(10.0, 35.0, 25.0),
   TerrainType.farm: const Range(10.0, 30.0, 20.0),
-  TerrainType.settlement: const Range(10.0, 30.0, 20.0),
+  TerrainType.settlement: const Range(10.0, 40.0, 30.0),
 };
 
 const Map<TerrainType, Range> humidityRange = {
@@ -40,7 +40,7 @@ const Map<TerrainType, Range> humidityRange = {
   TerrainType.desert: const Range(0.0, 10.0, 0.0),
   TerrainType.swamp: const Range(30.0, 100.0, 60.0),
   TerrainType.farm: const Range(15.0, 45.0, 30.0),
-  TerrainType.settlement: const Range(15.0, 45.0, 40.0),
+  TerrainType.settlement: const Range(15.0, 45.0, 30.0),
 };
 
 const Map<TerrainType, Range> fertilityRange = {

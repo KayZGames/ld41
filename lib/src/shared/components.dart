@@ -63,13 +63,17 @@ class Fire extends Component {
 
 class Flood extends Component {}
 
-class Settlement extends Component {}
+class Settlement extends Component {
+  int food;
+  int population;
+  int faithCreated;
+  Settlement(this.food, [this.population = 1, this.faithCreated = 0]);
+}
 
 class LogMessage extends Component {
-  int turn;
   String message;
   Severity severity;
-  LogMessage(this.turn, this.message, this.severity);
+  LogMessage(this.message, this.severity);
 }
 
 enum Severity {

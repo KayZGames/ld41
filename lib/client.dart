@@ -81,7 +81,6 @@ class Game extends GameBase {
 
     addEntity([
       new LogMessage(
-          0,
           'You created a world by randomly throwing pieces of mud together. But it feels empty. Find a nice piece of grassland and let some humans settle there.',
           Severity.info)
     ]);
@@ -116,10 +115,11 @@ class Game extends GameBase {
         new SelectedPowerRenderingSystem(hudCtx, spriteSheet),
         new FpsRenderingSystem(hudCtx, fillStyle: 'white'),
         new TerrainStatsUpdatingSystem(),
+        new SettlementGrowthSystem(),
         new GodlyPowersStatusSystem(),
+        new LogMessageSystem(),
         new FinishGameStartedSystem(),
         new FinishEndTurnSystem(),
-        new LogMessageSystem(),
       ],
       GameBase.physics: [
         // add at least one

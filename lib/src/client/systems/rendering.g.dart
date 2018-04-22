@@ -104,11 +104,13 @@ abstract class _$SelectedPowerRenderingSystem extends VoidEntitySystem {
 
 abstract class _$LogMessageSystem extends EntityProcessingSystem {
   Mapper<LogMessage> logMessageMapper;
+  GameStateManager gameStateManager;
   _$LogMessageSystem() : super(new Aspect.empty()..allOf([LogMessage]));
   @override
   void initialize() {
     super.initialize();
     logMessageMapper = new Mapper<LogMessage>(LogMessage, world);
+    gameStateManager = world.getManager(GameStateManager);
   }
 }
 

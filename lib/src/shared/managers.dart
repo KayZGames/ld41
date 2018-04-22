@@ -120,7 +120,7 @@ class WorldMapManager extends _$WorldMapManager {
 class GameStateManager extends _$GameStateManager {
   State state = State.started;
   PowerType selectedPower;
-  int turn = 1;
+  int turn = 0;
   int idleTurns = 0;
   bool isIdleTurn = true;
   String selectedView = 'terrain';
@@ -213,6 +213,7 @@ class ViewProjectionManager extends _$ViewProjectionManager {
   Manager,
   mapper: [
     TilePosition,
+    Terrain,
   ],
 )
 class TerrainChangeManager extends _$TerrainChangeManager {
@@ -276,8 +277,13 @@ class TerrainChangeManager extends _$TerrainChangeManager {
       ..changedInWorld();
   }
 
-  void addSettlement(Entity entity, Terrain terrain) {
+  void addSettlement(Entity entity, Terrain terrain, int food) {
     changeTerrain(entity, terrain, TerrainType.settlement);
-    _addSprite(entity, new Settlement(), 'settlement');
+    _addSprite(entity, new Settlement(food), 'settlement1');
+  }
+
+  void removeSettlement(Entity entity) {
+    changeTerrain(entity, terrainMapper[entity], TerrainType.grass);
+    _removeSprite(entity, Settlement);
   }
 }

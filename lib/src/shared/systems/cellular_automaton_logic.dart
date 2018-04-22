@@ -142,6 +142,11 @@ class PrepareTerrainChangeSystem extends _$PrepareTerrainChangeSystem {
           (grasslands != null && grasslands > 1)) {
         terrainChangeManager.changeTerrain(entity, terrain, TerrainType.grass);
       }
+    } else if (terrain.type == TerrainType.farm) {
+      final settlement = surroundingTypes[TerrainType.settlement];
+      if (settlement == null) {
+        terrainChangeManager.changeTerrain(entity, terrain, TerrainType.grass);
+      }
     }
   }
 
@@ -150,7 +155,6 @@ class PrepareTerrainChangeSystem extends _$PrepareTerrainChangeSystem {
     if (firesSpread > 0) {
       world.createAndAddEntity([
         new LogMessage(
-            gameStateManager.turn,
             'The fire is spreading!! $firesSpread new ${firesSpread == 1
                 ? 'fire has'
                 : 'fires have'} started!',

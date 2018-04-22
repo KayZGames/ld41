@@ -331,6 +331,9 @@ class SelectedPowerRenderingSystem extends _$SelectedPowerRenderingSystem {
   allOf: [
     LogMessage,
   ],
+  manager: [
+    GameStateManager,
+  ],
 )
 class LogMessageSystem extends _$LogMessageSystem {
   final DivElement logMessagesElement = document.querySelector('#logmessages');
@@ -339,7 +342,7 @@ class LogMessageSystem extends _$LogMessageSystem {
   void processEntity(Entity entity) {
     final log = logMessageMapper[entity];
     final newNode = new DivElement()
-      ..innerHtml = '[Turn ${log.turn}] ${log.message}';
+      ..innerHtml = '[Turn ${gameStateManager.turn}] ${log.message}';
     logMessagesElement.insertBefore(newNode, lastNode);
     lastNode = newNode;
     entity.deleteFromWorld();
