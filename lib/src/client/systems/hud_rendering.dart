@@ -18,6 +18,23 @@ part 'hud_rendering.g.dart';
 class TerrainStatsUpdatingSystem extends _$TerrainStatsUpdatingSystem {
   Map<TerrainType, int> terrainStats = new Map.fromIterable(TerrainType.values,
       key: (key) => key, value: (value) => 0);
+
+  @override
+  void initialize() {
+    super.initialize();
+    for (final terrainType in TerrainType.values) {
+      final color = colorMap[terrainType];
+      final colorString =
+          '#${_toHex(color.x)}${_toHex(color.y)}${_toHex(color.z)}';
+      querySelector('#${terrainType.toString().split('.')[1]} > .icon')
+          .style
+          .backgroundColor = colorString;
+    }
+  }
+
+  String _toHex(double colorFragment) =>
+      (colorFragment * 255).toInt().toRadixString(16).padLeft(2, '0');
+
   @override
   void processEntity(Entity entity) {
     final terrain = terrainMapper[entity];

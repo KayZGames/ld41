@@ -54,6 +54,20 @@ const Map<TerrainType, Range> fertilityRange = {
   TerrainType.farm: const Range(15.0, 50.0, 30.0),
 };
 
+final Map<TerrainType, Vector3> colorMap = {
+  TerrainType.glacier: new Vector3(189 / 255, 221 / 255, 252 / 255),
+  TerrainType.ocean: new Vector3(41 / 255, 145 / 255, 212 / 255),
+  TerrainType.coast: new Vector3(246 / 255, 237 / 255, 223 / 255),
+  TerrainType.grass: new Vector3(171 / 255, 252 / 255, 150 / 255),
+  TerrainType.forest: new Vector3(85 / 255, 166 / 255, 64 / 255),
+  TerrainType.jungle: new Vector3(7 / 255, 114 / 255, 18 / 255),
+  TerrainType.barren: new Vector3(125 / 255, 81 / 255, 44 / 255),
+  TerrainType.lake: new Vector3(9 / 255, 107 / 255, 182 / 255),
+  TerrainType.desert: new Vector3(255 / 255, 223 / 255, 65 / 255),
+  TerrainType.swamp: new Vector3(137 / 255, 120 / 255, 50 / 255),
+  TerrainType.farm: new Vector3(229 / 255, 176 / 255, 96 / 255),
+};
+
 class Range {
   final double min, max, start;
   const Range(this.min, this.max, this.start);

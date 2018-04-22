@@ -64,8 +64,7 @@ class WorldMapManager extends _$WorldMapManager {
       var column = map[x + direction[0]];
       if (column != null) {
         final entity = column[y + direction[1]];
-        if (entity != null &&
-            terrainMapper[entity].type != TerrainType.endOfWorld) {
+        if (entity != null) {
           result.add(entity);
         }
       }

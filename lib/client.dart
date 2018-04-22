@@ -41,7 +41,6 @@ class Game extends GameBase {
     var endX = radius;
     final tilesForRandomDistribution = TerrainType.values
         .where((type) =>
-            type != TerrainType.endOfWorld &&
             type != TerrainType.ocean &&
             type != TerrainType.glacier &&
             type != TerrainType.coast &&
@@ -50,33 +49,28 @@ class Game extends GameBase {
     for (int y = -radius; y <= radius; y++) {
       for (int x = startX; x <= endX; x++) {
         Terrain tile;
-        if (y.abs() == radius || x == startX || x == endX) {
-          tile = new Terrain(TerrainType.endOfWorld);
-        } else if (y.abs() == radius - 1) {
+        if (y.abs() == radius) {
           tile = new Terrain(TerrainType.glacier);
-        } else if (y.abs() >= radius - 3 || x < startX + 3 || x > endX - 3) {
+        } else if (y.abs() >= radius - 2 || x < startX + 2 || x > endX - 2) {
           tile = new Terrain(TerrainType.ocean);
-        } else if (y.abs() == radius - 4 || x == startX + 3 || x == endX - 3) {
+        } else if (y.abs() == radius - 3 || x == startX + 2 || x == endX - 2) {
           tile = new Terrain(TerrainType.coast);
         } else {
           tile = new Terrain(tilesForRandomDistribution[
               random.nextInt(tilesForRandomDistribution.length)]);
         }
+        final color = colorMap[tile.type];
         var components = [
           new TilePosition(x, y),
           new Position(x * hexagonWidth + y * hexagonWidth / 2,
               -y * hexagonHeight * 3 / 4),
-          new Color(1.0, 0.0, 0.0, 1.0),
+          new Color(color.x, color.y, color.z, 1.0),
           new ChangeTerrain(),
           tile,
+          new Temperature(temperatureRange[tile.type].start),
+          new Humidity(humidityRange[tile.type].start),
+          new Fertility(fertilityRange[tile.type].start),
         ];
-        if (tile.type != TerrainType.endOfWorld) {
-          components.addAll([
-            new Temperature(temperatureRange[tile.type].start),
-            new Humidity(humidityRange[tile.type].start),
-            new Fertility(fertilityRange[tile.type].start),
-          ]);
-        }
         addEntity(components);
       }
       startX = max(startX - 1, -radius);

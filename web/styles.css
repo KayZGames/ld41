@@ -75,10 +75,6 @@ canvas {
   text-align: right;
 }
 
-.terrainstats > div#grass > .icon {
-  background-color: green;
-}
-
 #endturn {
   position: absolute;
   width: 180px;
