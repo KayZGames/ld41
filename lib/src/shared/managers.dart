@@ -102,3 +102,32 @@ class CursorManager extends _$CursorManager {
     return new Point(rx, ry);
   }
 }
+
+@Generate(
+  Manager,
+  mapper: [
+    Camera,
+  ],
+  manager: [
+    CameraManager,
+  ],
+)
+class ViewProjectionManager extends _$ViewProjectionManager {
+  Matrix4 getOrthographicMatrix(Position cameraPosition, double zoom) {
+    final cameraX = cameraPosition.x;
+    final cameraY = cameraPosition.y;
+    final width = cameraManager.width;
+    final height = cameraManager.height;
+
+    final orthographicMatrix = new Matrix4.identity();
+    setOrthographicMatrix(
+        orthographicMatrix,
+        cameraX - (width / 2) * zoom,
+        cameraX + (width / 2) * zoom,
+        cameraY - (height / 2) * zoom,
+        cameraY + (height / 2) * zoom,
+        1.0,
+        -1.0);
+    return orthographicMatrix;
+  }
+}

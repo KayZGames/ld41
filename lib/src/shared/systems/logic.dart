@@ -1,5 +1,6 @@
 import 'package:dartemis/dartemis.dart';
 import 'package:gamedev_helpers/gamedev_helpers_shared.dart';
+import 'package:ld41/shared.dart';
 import 'package:ld41/src/shared/components.dart';
 import 'package:ld41/src/shared/managers.dart';
 
@@ -167,7 +168,6 @@ class FinishGameStartedSystem extends _$FinishGameStartedSystem {
   allOf: [
     ExecutePower,
     Terrain,
-    TilePosition,
   ],
   manager: [
     GameStateManager,
@@ -177,11 +177,12 @@ class ExecutePowerSystem extends _$ExecutePowerSystem {
   @override
   void processEntity(Entity entity) {
     final power = executePowerMapper[entity].power;
-    final tilePosition = tilePositionMapper[entity];
     entity.removeComponent(ExecutePower);
     if (power == PowerType.human) {
-      world.createAndAddEntity(
-          [new Human(), new TilePosition(tilePosition.x, tilePosition.y)]);
+      entity
+        ..addComponent(new Human())
+        ..addComponent(new Renderable('human', facesRight: false))
+        ..addComponent(new Orientation(pi));
       world.createAndAddEntity(
           [new LogMessage(gameStateManager.turn, 'Humans have appeared!!!')]);
     } else if (power == PowerType.forest) {
@@ -200,13 +201,19 @@ class ExecutePowerSystem extends _$ExecutePowerSystem {
             [new LogMessage(gameStateManager.turn, 'A new jungle has grown.')]);
       }
     } else if (power == PowerType.fire) {
-      entity.addComponent(new Fire());
+      entity
+        ..addComponent(new Fire())
+        ..addComponent(new Renderable('fire', facesRight: false))
+        ..addComponent(new Orientation(pi));
       world.createAndAddEntity([
         new LogMessage(gameStateManager.turn,
             'A fire has started!! Why is there no fire brigade?!')
       ]);
     } else if (power == PowerType.flood) {
-      entity.addComponent(new Flood());
+      entity
+        ..addComponent(new Flood())
+        ..addComponent(new Renderable('flood', facesRight: false))
+        ..addComponent(new Orientation(pi));
       world.createAndAddEntity([
         new LogMessage(gameStateManager.turn,
             'A flood!! Get onto higher ground! Oh no, it\'s a flat earth!')

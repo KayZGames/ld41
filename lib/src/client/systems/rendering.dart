@@ -18,7 +18,7 @@ part 'rendering.g.dart';
   ],
   manager: [
     TagManager,
-    CameraManager,
+    ViewProjectionManager,
   ],
   mapper: [
     Camera,
@@ -46,20 +46,10 @@ class TerrainRenderingSystem extends _$TerrainRenderingSystem {
     final cameraPosition = positionMapper[camera];
     cameraX = cameraPosition.x;
     cameraY = cameraPosition.y;
-    final width = cameraManager.width;
-    final height = cameraManager.height;
 
     final zoom = cameraMapper[camera].zoom;
-    final orthographicMatrix = new Matrix4.identity();
-    setOrthographicMatrix(
-        orthographicMatrix,
-        cameraX - (width / 2) * zoom,
-        cameraX + (width / 2) * zoom,
-        cameraY - (height / 2) * zoom,
-        cameraY + (height / 2) * zoom,
-        1.0,
-        -1.0);
-    twodOrthographicMatrix = orthographicMatrix;
+    twodOrthographicMatrix =
+        viewProjectionManager.getOrthographicMatrix(cameraPosition, zoom);
   }
 
   @override
@@ -118,6 +108,7 @@ class TerrainRenderingSystem extends _$TerrainRenderingSystem {
     TagManager,
     CameraManager,
     CursorManager,
+    ViewProjectionManager,
   ],
   mapper: [
     Position,
@@ -138,8 +129,6 @@ class CursorRenderingSystem extends _$CursorRenderingSystem {
     final zoom = cameraMapper[camera].zoom;
     final selectedTile = cursorManager.getCurrentHexagonFromCursorPosition();
     final cameraPosition = positionMapper[camera];
-    final cameraX = cameraPosition.x;
-    final cameraY = cameraPosition.y;
 
     final centerX =
         selectedTile.x * hexagonWidth + selectedTile.y * hexagonWidth / 2;
@@ -170,18 +159,8 @@ class CursorRenderingSystem extends _$CursorRenderingSystem {
     indices[6 * 6 - 2] = 0;
     indices[6 * 6 - 4] = 0;
 
-    final width = cameraManager.width;
-    final height = cameraManager.height;
-
-    final orthographicMatrix = new Matrix4.identity();
-    setOrthographicMatrix(
-        orthographicMatrix,
-        cameraX - (width / 2) * zoom,
-        cameraX + (width / 2) * zoom,
-        cameraY - (height / 2) * zoom,
-        cameraY + (height / 2) * zoom,
-        1.0,
-        -1.0);
+    Matrix4 orthographicMatrix =
+        viewProjectionManager.getOrthographicMatrix(cameraPosition, zoom);
     final location = gl.getUniformLocation(program, 'uViewProjectionMatrix');
     gl.uniformMatrix4fv(location, false, orthographicMatrix.storage);
     drawTriangles(attributes, items, indices);
@@ -207,8 +186,8 @@ class SelectedPowerRenderingSystem extends _$SelectedPowerRenderingSystem {
 
   @override
   void processSystem() {
-    final sprite =
-        sheet.sprites[gameStateManager.selectedPower.toString().split('.')[1]];
+    final sprite = sheet.sprites[
+        '${gameStateManager.selectedPower.toString().split('.')[1]}_0'];
     final image = sheet.image;
     final cursorX = cursorManager.cursorX;
     final cursorY = cursorManager.cursorY;
@@ -240,5 +219,27 @@ class LogMessageSystem extends _$LogMessageSystem {
     logMessagesElement.insertBefore(newNode, lastNode);
     lastNode = newNode;
     entity.deleteFromWorld();
+  }
+}
+
+@Generate(
+  WebGlSpriteRenderingSystem,
+  manager: [
+    ViewProjectionManager,
+  ],
+  mapper: [
+    Camera,
+  ],
+)
+class SpriteRenderingSystem extends _$SpriteRenderingSystem {
+  SpriteRenderingSystem(RenderingContext2 gl, SpriteSheet sheet)
+      : super(gl, sheet);
+
+  @override
+  Matrix4 create2dViewProjectionMatrix() {
+    final camera = tagManager.getEntity(cameraTag);
+    final zoom = cameraMapper[camera].zoom;
+    final cameraPosition = positionMapper[camera];
+    return viewProjectionManager.getOrthographicMatrix(cameraPosition, zoom);
   }
 }

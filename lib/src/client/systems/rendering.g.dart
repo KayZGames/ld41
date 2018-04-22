@@ -12,7 +12,7 @@ abstract class _$TerrainRenderingSystem extends WebGlRenderingSystem {
   Mapper<Color> colorMapper;
   Mapper<Camera> cameraMapper;
   TagManager tagManager;
-  CameraManager cameraManager;
+  ViewProjectionManager viewProjectionManager;
   _$TerrainRenderingSystem(RenderingContext2 gl)
       : super(gl, new Aspect.empty()..allOf([TilePosition, Position, Color]));
   @override
@@ -23,7 +23,7 @@ abstract class _$TerrainRenderingSystem extends WebGlRenderingSystem {
     colorMapper = new Mapper<Color>(Color, world);
     cameraMapper = new Mapper<Camera>(Camera, world);
     tagManager = world.getManager(TagManager);
-    cameraManager = world.getManager(CameraManager);
+    viewProjectionManager = world.getManager(ViewProjectionManager);
   }
 }
 
@@ -33,6 +33,7 @@ abstract class _$CursorRenderingSystem extends VoidWebGlRenderingSystem {
   TagManager tagManager;
   CameraManager cameraManager;
   CursorManager cursorManager;
+  ViewProjectionManager viewProjectionManager;
   _$CursorRenderingSystem(RenderingContext2 gl) : super(gl);
   @override
   void initialize() {
@@ -42,6 +43,7 @@ abstract class _$CursorRenderingSystem extends VoidWebGlRenderingSystem {
     tagManager = world.getManager(TagManager);
     cameraManager = world.getManager(CameraManager);
     cursorManager = world.getManager(CursorManager);
+    viewProjectionManager = world.getManager(ViewProjectionManager);
   }
 }
 
@@ -63,5 +65,18 @@ abstract class _$LogMessageSystem extends EntityProcessingSystem {
   void initialize() {
     super.initialize();
     logMessageMapper = new Mapper<LogMessage>(LogMessage, world);
+  }
+}
+
+abstract class _$SpriteRenderingSystem extends WebGlSpriteRenderingSystem {
+  Mapper<Camera> cameraMapper;
+  ViewProjectionManager viewProjectionManager;
+  _$SpriteRenderingSystem(RenderingContext2 gl, SpriteSheet sheet)
+      : super(gl, sheet, new Aspect.empty());
+  @override
+  void initialize() {
+    super.initialize();
+    cameraMapper = new Mapper<Camera>(Camera, world);
+    viewProjectionManager = world.getManager(ViewProjectionManager);
   }
 }

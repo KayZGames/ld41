@@ -1,6 +1,6 @@
 {"frames": {
 
-"fire":
+"fire_0":
 {
 	"frame": {"x":2,"y":166,"w":46,"h":80},
 	"rotated": false,
@@ -8,7 +8,7 @@
 	"spriteSourceSize": {"x":18,"y":0,"w":46,"h":80},
 	"sourceSize": {"w":80,"h":80}
 },
-"flood":
+"flood_0":
 {
 	"frame": {"x":2,"y":84,"w":46,"h":80},
 	"rotated": false,
@@ -16,7 +16,7 @@
 	"spriteSourceSize": {"x":17,"y":0,"w":46,"h":80},
 	"sourceSize": {"w":80,"h":80}
 },
-"forest":
+"forest_0":
 {
 	"frame": {"x":66,"y":2,"w":46,"h":80},
 	"rotated": false,
@@ -24,7 +24,7 @@
 	"spriteSourceSize": {"x":18,"y":0,"w":46,"h":80},
 	"sourceSize": {"w":80,"h":80}
 },
-"human":
+"human_0":
 {
 	"frame": {"x":2,"y":2,"w":62,"h":80},
 	"rotated": false,
@@ -39,6 +39,6 @@
 	"format": "RGBA8888",
 	"size": {"w":128,"h":256},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:12490544047e2a01a55ff42525dadb31:eadf0c66ccdafc0368c0ebe336194931:a759b6bbc8381ac9c472b28f589ad0d6$"
+	"smartupdate": "$TexturePacker:SmartUpdate:631ab7833af5fe4729d9881ba25d9685:eadf0c66ccdafc0368c0ebe336194931:a759b6bbc8381ac9c472b28f589ad0d6$"
 }
 }

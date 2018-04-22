@@ -33,3 +33,14 @@ abstract class _$CursorManager extends Manager {
     cameraManager = world.getManager(CameraManager);
   }
 }
+
+abstract class _$ViewProjectionManager extends Manager {
+  Mapper<Camera> cameraMapper;
+  CameraManager cameraManager;
+  @override
+  void initialize() {
+    super.initialize();
+    cameraMapper = new Mapper<Camera>(Camera, world);
+    cameraManager = world.getManager(CameraManager);
+  }
+}
