@@ -3,20 +3,20 @@
 part of 'logic.dart';
 
 // **************************************************************************
-// Generator: SystemGenerator
+// SystemGenerator
 // **************************************************************************
 
 abstract class _$FireSystem extends EntityProcessingSystem {
   Mapper<Fire> fireMapper;
   TerrainChangeManager terrainChangeManager;
   GameStateManager gameStateManager;
-  _$FireSystem() : super(new Aspect.empty()..allOf([Fire]));
+  _$FireSystem() : super(Aspect.empty()..allOf([Fire]));
   @override
   void initialize() {
     super.initialize();
-    fireMapper = new Mapper<Fire>(Fire, world);
-    terrainChangeManager = world.getManager(TerrainChangeManager);
-    gameStateManager = world.getManager(GameStateManager);
+    fireMapper = Mapper<Fire>(world);
+    terrainChangeManager = world.getManager<TerrainChangeManager>();
+    gameStateManager = world.getManager<GameStateManager>();
   }
 }
 
@@ -24,13 +24,13 @@ abstract class _$FloodSystem extends EntityProcessingSystem {
   Mapper<Flood> floodMapper;
   TerrainChangeManager terrainChangeManager;
   GameStateManager gameStateManager;
-  _$FloodSystem() : super(new Aspect.empty()..allOf([Flood]));
+  _$FloodSystem() : super(Aspect.empty()..allOf([Flood]));
   @override
   void initialize() {
     super.initialize();
-    floodMapper = new Mapper<Flood>(Flood, world);
-    terrainChangeManager = world.getManager(TerrainChangeManager);
-    gameStateManager = world.getManager(GameStateManager);
+    floodMapper = Mapper<Flood>(world);
+    terrainChangeManager = world.getManager<TerrainChangeManager>();
+    gameStateManager = world.getManager<GameStateManager>();
   }
 }
 
@@ -39,7 +39,7 @@ abstract class _$FinishEndTurnSystem extends VoidEntitySystem {
   @override
   void initialize() {
     super.initialize();
-    gameStateManager = world.getManager(GameStateManager);
+    gameStateManager = world.getManager<GameStateManager>();
   }
 }
 
@@ -48,7 +48,7 @@ abstract class _$FinishGameStartedSystem extends VoidEntitySystem {
   @override
   void initialize() {
     super.initialize();
-    gameStateManager = world.getManager(GameStateManager);
+    gameStateManager = world.getManager<GameStateManager>();
   }
 }
 
@@ -61,17 +61,17 @@ abstract class _$ExecutePowerSystem extends EntityProcessingSystem {
   GameStateManager gameStateManager;
   TerrainChangeManager terrainChangeManager;
   _$ExecutePowerSystem()
-      : super(new Aspect.empty()..allOf([ExecutePower, Terrain]));
+      : super(Aspect.empty()..allOf([ExecutePower, Terrain]));
   @override
   void initialize() {
     super.initialize();
-    executePowerMapper = new Mapper<ExecutePower>(ExecutePower, world);
-    terrainMapper = new Mapper<Terrain>(Terrain, world);
-    temperatureMapper = new Mapper<Temperature>(Temperature, world);
-    fertilityMapper = new Mapper<Fertility>(Fertility, world);
-    humidityMapper = new Mapper<Humidity>(Humidity, world);
-    gameStateManager = world.getManager(GameStateManager);
-    terrainChangeManager = world.getManager(TerrainChangeManager);
+    executePowerMapper = Mapper<ExecutePower>(world);
+    terrainMapper = Mapper<Terrain>(world);
+    temperatureMapper = Mapper<Temperature>(world);
+    fertilityMapper = Mapper<Fertility>(world);
+    humidityMapper = Mapper<Humidity>(world);
+    gameStateManager = world.getManager<GameStateManager>();
+    terrainChangeManager = world.getManager<TerrainChangeManager>();
   }
 }
 
@@ -84,17 +84,17 @@ abstract class _$HumanAiSystem extends EntityProcessingSystem {
   TerrainChangeManager terrainChangeManager;
   GameStateManager gameStateManager;
   _$HumanAiSystem()
-      : super(new Aspect.empty()..allOf([Human, TilePosition, Position]));
+      : super(Aspect.empty()..allOf([Human, TilePosition, Position]));
   @override
   void initialize() {
     super.initialize();
-    humanMapper = new Mapper<Human>(Human, world);
-    tilePositionMapper = new Mapper<TilePosition>(TilePosition, world);
-    positionMapper = new Mapper<Position>(Position, world);
-    terrainMapper = new Mapper<Terrain>(Terrain, world);
-    worldMapManager = world.getManager(WorldMapManager);
-    terrainChangeManager = world.getManager(TerrainChangeManager);
-    gameStateManager = world.getManager(GameStateManager);
+    humanMapper = Mapper<Human>(world);
+    tilePositionMapper = Mapper<TilePosition>(world);
+    positionMapper = Mapper<Position>(world);
+    terrainMapper = Mapper<Terrain>(world);
+    worldMapManager = world.getManager<WorldMapManager>();
+    terrainChangeManager = world.getManager<TerrainChangeManager>();
+    gameStateManager = world.getManager<GameStateManager>();
   }
 }
 
@@ -107,17 +107,16 @@ abstract class _$SettlementGrowthSystem extends EntityProcessingSystem {
   TerrainChangeManager terrainChangeManager;
   GameStateManager gameStateManager;
   _$SettlementGrowthSystem()
-      : super(
-            new Aspect.empty()..allOf([Settlement, TilePosition, Renderable]));
+      : super(Aspect.empty()..allOf([Settlement, TilePosition, Renderable]));
   @override
   void initialize() {
     super.initialize();
-    settlementMapper = new Mapper<Settlement>(Settlement, world);
-    tilePositionMapper = new Mapper<TilePosition>(TilePosition, world);
-    renderableMapper = new Mapper<Renderable>(Renderable, world);
-    fireMapper = new Mapper<Fire>(Fire, world);
-    worldMapManager = world.getManager(WorldMapManager);
-    terrainChangeManager = world.getManager(TerrainChangeManager);
-    gameStateManager = world.getManager(GameStateManager);
+    settlementMapper = Mapper<Settlement>(world);
+    tilePositionMapper = Mapper<TilePosition>(world);
+    renderableMapper = Mapper<Renderable>(world);
+    fireMapper = Mapper<Fire>(world);
+    worldMapManager = world.getManager<WorldMapManager>();
+    terrainChangeManager = world.getManager<TerrainChangeManager>();
+    gameStateManager = world.getManager<GameStateManager>();
   }
 }

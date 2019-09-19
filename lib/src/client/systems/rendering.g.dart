@@ -3,7 +3,7 @@
 part of 'rendering.dart';
 
 // **************************************************************************
-// Generator: SystemGenerator
+// SystemGenerator
 // **************************************************************************
 
 abstract class _$TileRenderingSystem extends WebGlRenderingSystem {
@@ -18,56 +18,56 @@ abstract class _$TileRenderingSystem extends WebGlRenderingSystem {
   @override
   void initialize() {
     super.initialize();
-    tilePositionMapper = new Mapper<TilePosition>(TilePosition, world);
-    positionMapper = new Mapper<Position>(Position, world);
-    cameraMapper = new Mapper<Camera>(Camera, world);
-    tagManager = world.getManager(TagManager);
-    viewProjectionManager = world.getManager(ViewProjectionManager);
-    gameStateManager = world.getManager(GameStateManager);
+    tilePositionMapper = Mapper<TilePosition>(world);
+    positionMapper = Mapper<Position>(world);
+    cameraMapper = Mapper<Camera>(world);
+    tagManager = world.getManager<TagManager>();
+    viewProjectionManager = world.getManager<ViewProjectionManager>();
+    gameStateManager = world.getManager<GameStateManager>();
   }
 }
 
 abstract class _$TerrainRenderingSystem extends TileRenderingSystem {
   Mapper<Color> colorMapper;
   _$TerrainRenderingSystem(RenderingContext2 gl)
-      : super(gl, new Aspect.empty()..allOf([Color]));
+      : super(gl, Aspect.empty()..allOf([Color]));
   @override
   void initialize() {
     super.initialize();
-    colorMapper = new Mapper<Color>(Color, world);
+    colorMapper = Mapper<Color>(world);
   }
 }
 
 abstract class _$TemperatureRenderingSystem extends TileRenderingSystem {
   Mapper<Temperature> temperatureMapper;
   _$TemperatureRenderingSystem(RenderingContext2 gl)
-      : super(gl, new Aspect.empty()..allOf([Temperature]));
+      : super(gl, Aspect.empty()..allOf([Temperature]));
   @override
   void initialize() {
     super.initialize();
-    temperatureMapper = new Mapper<Temperature>(Temperature, world);
+    temperatureMapper = Mapper<Temperature>(world);
   }
 }
 
 abstract class _$HumidityRenderingSystem extends TileRenderingSystem {
   Mapper<Humidity> humidityMapper;
   _$HumidityRenderingSystem(RenderingContext2 gl)
-      : super(gl, new Aspect.empty()..allOf([Humidity]));
+      : super(gl, Aspect.empty()..allOf([Humidity]));
   @override
   void initialize() {
     super.initialize();
-    humidityMapper = new Mapper<Humidity>(Humidity, world);
+    humidityMapper = Mapper<Humidity>(world);
   }
 }
 
 abstract class _$FertilityRenderingSystem extends TileRenderingSystem {
   Mapper<Fertility> fertilityMapper;
   _$FertilityRenderingSystem(RenderingContext2 gl)
-      : super(gl, new Aspect.empty()..allOf([Fertility]));
+      : super(gl, Aspect.empty()..allOf([Fertility]));
   @override
   void initialize() {
     super.initialize();
-    fertilityMapper = new Mapper<Fertility>(Fertility, world);
+    fertilityMapper = Mapper<Fertility>(world);
   }
 }
 
@@ -82,12 +82,12 @@ abstract class _$CursorRenderingSystem extends VoidWebGlRenderingSystem {
   @override
   void initialize() {
     super.initialize();
-    positionMapper = new Mapper<Position>(Position, world);
-    cameraMapper = new Mapper<Camera>(Camera, world);
-    tagManager = world.getManager(TagManager);
-    cameraManager = world.getManager(CameraManager);
-    cursorManager = world.getManager(CursorManager);
-    viewProjectionManager = world.getManager(ViewProjectionManager);
+    positionMapper = Mapper<Position>(world);
+    cameraMapper = Mapper<Camera>(world);
+    tagManager = world.getManager<TagManager>();
+    cameraManager = world.getManager<CameraManager>();
+    cursorManager = world.getManager<CursorManager>();
+    viewProjectionManager = world.getManager<ViewProjectionManager>();
   }
 }
 
@@ -97,20 +97,20 @@ abstract class _$SelectedPowerRenderingSystem extends VoidEntitySystem {
   @override
   void initialize() {
     super.initialize();
-    gameStateManager = world.getManager(GameStateManager);
-    cursorManager = world.getManager(CursorManager);
+    gameStateManager = world.getManager<GameStateManager>();
+    cursorManager = world.getManager<CursorManager>();
   }
 }
 
 abstract class _$LogMessageSystem extends EntityProcessingSystem {
   Mapper<LogMessage> logMessageMapper;
   GameStateManager gameStateManager;
-  _$LogMessageSystem() : super(new Aspect.empty()..allOf([LogMessage]));
+  _$LogMessageSystem() : super(Aspect.empty()..allOf([LogMessage]));
   @override
   void initialize() {
     super.initialize();
-    logMessageMapper = new Mapper<LogMessage>(LogMessage, world);
-    gameStateManager = world.getManager(GameStateManager);
+    logMessageMapper = Mapper<LogMessage>(world);
+    gameStateManager = world.getManager<GameStateManager>();
   }
 }
 
@@ -118,11 +118,11 @@ abstract class _$SpriteRenderingSystem extends WebGlSpriteRenderingSystem {
   Mapper<Camera> cameraMapper;
   ViewProjectionManager viewProjectionManager;
   _$SpriteRenderingSystem(RenderingContext2 gl, SpriteSheet sheet)
-      : super(gl, sheet, new Aspect.empty());
+      : super(gl, sheet, Aspect.empty());
   @override
   void initialize() {
     super.initialize();
-    cameraMapper = new Mapper<Camera>(Camera, world);
-    viewProjectionManager = world.getManager(ViewProjectionManager);
+    cameraMapper = Mapper<Camera>(world);
+    viewProjectionManager = world.getManager<ViewProjectionManager>();
   }
 }

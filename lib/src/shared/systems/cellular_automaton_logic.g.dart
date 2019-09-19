@@ -3,7 +3,7 @@
 part of 'cellular_automaton_logic.dart';
 
 // **************************************************************************
-// Generator: SystemGenerator
+// SystemGenerator
 // **************************************************************************
 
 abstract class _$PrepareTemperatureChangeSystem extends EntityProcessingSystem {
@@ -13,15 +13,15 @@ abstract class _$PrepareTemperatureChangeSystem extends EntityProcessingSystem {
   WorldMapManager worldMapManager;
   GameStateManager gameStateManager;
   _$PrepareTemperatureChangeSystem()
-      : super(new Aspect.empty()..allOf([Temperature, TilePosition, Terrain]));
+      : super(Aspect.empty()..allOf([Temperature, TilePosition, Terrain]));
   @override
   void initialize() {
     super.initialize();
-    temperatureMapper = new Mapper<Temperature>(Temperature, world);
-    tilePositionMapper = new Mapper<TilePosition>(TilePosition, world);
-    terrainMapper = new Mapper<Terrain>(Terrain, world);
-    worldMapManager = world.getManager(WorldMapManager);
-    gameStateManager = world.getManager(GameStateManager);
+    temperatureMapper = Mapper<Temperature>(world);
+    tilePositionMapper = Mapper<TilePosition>(world);
+    terrainMapper = Mapper<Terrain>(world);
+    worldMapManager = world.getManager<WorldMapManager>();
+    gameStateManager = world.getManager<GameStateManager>();
   }
 }
 
@@ -32,15 +32,15 @@ abstract class _$PrepareFertilityChangeSystem extends EntityProcessingSystem {
   WorldMapManager worldMapManager;
   GameStateManager gameStateManager;
   _$PrepareFertilityChangeSystem()
-      : super(new Aspect.empty()..allOf([Fertility, TilePosition, Terrain]));
+      : super(Aspect.empty()..allOf([Fertility, TilePosition, Terrain]));
   @override
   void initialize() {
     super.initialize();
-    fertilityMapper = new Mapper<Fertility>(Fertility, world);
-    tilePositionMapper = new Mapper<TilePosition>(TilePosition, world);
-    terrainMapper = new Mapper<Terrain>(Terrain, world);
-    worldMapManager = world.getManager(WorldMapManager);
-    gameStateManager = world.getManager(GameStateManager);
+    fertilityMapper = Mapper<Fertility>(world);
+    tilePositionMapper = Mapper<TilePosition>(world);
+    terrainMapper = Mapper<Terrain>(world);
+    worldMapManager = world.getManager<WorldMapManager>();
+    gameStateManager = world.getManager<GameStateManager>();
   }
 }
 
@@ -51,15 +51,15 @@ abstract class _$PrepareHumidityChangeSystem extends EntityProcessingSystem {
   WorldMapManager worldMapManager;
   GameStateManager gameStateManager;
   _$PrepareHumidityChangeSystem()
-      : super(new Aspect.empty()..allOf([Humidity, TilePosition, Terrain]));
+      : super(Aspect.empty()..allOf([Humidity, TilePosition, Terrain]));
   @override
   void initialize() {
     super.initialize();
-    humidityMapper = new Mapper<Humidity>(Humidity, world);
-    tilePositionMapper = new Mapper<TilePosition>(TilePosition, world);
-    terrainMapper = new Mapper<Terrain>(Terrain, world);
-    worldMapManager = world.getManager(WorldMapManager);
-    gameStateManager = world.getManager(GameStateManager);
+    humidityMapper = Mapper<Humidity>(world);
+    tilePositionMapper = Mapper<TilePosition>(world);
+    terrainMapper = Mapper<Terrain>(world);
+    worldMapManager = world.getManager<WorldMapManager>();
+    gameStateManager = world.getManager<GameStateManager>();
   }
 }
 
@@ -73,55 +73,55 @@ abstract class _$PrepareTerrainChangeSystem extends EntityProcessingSystem {
   GameStateManager gameStateManager;
   TerrainChangeManager terrainChangeManager;
   _$PrepareTerrainChangeSystem()
-      : super(new Aspect.empty()
+      : super(Aspect.empty()
           ..allOf([Terrain, TilePosition, Temperature, Humidity, Fertility]));
   @override
   void initialize() {
     super.initialize();
-    terrainMapper = new Mapper<Terrain>(Terrain, world);
-    tilePositionMapper = new Mapper<TilePosition>(TilePosition, world);
-    temperatureMapper = new Mapper<Temperature>(Temperature, world);
-    humidityMapper = new Mapper<Humidity>(Humidity, world);
-    fertilityMapper = new Mapper<Fertility>(Fertility, world);
-    worldMapManager = world.getManager(WorldMapManager);
-    gameStateManager = world.getManager(GameStateManager);
-    terrainChangeManager = world.getManager(TerrainChangeManager);
+    terrainMapper = Mapper<Terrain>(world);
+    tilePositionMapper = Mapper<TilePosition>(world);
+    temperatureMapper = Mapper<Temperature>(world);
+    humidityMapper = Mapper<Humidity>(world);
+    fertilityMapper = Mapper<Fertility>(world);
+    worldMapManager = world.getManager<WorldMapManager>();
+    gameStateManager = world.getManager<GameStateManager>();
+    terrainChangeManager = world.getManager<TerrainChangeManager>();
   }
 }
 
 abstract class _$TemperatureChangeSystem extends EntityProcessingSystem {
   Mapper<Temperature> temperatureMapper;
   GameStateManager gameStateManager;
-  _$TemperatureChangeSystem() : super(new Aspect.empty()..allOf([Temperature]));
+  _$TemperatureChangeSystem() : super(Aspect.empty()..allOf([Temperature]));
   @override
   void initialize() {
     super.initialize();
-    temperatureMapper = new Mapper<Temperature>(Temperature, world);
-    gameStateManager = world.getManager(GameStateManager);
+    temperatureMapper = Mapper<Temperature>(world);
+    gameStateManager = world.getManager<GameStateManager>();
   }
 }
 
 abstract class _$FertilityChangeSystem extends EntityProcessingSystem {
   Mapper<Fertility> fertilityMapper;
   GameStateManager gameStateManager;
-  _$FertilityChangeSystem() : super(new Aspect.empty()..allOf([Fertility]));
+  _$FertilityChangeSystem() : super(Aspect.empty()..allOf([Fertility]));
   @override
   void initialize() {
     super.initialize();
-    fertilityMapper = new Mapper<Fertility>(Fertility, world);
-    gameStateManager = world.getManager(GameStateManager);
+    fertilityMapper = Mapper<Fertility>(world);
+    gameStateManager = world.getManager<GameStateManager>();
   }
 }
 
 abstract class _$HumidityChangeSystem extends EntityProcessingSystem {
   Mapper<Humidity> humidityMapper;
   GameStateManager gameStateManager;
-  _$HumidityChangeSystem() : super(new Aspect.empty()..allOf([Humidity]));
+  _$HumidityChangeSystem() : super(Aspect.empty()..allOf([Humidity]));
   @override
   void initialize() {
     super.initialize();
-    humidityMapper = new Mapper<Humidity>(Humidity, world);
-    gameStateManager = world.getManager(GameStateManager);
+    humidityMapper = Mapper<Humidity>(world);
+    gameStateManager = world.getManager<GameStateManager>();
   }
 }
 
@@ -130,12 +130,12 @@ abstract class _$TerrainChangeSystem extends EntityProcessingSystem {
   Mapper<Color> colorMapper;
   Mapper<ChangeTerrain> changeTerrainMapper;
   _$TerrainChangeSystem()
-      : super(new Aspect.empty()..allOf([Terrain, Color, ChangeTerrain]));
+      : super(Aspect.empty()..allOf([Terrain, Color, ChangeTerrain]));
   @override
   void initialize() {
     super.initialize();
-    terrainMapper = new Mapper<Terrain>(Terrain, world);
-    colorMapper = new Mapper<Color>(Color, world);
-    changeTerrainMapper = new Mapper<ChangeTerrain>(ChangeTerrain, world);
+    terrainMapper = Mapper<Terrain>(world);
+    colorMapper = Mapper<Color>(world);
+    changeTerrainMapper = Mapper<ChangeTerrain>(world);
   }
 }

@@ -28,11 +28,6 @@ class FireSystem extends _$FireSystem {
   }
 
   @override
-  void end() {
-    world.processEntityChanges();
-  }
-
-  @override
   bool checkProcessing() => gameStateManager.state == State.endTurn;
 }
 
@@ -55,11 +50,6 @@ class FloodSystem extends _$FloodSystem {
     } else {
       flood.turnsRemaining--;
     }
-  }
-
-  @override
-  void end() {
-    world.processEntityChanges();
   }
 
   @override
@@ -129,7 +119,7 @@ class ExecutePowerSystem extends _$ExecutePowerSystem {
       gameStateManager.isIdleTurn = false;
       gameStateManager.faith -= powerCost;
       entity
-        ..removeComponent(ExecutePower)
+        ..removeComponent<ExecutePower>()
         ..changedInWorld();
       if (power == PowerType.human) {
         terrainChangeManager.addHuman(entity, food: 5);
@@ -176,11 +166,6 @@ class ExecutePowerSystem extends _$ExecutePowerSystem {
         ]);
       }
     }
-  }
-
-  @override
-  void end() {
-    world.processEntityChanges();
   }
 }
 

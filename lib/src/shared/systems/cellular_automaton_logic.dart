@@ -201,7 +201,6 @@ class PrepareTerrainChangeSystem extends _$PrepareTerrainChangeSystem {
       ]);
     }
     firesSpread = 0;
-    world.processEntityChanges();
   }
 
   @override
@@ -280,7 +279,7 @@ class TerrainChangeSystem extends _$TerrainChangeSystem {
   @override
   void processEntity(Entity entity) {
     entity
-      ..removeComponent(ChangeTerrain)
+      ..removeComponent<ChangeTerrain>()
       ..changedInWorld();
     final terrain = terrainMapper[entity];
     final color = colorMapper[entity];

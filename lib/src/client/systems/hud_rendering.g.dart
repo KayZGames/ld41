@@ -3,18 +3,18 @@
 part of 'hud_rendering.dart';
 
 // **************************************************************************
-// Generator: SystemGenerator
+// SystemGenerator
 // **************************************************************************
 
 abstract class _$TerrainStatsUpdatingSystem extends EntityProcessingSystem {
   Mapper<Terrain> terrainMapper;
   GameStateManager gameStateManager;
-  _$TerrainStatsUpdatingSystem() : super(new Aspect.empty()..allOf([Terrain]));
+  _$TerrainStatsUpdatingSystem() : super(Aspect.empty()..allOf([Terrain]));
   @override
   void initialize() {
     super.initialize();
-    terrainMapper = new Mapper<Terrain>(Terrain, world);
-    gameStateManager = world.getManager(GameStateManager);
+    terrainMapper = Mapper<Terrain>(world);
+    gameStateManager = world.getManager<GameStateManager>();
   }
 }
 
@@ -23,6 +23,6 @@ abstract class _$GodlyPowersStatusSystem extends VoidEntitySystem {
   @override
   void initialize() {
     super.initialize();
-    gameStateManager = world.getManager(GameStateManager);
+    gameStateManager = world.getManager<GameStateManager>();
   }
 }

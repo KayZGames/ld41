@@ -3,7 +3,7 @@
 part of 'managers.dart';
 
 // **************************************************************************
-// Generator: SystemGenerator
+// SystemGenerator
 // **************************************************************************
 
 abstract class _$WorldMapManager extends Manager {
@@ -17,13 +17,13 @@ abstract class _$WorldMapManager extends Manager {
   @override
   void initialize() {
     super.initialize();
-    tilePositionMapper = new Mapper<TilePosition>(TilePosition, world);
-    terrainMapper = new Mapper<Terrain>(Terrain, world);
-    fireMapper = new Mapper<Fire>(Fire, world);
-    floodMapper = new Mapper<Flood>(Flood, world);
-    temperatureMapper = new Mapper<Temperature>(Temperature, world);
-    fertilityMapper = new Mapper<Fertility>(Fertility, world);
-    humidityMapper = new Mapper<Humidity>(Humidity, world);
+    tilePositionMapper = Mapper<TilePosition>(world);
+    terrainMapper = Mapper<Terrain>(world);
+    fireMapper = Mapper<Fire>(world);
+    floodMapper = Mapper<Flood>(world);
+    temperatureMapper = Mapper<Temperature>(world);
+    fertilityMapper = Mapper<Fertility>(world);
+    humidityMapper = Mapper<Humidity>(world);
   }
 }
 
@@ -37,10 +37,10 @@ abstract class _$CursorManager extends Manager {
   @override
   void initialize() {
     super.initialize();
-    positionMapper = new Mapper<Position>(Position, world);
-    cameraMapper = new Mapper<Camera>(Camera, world);
-    tagManager = world.getManager(TagManager);
-    cameraManager = world.getManager(CameraManager);
+    positionMapper = Mapper<Position>(world);
+    cameraMapper = Mapper<Camera>(world);
+    tagManager = world.getManager<TagManager>();
+    cameraManager = world.getManager<CameraManager>();
   }
 }
 
@@ -50,8 +50,8 @@ abstract class _$ViewProjectionManager extends Manager {
   @override
   void initialize() {
     super.initialize();
-    cameraMapper = new Mapper<Camera>(Camera, world);
-    cameraManager = world.getManager(CameraManager);
+    cameraMapper = Mapper<Camera>(world);
+    cameraManager = world.getManager<CameraManager>();
   }
 }
 
@@ -66,12 +66,12 @@ abstract class _$TerrainChangeManager extends Manager {
   @override
   void initialize() {
     super.initialize();
-    tilePositionMapper = new Mapper<TilePosition>(TilePosition, world);
-    terrainMapper = new Mapper<Terrain>(Terrain, world);
-    humidityMapper = new Mapper<Humidity>(Humidity, world);
-    temperatureMapper = new Mapper<Temperature>(Temperature, world);
-    fertilityMapper = new Mapper<Fertility>(Fertility, world);
-    settlementMapper = new Mapper<Settlement>(Settlement, world);
-    worldMapManager = world.getManager(WorldMapManager);
+    tilePositionMapper = Mapper<TilePosition>(world);
+    terrainMapper = Mapper<Terrain>(world);
+    humidityMapper = Mapper<Humidity>(world);
+    temperatureMapper = Mapper<Temperature>(world);
+    fertilityMapper = Mapper<Fertility>(world);
+    settlementMapper = Mapper<Settlement>(world);
+    worldMapManager = world.getManager<WorldMapManager>();
   }
 }

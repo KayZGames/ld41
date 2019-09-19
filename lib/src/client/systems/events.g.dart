@@ -3,7 +3,7 @@
 part of 'events.dart';
 
 // **************************************************************************
-// Generator: SystemGenerator
+// SystemGenerator
 // **************************************************************************
 
 abstract class _$HudInteractionSystem extends VoidEntitySystem {
@@ -14,22 +14,21 @@ abstract class _$HudInteractionSystem extends VoidEntitySystem {
   @override
   void initialize() {
     super.initialize();
-    terrainMapper = new Mapper<Terrain>(Terrain, world);
-    gameStateManager = world.getManager(GameStateManager);
-    worldMapManager = world.getManager(WorldMapManager);
-    cursorManager = world.getManager(CursorManager);
+    terrainMapper = Mapper<Terrain>(world);
+    gameStateManager = world.getManager<GameStateManager>();
+    worldMapManager = world.getManager<WorldMapManager>();
+    cursorManager = world.getManager<CursorManager>();
   }
 }
 
 abstract class _$CameraControllerSystem extends GenericInputHandlingSystem {
   Mapper<Camera> cameraMapper;
   Mapper<Position> positionMapper;
-  _$CameraControllerSystem()
-      : super(new Aspect.empty()..allOf([Camera, Position]));
+  _$CameraControllerSystem() : super(Aspect.empty()..allOf([Camera, Position]));
   @override
   void initialize() {
     super.initialize();
-    cameraMapper = new Mapper<Camera>(Camera, world);
-    positionMapper = new Mapper<Position>(Position, world);
+    cameraMapper = Mapper<Camera>(world);
+    positionMapper = Mapper<Position>(world);
   }
 }

@@ -341,11 +341,11 @@ class TerrainChangeManager extends _$TerrainChangeManager {
     }
   }
 
-  void _removeSprite(Entity entity, Type type) {
+  void _removeSprite<T extends Component>(Entity entity) {
     entity
-      ..removeComponent(type)
-      ..removeComponent(Renderable)
-      ..removeComponent(Orientation)
+      ..removeComponent<T>()
+      ..removeComponent<Renderable>()
+      ..removeComponent<Orientation>()
       ..changedInWorld();
   }
 
@@ -356,7 +356,7 @@ class TerrainChangeManager extends _$TerrainChangeManager {
 
   void removeSettlement(Entity entity) {
     changeTerrain(entity, TerrainType.grass);
-    _removeSprite(entity, Settlement);
+    _removeSprite<Settlement>(entity);
   }
 
   void douseFlames(Entity entity, int highestFlood) {
